@@ -60,20 +60,14 @@ expect(stub).to(call("functionNameWith(arg1:arg2:)", countSpecifier: .AtLeast(2)
 // passes if function was called at most a number of times
 expect(stub).to(call("functionNameWith(arg1:arg2:)", countSpecifier: .AtMost(1)))
 
-// passes if function was called with equivalent arguemnts
+// passes if function was called with equivalent arguments
 expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: "firstArg", "secondArg"))
 
 // passes if function was called with arguments that pass the specified option
-expect(stub).to(call("functionNameWith(arg1:arg2:arg3:)", withArguments: Arguement.Anything, Arguement.NonNil, Argument.InstanceOf(String.self)))
+expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: Argument.NonNil, Argument.InstanceOf(String.self)))
 
-// passes if function was called with argument specifications a number of times
-expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: "firstArg", Argument.Anything, countSpecifier: .Exactly(2)))
-
-// passes if function was called with argument specifications at least a number of times
-expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: "firstArg", Argument.NonNil, countSpecifier: .AtLeast(2)))
-
-// passes if function was called with argument specifications at most a number of times
-expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: "firstArg", Argument.KindOf(type: NSObject.self), countSpecifier: .AtMost(2)))
+// passes if function was called with equivalent arguments a number of times
+expect(stub).to(call("functionNameWith(arg1:arg2:)", withArguments: "firstArg", "secondArg", countSpecifier: .Exactly(1)))
 ```
 
 Argument enum options: (use when the exact comparison of the argument using `Equatable` Protocol is not desired)
@@ -124,6 +118,18 @@ class StubStringService : StringService, CallRecorder {
 ```
 
 > Could also use inheritance with the subclass overriding all functions and replacing implementation with `self.recordCall()` functions. However, this is unadvised as it could lead to forgotten functions when adding functionality to the base class in the future.
+
+## Motivation
+
+When writing tests for a class, it is advised to only test that class's behavior and not the other objects it uses. With swift this can be difficult. How do you check if you are calling the correct methods at the appropriate times passing in the appropriate objects? Spry allows you to easily make a stubbed object that records every called function and the passed-in arguments. This way you can write tests from the point of view of the class you are testing and nothing more.
+
+## Installation
+
+Currently the only way to use this matcher is to copy and paste these files into your project. A better way is coming soon.
+
+## Contributors
+
+If you have an idea that can make this call matcher better, please don't hesitate to submit a pull request.
 
 ## License
 
