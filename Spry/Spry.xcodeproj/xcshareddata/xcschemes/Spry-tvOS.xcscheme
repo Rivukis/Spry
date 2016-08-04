@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A43D68D1D52B4D00000A8E3"
+               BuildableName = "Spry-tvOSTests.xctest"
+               BlueprintName = "Spry-tvOSTests"
+               ReferencedContainer = "container:Spry.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A43D6231D5297C20000A8E3"
+            BuildableName = "Spry.framework"
+            BlueprintName = "Spry-tvOS"
+            ReferencedContainer = "container:Spry.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

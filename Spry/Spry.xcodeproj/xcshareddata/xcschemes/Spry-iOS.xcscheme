@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A43D67D1D52B4280000A8E3"
+               BuildableName = "Spry-iOSTests.xctest"
+               BlueprintName = "Spry-iOSTests"
+               ReferencedContainer = "container:Spry.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A43D6081D5297810000A8E3"
+            BuildableName = "Spry.framework"
+            BlueprintName = "Spry-iOS"
+            ReferencedContainer = "container:Spry.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

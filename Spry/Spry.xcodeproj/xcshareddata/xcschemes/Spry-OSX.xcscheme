@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A43D6161D5297A60000A8E3"
+               BlueprintIdentifier = "7A43D66E1D52AF140000A8E3"
                BuildableName = "Spry.framework"
-               BlueprintName = "Spry-watchOS"
+               BlueprintName = "Spry-OSX"
                ReferencedContainer = "container:Spry.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A43D69C1D52B4F00000A8E3"
+               BuildableName = "Spry-OSXTests.xctest"
+               BlueprintName = "Spry-OSXTests"
+               ReferencedContainer = "container:Spry.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7A43D66E1D52AF140000A8E3"
+            BuildableName = "Spry.framework"
+            BlueprintName = "Spry-OSX"
+            ReferencedContainer = "container:Spry.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -45,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A43D6161D5297A60000A8E3"
+            BlueprintIdentifier = "7A43D66E1D52AF140000A8E3"
             BuildableName = "Spry.framework"
-            BlueprintName = "Spry-watchOS"
+            BlueprintName = "Spry-OSX"
             ReferencedContainer = "container:Spry.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A43D6161D5297A60000A8E3"
+            BlueprintIdentifier = "7A43D66E1D52AF140000A8E3"
             BuildableName = "Spry.framework"
-            BlueprintName = "Spry-watchOS"
+            BlueprintName = "Spry-OSX"
             ReferencedContainer = "container:Spry.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

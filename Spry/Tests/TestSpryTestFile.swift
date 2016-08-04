@@ -1,14 +1,15 @@
 //
-//  Spry_tvOSTests.swift
-//  Spry tvOSTests
+//  TestSpryTestFile.swift
+//  Spry
 //
 //  Created by Brian Radebaugh on 8/3/16.
 //
 //
 
 import XCTest
+import Spry
 
-class Spry_tvOSTests: XCTestCase {
+class TestSpryTestFile: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -21,6 +22,10 @@ class Spry_tvOSTests: XCTestCase {
     }
     
     func testExample() {
+        print("----->", NSProcessInfo.processInfo().operatingSystemVersionString)
+        
+        XCTAssertEqual(otherTestString(), "bar")
+        
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
