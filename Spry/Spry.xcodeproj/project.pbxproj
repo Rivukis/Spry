@@ -19,6 +19,9 @@
 		7A43D6B21D52BD770000A8E3 /* TestSpryTestFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A43D6B11D52BD770000A8E3 /* TestSpryTestFile.swift */; };
 		7A43D6B31D52BD770000A8E3 /* TestSpryTestFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A43D6B11D52BD770000A8E3 /* TestSpryTestFile.swift */; };
 		7A43D6B41D52BD770000A8E3 /* TestSpryTestFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A43D6B11D52BD770000A8E3 /* TestSpryTestFile.swift */; };
+		7A43D6B61D52C5620000A8E3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A43D6B51D52C5620000A8E3 /* Info.plist */; };
+		7A43D6B71D52C5620000A8E3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A43D6B51D52C5620000A8E3 /* Info.plist */; };
+		7A43D6B81D52C5620000A8E3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A43D6B51D52C5620000A8E3 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,19 +51,20 @@
 /* Begin PBXFileReference section */
 		7A43D6091D5297810000A8E3 /* Spry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Spry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A43D6241D5297C20000A8E3 /* Spry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Spry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A43D62F1D5299020000A8E3 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
-		7A43D6301D5299020000A8E3 /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		7A43D6321D529A8B0000A8E3 /* Spry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spry.h; sourceTree = "<group>"; };
 		7A43D63F1D529E2F0000A8E3 /* Spry.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Spry.podspec; path = MetaData/Spry.podspec; sourceTree = "<group>"; };
 		7A43D6431D52ABF00000A8E3 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = MetaData/LICENSE; sourceTree = "<group>"; };
 		7A43D6441D52ABF00000A8E3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = MetaData/README.md; sourceTree = "<group>"; };
 		7A43D66F1D52AF140000A8E3 /* Spry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Spry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A43D6771D52B16C0000A8E3 /* Info-OSX.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
 		7A43D67E1D52B4280000A8E3 /* Spry-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Spry-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A43D68E1D52B4D00000A8E3 /* Spry-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Spry-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A43D69D1D52B4F00000A8E3 /* Spry-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Spry-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A43D6A81D52B5580000A8E3 /* TestFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFile.swift; sourceTree = "<group>"; };
 		7A43D6B11D52BD770000A8E3 /* TestSpryTestFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestSpryTestFile.swift; path = Tests/TestSpryTestFile.swift; sourceTree = "<group>"; };
+		7A43D6B51D52C5620000A8E3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
+		7A43D6BA1D52D0E10000A8E3 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-iOS.plist"; path = "InfoPlists/Info-iOS.plist"; sourceTree = "<group>"; };
+		7A43D6BB1D52D0E10000A8E3 /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-OSX.plist"; path = "InfoPlists/Info-OSX.plist"; sourceTree = "<group>"; };
+		7A43D6BC1D52D0E10000A8E3 /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-tvOS.plist"; path = "InfoPlists/Info-tvOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,11 +142,9 @@
 		7A43D62E1D5299020000A8E3 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				7A43D6B91D52D0820000A8E3 /* InfoPlists */,
 				7A43D6691D52AE830000A8E3 /* CallMatcher */,
 				7A43D6321D529A8B0000A8E3 /* Spry.h */,
-				7A43D62F1D5299020000A8E3 /* Info-iOS.plist */,
-				7A43D6301D5299020000A8E3 /* Info-tvOS.plist */,
-				7A43D6771D52B16C0000A8E3 /* Info-OSX.plist */,
 				7A43D6A81D52B5580000A8E3 /* TestFile.swift */,
 			);
 			path = Sources;
@@ -169,8 +171,19 @@
 			isa = PBXGroup;
 			children = (
 				7A43D6B11D52BD770000A8E3 /* TestSpryTestFile.swift */,
+				7A43D6B51D52C5620000A8E3 /* Info.plist */,
 			);
 			name = Tests;
+			sourceTree = "<group>";
+		};
+		7A43D6B91D52D0820000A8E3 /* InfoPlists */ = {
+			isa = PBXGroup;
+			children = (
+				7A43D6BA1D52D0E10000A8E3 /* Info-iOS.plist */,
+				7A43D6BB1D52D0E10000A8E3 /* Info-OSX.plist */,
+				7A43D6BC1D52D0E10000A8E3 /* Info-tvOS.plist */,
+			);
+			name = InfoPlists;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A43D6B61D52C5620000A8E3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A43D6B71D52C5620000A8E3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +396,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A43D6B81D52C5620000A8E3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,7 +556,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-iOS.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -594,7 +610,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-iOS.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -652,7 +668,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-tvOS.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-tvOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -705,7 +721,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-tvOS.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-tvOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -766,7 +782,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-OSX.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-OSX.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -821,7 +837,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Sources/Info-OSX.plist";
+				INFOPLIST_FILE = "Sources/InfoPlists/Info-OSX.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
