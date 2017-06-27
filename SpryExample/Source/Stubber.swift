@@ -8,21 +8,35 @@
 
 import Foundation
 
+// MARK: Private Extensions
+
+public protocol Stubber: class {
+    var _stubs: [Stub] { get set }
+
+    func stub(_ function: String) -> Stub
+
+    func returnValue<T>(function: String, arguments: GloballyEquatable...) -> T
+    func returnValue<T>(asType _: T.Type, function: String, arguments: GloballyEquatable...) -> T
+    func returnValue<T>(withFallbackValue fallbackValue: T, function: String, arguments: GloballyEquatable...) -> T
+}
+
+// MARK: - Helper Objects
+
 public class Stub: CustomStringConvertible {
     let function: String
-    private(set) var args: [GloballyEquatable] = []
+    private(set) var arguments: [GloballyEquatable] = []
     private(set) var returnValue: Any? = nil
 
     public var description: String {
-        return "Stub(function: <\(function)>, args: <\(args.map{"<\($0)>"}.joined(separator: ", "))>, returnValue: <\(returnValue ?? "nil")>)"
+        return "Stub(function: <\(function)>, args: <\(arguments.map{"<\($0)>"}.joined(separator: ", "))>, returnValue: <\(returnValue ?? "nil")>)"
     }
 
     init(function: String) {
         self.function = function
     }
 
-    public func with(_ args: GloballyEquatable...) -> Stub {
-        self.args += args
+    public func with(_ arguments: GloballyEquatable...) -> Stub {
+        self.arguments += arguments
         return self
     }
 
@@ -31,15 +45,7 @@ public class Stub: CustomStringConvertible {
     }
 }
 
-public protocol Stubber : class {
-    var _stubs: [Stub] { get set }
-
-    func stub(_ function: String) -> Stub
-
-    func returnValue<T>(function: String, args: GloballyEquatable...) -> T
-    func returnValue<T>(asType _: T.Type, function: String, args: GloballyEquatable...) -> T
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String, args: GloballyEquatable...) -> T
-}
+// MARK - Stubber Extension
 
 public extension Stubber {
     func stub(_ function: String) -> Stub {
@@ -49,25 +55,25 @@ public extension Stubber {
         return stub
     }
 
-    func returnValue<T>(function: String = #function, args: GloballyEquatable...) -> T {
-        return getReturnValue(function: function, args: args)
+    func returnValue<T>(function: String = #function, arguments: GloballyEquatable...) -> T {
+        return getReturnValue(function: function, arguments: arguments)
     }
 
-    func returnValue<T>(asType _: T.Type, function: String = #function, args: GloballyEquatable...) -> T {
-        return getReturnValue(function: function, args: args)
+    func returnValue<T>(asType _: T.Type, function: String = #function, arguments: GloballyEquatable...) -> T {
+        return getReturnValue(function: function, arguments: arguments)
     }
 
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, args: GloballyEquatable...) -> T {
+    func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, arguments: GloballyEquatable...) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
 
         if stubsForFunctionName.isEmpty {
             return fallbackValue
         }
 
-        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.args.count == 0 }
+        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.args, actualArgs: args), let value = stub.returnValue as? T {
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
                 return value
             }
         }
@@ -81,20 +87,20 @@ public extension Stubber {
         return fallbackValue
     }
 
-    // MARK: Helper
+    // MARK: - Protocol Extention Helper Functions
 
-    private func getReturnValue<T>(function: String, args: [GloballyEquatable]) -> T {
+    private func getReturnValue<T>(function: String, arguments: [GloballyEquatable]) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
 
         if stubsForFunctionName.isEmpty {
-            let argsDesc = args.map{"<\($0)>"}.joined(separator: ", ")
-            fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argsDesc)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")
+            let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+            fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")
         }
 
-        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.args.count == 0 }
+        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.args, actualArgs: args), let value = stub.returnValue as? T {
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
                 return value
             }
         }
@@ -105,9 +111,11 @@ public extension Stubber {
             }
         }
 
-        let argsDesc = args.map{"<\($0)>"}.joined(separator: ", ")
-        fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argsDesc)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")    }
+        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+        fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")    }
 }
+
+// MARK: Private Extensions
 
 extension Array {
     /**

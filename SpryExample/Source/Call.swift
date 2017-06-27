@@ -1,6 +1,6 @@
 import Nimble
 
-public func haveReceived(_ function: String, withArguments arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .AtLeast(1)) -> NonNilMatcherFunc<CallRecorder> {
+public func haveReceived(_ function: String, with arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .AtLeast(1)) -> NonNilMatcherFunc<Mocker> {
     return NonNilMatcherFunc { expression, failureMessage in
         guard let expressionValue = try expression.evaluate() else {
             failureMessage.postfixMessage = postfixMessageForNilCase(arguments: arguments, countSpecifier: countSpecifier)
@@ -19,7 +19,7 @@ public func haveReceived(_ function: String, withArguments arguments: GloballyEq
 
 // MARK: Private
 
-private func descriptionOfAttemptedCall(object: CallRecorder, function: String, arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfAttemptedCall(object: Mocker, function: String, arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
     var description = "receive <\(function)> on \(type(of: object))"
     
     if !arguments.isEmpty {

@@ -21,7 +21,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 .idea/
-patches/
 #
 #
 # CocoaPods

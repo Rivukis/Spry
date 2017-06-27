@@ -6,8 +6,8 @@ extension Int: GloballyEquatable {}
 extension NSObject: GloballyEquatable {}
 extension Optional: GloballyEquatable {}
 
-private class TestClass: CallRecorder {
-    var _calls = (functionList: [String](), argumentsList: [[GloballyEquatable]]())
+private class TestClass: Mocker {
+    var _calls = [RecordedCall]()
 
     func doStuff() {
         recordCall()
@@ -30,72 +30,10 @@ private class TestClass: CallRecorder {
     }
 }
 
-class CallRecorderTest: XCTestCase {
+class MockerTest: XCTestCase {
 
-    // MARK: - Recording Tests
+    // MARK: - Resetting
 
-    func testRecordingFunctions() {
-        // given
-        let testClass = TestClass()
-        
-        // when
-        testClass.doStuff()
-        testClass.doStuff()
-        testClass.doStuffWith(string: "asd")
-        
-        // then
-        let expectedRecordedFunctions = ["doStuff()", "doStuff()", "doStuffWith(string:)"]
-        XCTAssertEqual(testClass._calls.functionList, expectedRecordedFunctions, "should record function names in order")
-    }
-    
-    func testRecordingArguments() { // most of these 'asserts' are here because Swift's 'Any' Protocol is not Equatable
-        // given
-        let testClass = TestClass()
-        let expectedSet1Arg1 = "foo"
-        let expectedSet2Arg1 = 1
-        let expectedSet2Arg2 = 2
-        let expectedSet3Arg1 = "bar"
-        
-        // when
-        testClass.doStuffWith(string: expectedSet1Arg1)
-        testClass.doMoreStuffWith(int1: expectedSet2Arg1, int2: expectedSet2Arg2)
-        testClass.doStuffWith(string: expectedSet3Arg1)
-        
-        // then
-        let countFailureMessage = { (input: (count: Int, set: Int)) -> String in
-            return "should have \(input.count) argument(s) in set \(input.set)"
-        }
-
-        let typeFailureMessage = { (input: (set: Int, arg: Int)) -> String in
-            return "should match type for set \(input.set), argument \(input.arg)"
-        }
-
-        let descFailureMessage = { (input: (set: Int, arg: Int)) -> String in
-            return "should match string interpolation for set \(input.set), argument \(input.arg)"
-        }
-
-        let actualset1Arg1 = testClass._calls.argumentsList[0][0]
-        let actualset2Arg1 = testClass._calls.argumentsList[1][0]
-        let actualset2Arg2 = testClass._calls.argumentsList[1][1]
-        let actualset3Arg1 = testClass._calls.argumentsList[2][0]
-
-        XCTAssertEqual(testClass._calls.argumentsList.count, 3, "should have 3 sets of arguments")
-
-        XCTAssertEqual(testClass._calls.argumentsList[0].count, 1, countFailureMessage((count: 1, set: 1)))
-        XCTAssertEqual("\(type(of: actualset1Arg1))", "\(type(of: expectedSet1Arg1))", typeFailureMessage((set: 1, arg: 1)))
-        XCTAssertEqual("\(actualset1Arg1)", "\(expectedSet1Arg1)", descFailureMessage((set: 1, arg: 1)))
-        
-        XCTAssertEqual(testClass._calls.argumentsList[1].count, 2, countFailureMessage((count: 2, set: 2)))
-        XCTAssertEqual("\(type(of: actualset2Arg1))", "\(type(of: expectedSet2Arg1))", typeFailureMessage((set: 2, arg: 1)))
-        XCTAssertEqual("\(actualset2Arg1)", "\(expectedSet2Arg1)", descFailureMessage((set: 2, arg: 1)))
-        XCTAssertEqual("\(type(of: actualset2Arg2))", "\(type(of: expectedSet2Arg2))", typeFailureMessage((set: 2, arg: 2)))
-        XCTAssertEqual("\(actualset2Arg2)", "\(expectedSet2Arg2)", descFailureMessage((set: 2, arg: 2)))
-
-        XCTAssertEqual(testClass._calls.argumentsList[2].count, 1, countFailureMessage((count: 1, set: 3)))
-        XCTAssertEqual("\(type(of: actualset3Arg1))", "\(type(of: expectedSet3Arg1))", typeFailureMessage((set: 3, arg: 1)))
-        XCTAssertEqual("\(actualset3Arg1)", "\(expectedSet3Arg1)", descFailureMessage((set: 3, arg: 1)))
-    }
-    
     func testResettingTheRecordedLists() {
         // given
         let testClass = TestClass()
@@ -107,15 +45,11 @@ class CallRecorderTest: XCTestCase {
         testClass.doStuffWith(string: "bar")
         
         // then
-        XCTAssertEqual(testClass._calls.functionList.count, 1, "should have 1 function recorded")
-        let recordedFunction = testClass._calls.functionList[0] // <- swift doesn't like accessing an array directly in the expect function
-        XCTAssertEqual(recordedFunction, "doStuffWith(string:)", "should have correct function recorded")
-        
-        XCTAssertEqual(testClass._calls.argumentsList.count, 1, "should have 1 set of arguments recorded")
-        XCTAssertEqual(testClass._calls.argumentsList[0].count, 1, "should have 1 argument in first argument set")
-        XCTAssertEqual("\(testClass._calls.argumentsList[0][0])", "bar", "should have correct argument in first argument set recorded")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["foo"]).success, "should SUCCEED to call function")
+        XCTAssertFalse(testClass.didCall(function: "doMoreStuffWith(int1:int2:)", withArguments: [1, 2]).success, "should SUCCEED to call function")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["bar"]).success, "should SUCCEED to call function")
     }
-    
+
     // MARK: - Did Call Tests
     
     func testDidCallFunction() {

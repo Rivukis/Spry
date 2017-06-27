@@ -109,7 +109,7 @@ class StubStringService : StringService, Stubber {
     }
 
     func hereAreTwoStrings(string1: String, string2: String) -> Bool {
-        return returnValue(args: string1, string2)
+        return returnValue(arguments: string1, string2)
     }
 
     func hereComesATuple() -> (String, String) {
@@ -137,7 +137,7 @@ class StubStringService : StringService, Stubber {
     }
 
     func giveMeAString(string: String) -> String {
-        return returnValue(args: string)
+        return returnValue(arguments: string)
     }
 }
 
