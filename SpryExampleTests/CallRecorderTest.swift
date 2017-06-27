@@ -254,8 +254,8 @@ class CallRecorderTest: XCTestCase {
         testClass.doWeirdStuffWith(string: "hi", int: nil)
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doMoreStuffWith(int1:int2:)", withArguments: [Argument.Anything, Argument.Anything]).success, "should SUCCEED to call function with 'anything' and 'anything' arguments")
-        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.Anything, Argument.Anything]).success, "should SUCCEED to call function with 'anything' and 'anything' arguments")
+        XCTAssertTrue(testClass.didCall(function: "doMoreStuffWith(int1:int2:)", withArguments: [Argument.anything, Argument.anything]).success, "should SUCCEED to call function with 'anything' and 'anything' arguments")
+        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.anything, Argument.anything]).success, "should SUCCEED to call function with 'anything' and 'anything' arguments")
     }
     
     func testNonNilArgument() {
@@ -266,8 +266,8 @@ class CallRecorderTest: XCTestCase {
         testClass.doWeirdStuffWith(string: "hi", int: nil)
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.NonNil, Argument.Anything]).success, "should SUCCEED to call function with 'non-nil' and 'anything' arguments")
-        XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.Anything, Argument.NonNil]).success, "should FAIL to call function with 'anything' and 'non-nil' arguments")
+        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.nonNil, Argument.anything]).success, "should SUCCEED to call function with 'non-nil' and 'anything' arguments")
+        XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.anything, Argument.nonNil]).success, "should FAIL to call function with 'anything' and 'non-nil' arguments")
     }
     
     func testNilArgument() {
@@ -278,8 +278,8 @@ class CallRecorderTest: XCTestCase {
         testClass.doWeirdStuffWith(string: "hi", int: nil)
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.Anything, Argument.Nil]).success, "should SUCCEED to call function with 'anything' and 'nil' arguments")
-        XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.Nil, Argument.Anything]).success, "should FAIL to call function with 'nil' and 'anything' arguments")
+        XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.anything, Argument.nil]).success, "should SUCCEED to call function with 'anything' and 'nil' arguments")
+        XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: [Argument.nil, Argument.anything]).success, "should FAIL to call function with 'nil' and 'anything' arguments")
     }
     
     func testInstanceOfArgument() {
@@ -291,12 +291,12 @@ class CallRecorderTest: XCTestCase {
         testClass.doWeirdStuffWith(string: "hi", int: nil)
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.InstanceOf(type: String.self)]).success, "should SUCCEED to call function with 'instance of String' argument")
-        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.InstanceOf(type: Int.self)]).success, "should FAIL to call function with 'instance of Int' argument")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.instanceOf(type: String.self)]).success, "should SUCCEED to call function with 'instance of String' argument")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.instanceOf(type: Int.self)]).success, "should FAIL to call function with 'instance of Int' argument")
         
-        let expectedArgs1: Array<GloballyEquatable> = [Argument.InstanceOf(type: Optional<String>.self), Argument.InstanceOf(type: Optional<Int>.self)]
+        let expectedArgs1: Array<GloballyEquatable> = [Argument.instanceOf(type: Optional<String>.self), Argument.instanceOf(type: Optional<Int>.self)]
         XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: expectedArgs1).success, "should SUCCEED to call function with 'instance of String?' and ' instance of Int?' arguments")
-        let expectedArgs2: Array<GloballyEquatable> = [Argument.InstanceOf(type: String.self), Argument.InstanceOf(type: Int.self)]
+        let expectedArgs2: Array<GloballyEquatable> = [Argument.instanceOf(type: String.self), Argument.instanceOf(type: Int.self)]
         XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: expectedArgs2).success, "should FAIL to call function with 'instance of String' and 'instance of Int' arguments")
     }
 

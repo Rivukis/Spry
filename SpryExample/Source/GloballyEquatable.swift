@@ -1,3 +1,11 @@
+//
+//  GloballyEquatable.swift
+//  SpryExample
+//
+//  Created by Brian Radebaugh on 6/27/17.
+//  Copyright © 2017 Brian Radebaugh. All rights reserved.
+//
+
 // MARK: OptionalType
 
 public protocol OptionalType {}

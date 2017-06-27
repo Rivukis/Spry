@@ -1,3 +1,11 @@
+//
+//  CallRecorder.swift
+//  SpryExample
+//
+//  Created by Brian Radebaugh on 6/27/17.
+//  Copyright © 2017 Brian Radebaugh. All rights reserved.
+//
+
 import Foundation
 
 // MARK: Helper Objects
@@ -26,9 +34,8 @@ public protocol CallRecorder : class {
     
     // Used if you want to reset the called function/arguments lists
     func clearRecordedLists()
-    
-    
-    // For Internal Use ONLY
+
+    // Used to determine if a call was made (Only use this is not using the Nimble Matcher)
     func didCall(function: String, withArguments arguments: Array<GloballyEquatable>, countSpecifier: CountSpecifier) -> DidCallResult
 }
 
@@ -75,7 +82,7 @@ private func numberOfMatchingCalls(function: String, functions: Array<String>, a
     
     for index in potentialMatchIndexes {
         let recordedArgsList = argsLists[index]
-        if isEqualArgsLists(passedArgs: argsList, recordedArgs: recordedArgsList) {
+        if isEqualArgsLists(specifiedArgs: argsList, actualArgs: recordedArgsList) {
             correctCallsCount += 1
         }
     }
@@ -85,50 +92,6 @@ private func numberOfMatchingCalls(function: String, functions: Array<String>, a
 
 private func matchingIndexesFor(functionName: String, functionList: Array<String>) -> [Int] {
     return functionList.enumerated().map { $1 == functionName ? $0 : -1 }.filter { $0 != -1 }
-}
-
-private func isEqualArgsLists(passedArgs: Array<GloballyEquatable>, recordedArgs: Array<GloballyEquatable>) -> Bool {
-    if passedArgs.count != recordedArgs.count {
-        return false
-    }
-    
-    for index in 0..<recordedArgs.count {
-        let passedArg = passedArgs[index]
-        let recordedArg = recordedArgs[index]
-        
-        if !isEqualArgs(passedArg: passedArg, recordedArg: recordedArg) {
-            return false
-        }
-    }
-    
-    return true
-}
-
-private func isEqualArgs(passedArg: GloballyEquatable, recordedArg: GloballyEquatable) -> Bool {
-    if let passedArgAsArgumentEnum = passedArg as? Argument {
-        switch passedArgAsArgumentEnum {
-        case .Anything:
-            return true
-        case .NonNil:
-            return !isNil(recordedArg)
-        case .Nil:
-            return isNil(recordedArg)
-        case .InstanceOf(let type):
-            let cleanedType = "\(type)".replaceMatching(regex: "\\.Type+$", withString: "")
-            let cleanedRecordedArgType = "\(type(of: recordedArg))"
-
-            return cleanedType == cleanedRecordedArgType
-        }
-    } else {
-        return passedArg.isEqualTo(recordedArg)
-    }
-}
-
-private func isNil(_ value: Any) -> Bool {
-    let mirror = Mirror(reflecting: value)
-    let hasAValue = mirror.children.first?.value != nil
-    
-    return mirror.displayStyle == .optional && !hasAValue
 }
 
 private func isOptional(_ value: Any) -> Bool {
@@ -156,12 +119,6 @@ private func descriptionOfCalls(functionList: Array<String>, argumentsList: Arra
 }
 
 // MARK: Private Extensions
-
-private extension String {
-    func replaceMatching(regex: String, withString string: String) -> String {
-        return self.replacingOccurrences(of: regex, with: string, options: .regularExpression, range: nil)
-    }
-}
 
 private extension Array {
     func stringRepresentation() -> String {
