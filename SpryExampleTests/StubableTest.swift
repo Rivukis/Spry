@@ -56,6 +56,7 @@ private protocol StringService : class {
     func giveMeAnotherString() -> String
     func giveMeAnOptional() -> String?
     func giveMeAString(string: String) -> String
+    func callThisCompletion(closure: () -> Void)
 }
 
 // The Real Class
@@ -95,6 +96,10 @@ private class RealStringService : StringService {
 
     func giveMeAString(string: String) -> String {
         return string
+    }
+
+    func callThisCompletion(closure: () -> Void) {
+
     }
 }
 
@@ -139,6 +144,10 @@ private class StubStringService : StringService, Stubable {
     func giveMeAString(string: String) -> String {
         return returnValue(arguments: string)
     }
+
+    func callThisCompletion(closure: () -> Void) {
+        return returnValue(arguments: closure)
+    }
 }
 
 // ********** object under test **********
@@ -155,6 +164,7 @@ private class TestObject {
     }
 
     func getBoolForTwoStrings(_ string1: String, _ string2: String) -> Bool {
+        print(#function)
         return self.service.hereAreTwoStrings(string1: string1, string2: string2)
     }
 
@@ -187,6 +197,10 @@ private class TestObject {
 
     func getAString(string: String) -> String {
         return service.giveMeAString(string: string)
+    }
+
+    func callThisCompletion(_ closure: () -> Void) {
+        service.callThisCompletion(closure: closure)
     }
 }
 
@@ -398,6 +412,60 @@ class StubableSpec: QuickSpec {
 
                     it("should fatal error") {
                         expect({ _ = subject.getAString() }()).to(throwAssertion())
+                    }
+                }
+            }
+
+            describe("and do") {
+                context("when there are NO arguments") {
+                    let expectedString = "expected"
+
+                    beforeEach {
+                        stringService.stub("giveMeAString()").andDo { _ in
+                            return expectedString
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.getAString()).to(equal(expectedString))
+                    }
+                }
+
+                context("when there are arguments") {
+                    beforeEach {
+                        stringService.stub("hereAreTwoStrings(string1:string2:)").andDo { arguments in
+                            let string1 = arguments[0] as! String
+                            let string2 = arguments[1] as! String
+
+                            return string1 == "one" && string2 == "two"
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.getBoolForTwoStrings("one", "two")).to(beTrue())
+                    }
+                }
+
+                context("when the are is a completion closure") {
+                    var turnToTrue = false
+
+                    beforeEach {
+//                        stringService.stub("callThisCompletion(closure:)").andReturn(Void())
+
+                        stringService.stub("callThisCompletion(closure:)").andDo { arguments in
+                            let completion = arguments[0] as! () -> Void
+                            completion()
+
+                            return Void()
+                        }
+
+                        subject.callThisCompletion {
+                            turnToTrue = true
+                        }
+                    }
+
+                    fit("should get a string from the stubbed service") {
+                        expect(turnToTrue).to(beTrue())
                     }
                 }
             }

@@ -15,8 +15,8 @@ public protocol Stubable: class {
 
     func stub(_ function: String) -> Stub
 
-    func returnValue<T>(function: String, arguments: GloballyEquatable...) -> T
-    func returnValue<T>(asType _: T.Type, function: String, arguments: GloballyEquatable...) -> T
+    func returnValue<T>(function: String, arguments: Any...) -> T
+    func returnValue<T>(asType _: T.Type, function: String, arguments: Any...) -> T
     func returnValue<T>(withFallbackValue fallbackValue: T, function: String, arguments: GloballyEquatable...) -> T
 }
 
@@ -25,7 +25,7 @@ public protocol Stubable: class {
 public class Stub: CustomStringConvertible {
     let function: String
     private(set) var arguments: [GloballyEquatable] = []
-    private(set) var returnValue: Any? = nil
+    private(set) var returnValue: Any?
 
     public var description: String {
         return "Stub(function: <\(function)>, args: <\(arguments.map{"<\($0)>"}.joined(separator: ", "))>, returnValue: <\(returnValue ?? "nil")>)"
@@ -43,6 +43,21 @@ public class Stub: CustomStringConvertible {
     public func andReturn(_ value: Any) {
         returnValue = value
     }
+
+
+
+    private var _closure: (([Any]) -> Any)?
+    fileprivate func blockReturn(args: [Any]) -> Any? {
+        guard let closure = _closure else {
+            return nil
+        }
+
+        return closure(args)
+    }
+
+    public func andDo(_ closure: @escaping ([Any]) -> Any) {
+        _closure = closure
+    }
 }
 
 // MARK - Stubable Extension
@@ -55,11 +70,11 @@ public extension Stubable {
         return stub
     }
 
-    func returnValue<T>(function: String = #function, arguments: GloballyEquatable...) -> T {
+    func returnValue<T>(function: String = #function, arguments: Any...) -> T {
         return getReturnValue(function: function, arguments: arguments)
     }
 
-    func returnValue<T>(asType _: T.Type, function: String = #function, arguments: GloballyEquatable...) -> T {
+    func returnValue<T>(asType _: T.Type, function: String = #function, arguments: Any...) -> T {
         return getReturnValue(function: function, arguments: arguments)
     }
 
@@ -89,8 +104,11 @@ public extension Stubable {
 
     // MARK: - Protocol Extention Helper Functions
 
-    private func getReturnValue<T>(function: String, arguments: [GloballyEquatable]) -> T {
+    private func getReturnValue<T>(function: String, arguments: [Any]) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
+
+        print(_stubs)
+        print(function)
 
         if stubsForFunctionName.isEmpty {
             let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
@@ -100,13 +118,17 @@ public extension Stubable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
-                return value
-            }
+//            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
+//                return value
+//            }
         }
 
         for stub in stubsWithoutArgs {
             if let value = stub.returnValue as? T {
+                return value
+            }
+
+            if let value = stub.blockReturn(args: arguments) as? T {
                 return value
             }
         }
