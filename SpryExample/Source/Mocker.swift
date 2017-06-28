@@ -46,9 +46,9 @@ public struct DidCallResult {
 }
 
 public enum CountSpecifier {
-    case Exactly(Int)
-    case AtLeast(Int)
-    case AtMost(Int)
+    case exactly(Int)
+    case atLeast(Int)
+    case atMost(Int)
 }
 
 // MARK - Mocker Extension
@@ -63,12 +63,12 @@ public extension Mocker {
         _calls = []
     }
     
-    func didCall(function: String, withArguments arguments: Array<GloballyEquatable> = [GloballyEquatable](), countSpecifier: CountSpecifier = .AtLeast(1)) -> DidCallResult {
+    func didCall(function: String, withArguments arguments: Array<GloballyEquatable> = [GloballyEquatable](), countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
-        case .Exactly(let count): success = timesCalled(function, arguments: arguments) == count
-        case .AtLeast(let count): success = timesCalled(function, arguments: arguments) >= count
-        case .AtMost(let count): success = timesCalled(function, arguments: arguments) <= count
+        case .exactly(let count): success = timesCalled(function, arguments: arguments) == count
+        case .atLeast(let count): success = timesCalled(function, arguments: arguments) >= count
+        case .atMost(let count): success = timesCalled(function, arguments: arguments) <= count
         }
 
         let recordedCallsDescription = description(of: _calls)

@@ -4,12 +4,12 @@ import SpryExample
 
 // ********** a protocol as a return value **********
 
-protocol SpecialString {
+private protocol SpecialString {
     func myStringValue() -> String
 }
 
 // final
-final class AlwaysLowerCase: SpecialString {
+private final class AlwaysLowerCase: SpecialString {
     let value: String
 
     init(value: String) {
@@ -22,7 +22,7 @@ final class AlwaysLowerCase: SpecialString {
 }
 
 // NOT final
-class NumbersOnly: SpecialString {
+private class NumbersOnly: SpecialString {
     let value: Int
 
     required init(value: Int) {
@@ -35,7 +35,7 @@ class NumbersOnly: SpecialString {
 }
 
 // stubbed version
-final class StubSpecialString : SpecialString, Stubber {
+private final class StubSpecialString : SpecialString, Stubber {
     var _stubs = [Stub]()
 
     func myStringValue() -> String {
@@ -46,7 +46,7 @@ final class StubSpecialString : SpecialString, Stubber {
 // ********** the service to be stubbed **********
 
 // The Protocol
-protocol StringService : class {
+private protocol StringService : class {
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
     func hereComesATuple() -> (String, String)
@@ -59,7 +59,7 @@ protocol StringService : class {
 }
 
 // The Real Class
-class RealStringService : StringService {
+private class RealStringService : StringService {
     func giveMeAString() -> String {
         return "a real string"
     }
@@ -101,7 +101,7 @@ class RealStringService : StringService {
 
 // ********** stub the service **********
 
-class StubStringService : StringService, Stubber {
+private class StubStringService : StringService, Stubber {
     var _stubs = [Stub]()
 
     func giveMeAString() -> String {
@@ -143,7 +143,7 @@ class StubStringService : StringService, Stubber {
 
 // ********** object under test **********
 
-class TestObject {
+private class TestObject {
     let service : StringService
 
     init(service: StringService) {

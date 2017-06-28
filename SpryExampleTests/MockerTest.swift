@@ -73,9 +73,9 @@ class MockerTest: XCTestCase {
         testClass.doStuff()
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .Exactly(2)).success, "should SUCCEED to call function 2 times")
-        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .Exactly(1)).success, "should FAIL to call the function 1 time")
-        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .Exactly(3)).success, "should FAIL to call the function 3 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .exactly(2)).success, "should SUCCEED to call function 2 times")
+        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .exactly(1)).success, "should FAIL to call the function 1 time")
+        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .exactly(3)).success, "should FAIL to call the function 3 times")
     }
     
     func testDidCallFunctionAtLeastANumberOfTimes() {
@@ -87,9 +87,9 @@ class MockerTest: XCTestCase {
         testClass.doStuff()
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .AtLeast(2)).success, "should SUCCEED to call function at least 2 times")
-        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .AtLeast(1)).success, "should SUCCEED to call function at least 1 time")
-        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .AtLeast(3)).success, "should FAIL to call function at least 3 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .atLeast(2)).success, "should SUCCEED to call function at least 2 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .atLeast(1)).success, "should SUCCEED to call function at least 1 time")
+        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .atLeast(3)).success, "should FAIL to call function at least 3 times")
     }
     
     func testDidCallFunctionAtMostANumberOfTimes() {
@@ -101,9 +101,9 @@ class MockerTest: XCTestCase {
         testClass.doStuff()
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .AtMost(2)).success, "should SUCCEED to call function at most 2 times")
-        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .AtMost(3)).success, "should SUCCEED to call function at most 3 times")
-        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .AtMost(1)).success, "should FAIL to call function at most 1 time")
+        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .atMost(2)).success, "should SUCCEED to call function at most 2 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuff()", countSpecifier: .atMost(3)).success, "should SUCCEED to call function at most 3 times")
+        XCTAssertFalse(testClass.didCall(function: "doStuff()", countSpecifier: .atMost(1)).success, "should FAIL to call function at most 1 time")
     }
     
     func testDidCallFunctionWithArguments() {
@@ -142,9 +142,9 @@ class MockerTest: XCTestCase {
         testClass.doStuffWith(string: "hi")
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .Exactly(2)).success, "should SUCCEED to call function with arguments 2 times")
-        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .Exactly(1)).success, "should FAIL to call function with arguments 1 time")
-        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .Exactly(3)).success, "should FAIL to call function with arguments 3 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .exactly(2)).success, "should SUCCEED to call function with arguments 2 times")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .exactly(1)).success, "should FAIL to call function with arguments 1 time")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .exactly(3)).success, "should FAIL to call function with arguments 3 times")
     }
     
     func testDidCallFunctionWithArgumentsAtLeastANumberOfTimes() {
@@ -157,9 +157,9 @@ class MockerTest: XCTestCase {
         testClass.doStuffWith(string: "hi")
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtLeast(2)).success, "should SUCCEED to call function with arguments at least 2 times")
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtLeast(1)).success, "should SUCCEED to call function with arguments at least 1 time")
-        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtLeast(3)).success, "should FAIL to call function with arguments 3 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atLeast(2)).success, "should SUCCEED to call function with arguments at least 2 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atLeast(1)).success, "should SUCCEED to call function with arguments at least 1 time")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atLeast(3)).success, "should FAIL to call function with arguments 3 times")
     }
     
     func testDidCallFunctionWithArgumentsAtMostANumberOfTimes() {
@@ -172,9 +172,9 @@ class MockerTest: XCTestCase {
         testClass.doStuffWith(string: "hi")
         
         // then
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtMost(2)).success, "should SUCCEED to call function with arguments at most 2 times")
-        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtMost(3)).success, "should SUCCEED to call function with arguments at most 3 times")
-        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .AtMost(1)).success, "should FAIL to call function with arguments at most 1 time")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atMost(2)).success, "should SUCCEED to call function with arguments at most 2 times")
+        XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atMost(3)).success, "should SUCCEED to call function with arguments at most 3 times")
+        XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: ["hello"], countSpecifier: .atMost(1)).success, "should FAIL to call function with arguments at most 1 time")
     }
     
     // MARK: - Argument Enum Tests
