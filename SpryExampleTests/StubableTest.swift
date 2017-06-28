@@ -450,8 +450,6 @@ class StubableSpec: QuickSpec {
                     var turnToTrue = false
 
                     beforeEach {
-//                        stringService.stub("callThisCompletion(closure:)").andReturn(Void())
-
                         stringService.stub("callThisCompletion(closure:)").andDo { arguments in
                             let completion = arguments[0] as! () -> Void
                             completion()
@@ -464,7 +462,7 @@ class StubableSpec: QuickSpec {
                         }
                     }
 
-                    fit("should get a string from the stubbed service") {
+                    it("should get a string from the stubbed service") {
                         expect(turnToTrue).to(beTrue())
                     }
                 }

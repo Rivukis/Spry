@@ -17,22 +17,32 @@ public protocol Stubable: class {
 
     func returnValue<T>(function: String, arguments: Any...) -> T
     func returnValue<T>(asType _: T.Type, function: String, arguments: Any...) -> T
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String, arguments: GloballyEquatable...) -> T
+    func returnValue<T>(withFallbackValue fallbackValue: T, function: String, arguments: Any...) -> T
 }
 
 // MARK: - Helper Objects
 
 public class Stub: CustomStringConvertible {
-    let function: String
-    private(set) var arguments: [GloballyEquatable] = []
-    private(set) var returnValue: Any?
-
-    public var description: String {
-        return "Stub(function: <\(function)>, args: <\(arguments.map{"<\($0)>"}.joined(separator: ", "))>, returnValue: <\(returnValue ?? "nil")>)"
+    enum StubType {
+        case andReturn(Any)
+        case andDo(([Any]) -> Any)
     }
 
-    init(function: String) {
+    private var stubType: StubType?
+
+    fileprivate let function: String
+    fileprivate private(set) var arguments: [GloballyEquatable] = []
+
+    fileprivate init(function: String) {
         self.function = function
+    }
+
+    // MARK: Public
+
+    public var description: String {
+        let argumentsString = arguments.map{"<\($0)>"}.joined(separator: ", ")
+        let returnString = stubType == nil ? "nil" : "\(stubType!)"
+        return "Stub(function: <\(function)>, args: <\(argumentsString)>, returnValue: <\(returnString)>)"
     }
 
     public func with(_ arguments: GloballyEquatable...) -> Stub {
@@ -41,22 +51,26 @@ public class Stub: CustomStringConvertible {
     }
 
     public func andReturn(_ value: Any) {
-        returnValue = value
-    }
-
-
-
-    private var _closure: (([Any]) -> Any)?
-    fileprivate func blockReturn(args: [Any]) -> Any? {
-        guard let closure = _closure else {
-            return nil
-        }
-
-        return closure(args)
+        stubType = .andReturn(value)
     }
 
     public func andDo(_ closure: @escaping ([Any]) -> Any) {
-        _closure = closure
+        stubType = .andDo(closure)
+    }
+
+    // MARK: Fileprivate
+
+    fileprivate func returnValue(for args: [Any]) -> Any {
+        guard let stubType = stubType else {
+            fatalError("Must add `andReturn` or `andDo` to properly stub an object")
+        }
+
+        switch stubType {
+        case .andReturn(let value):
+            return value
+        case .andDo(let closure):
+            return closure(args)
+        }
     }
 }
 
@@ -78,7 +92,7 @@ public extension Stubable {
         return getReturnValue(function: function, arguments: arguments)
     }
 
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, arguments: GloballyEquatable...) -> T {
+    func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, arguments: Any...) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
 
         if stubsForFunctionName.isEmpty {
@@ -88,13 +102,14 @@ public extension Stubable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
+            let equatableArguments = arguments.map { $0 as! GloballyEquatable }
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: equatableArguments), let value = stub.returnValue(for: arguments) as? T {
                 return value
             }
         }
 
         for stub in stubsWithoutArgs {
-            if let value = stub.returnValue as? T {
+            if let value = stub.returnValue(for: arguments) as? T {
                 return value
             }
         }
@@ -118,9 +133,10 @@ public extension Stubable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-//            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue as? T {
-//                return value
-//            }
+            let equatableArguments = arguments.map { $0 as! GloballyEquatable }
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: equatableArguments), let value = stub.returnValue(for: arguments) as? T {
+                return value
+            }
         }
 
         for stub in stubsWithoutArgs {
@@ -128,7 +144,7 @@ public extension Stubable {
                 return value
             }
 
-            if let value = stub.blockReturn(args: arguments) as? T {
+            if let value = stub.returnValue(for: arguments) as? T {
                 return value
             }
         }
