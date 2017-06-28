@@ -1,5 +1,5 @@
 //
-//  Stubber.swift
+//  Stubable.swift
 //  SpryExample
 //
 //  Created by Brian Radebaugh on 6/27/17.
@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: Private Extensions
 
-public protocol Stubber: class {
+public protocol Stubable: class {
     var _stubs: [Stub] { get set }
 
     func stub(_ function: String) -> Stub
@@ -45,9 +45,9 @@ public class Stub: CustomStringConvertible {
     }
 }
 
-// MARK - Stubber Extension
+// MARK - Stubable Extension
 
-public extension Stubber {
+public extension Stubable {
     func stub(_ function: String) -> Stub {
         let stub = Stub(function: function)
         _stubs.append(stub)

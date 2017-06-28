@@ -5,7 +5,7 @@ import SpryExample
 @testable import Nimble
 
 class HaveReceivedMatcherTest: XCTestCase {
-    class TestClass: Mocker {
+    class TestClass: Spyable {
         var _calls: [RecordedCall] = []
 
         func doStuff() {

@@ -35,7 +35,7 @@ private class NumbersOnly: SpecialString {
 }
 
 // stubbed version
-private final class StubSpecialString : SpecialString, Stubber {
+private final class StubSpecialString : SpecialString, Stubable {
     var _stubs = [Stub]()
 
     func myStringValue() -> String {
@@ -101,7 +101,7 @@ private class RealStringService : StringService {
 
 // ********** stub the service **********
 
-private class StubStringService : StringService, Stubber {
+private class StubStringService : StringService, Stubable {
     var _stubs = [Stub]()
 
     func giveMeAString() -> String {
@@ -190,10 +190,10 @@ private class TestObject {
     }
 }
 
-class StubberSpec: QuickSpec {
+class StubableSpec: QuickSpec {
     override func spec() {
 
-        describe("Stubber") {
+        describe("Stubable") {
             var stringService: StubStringService!
             var subject: TestObject!
 

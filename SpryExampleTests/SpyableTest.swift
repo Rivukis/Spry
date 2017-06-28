@@ -6,7 +6,7 @@ extension Int: GloballyEquatable {}
 extension NSObject: GloballyEquatable {}
 extension Optional: GloballyEquatable {}
 
-private class TestClass: Mocker {
+private class TestClass: Spyable {
     var _calls = [RecordedCall]()
 
     func doStuff() {
@@ -30,7 +30,7 @@ private class TestClass: Mocker {
     }
 }
 
-class MockerTest: XCTestCase {
+class SpyableTest: XCTestCase {
 
     // MARK: - Resetting
 

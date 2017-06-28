@@ -1,14 +1,14 @@
 import Nimble
 
-public func haveReceived(_ function: String, with arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Mocker> {
+public func haveReceived(_ function: String, with arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Spyable> {
     return Predicate.define("") { actualExpression, msg in
-        guard let mocker = try actualExpression.evaluate() else {
+        guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
             return PredicateResult(bool: false, message: .expectedActualValueTo(descriptionOfAttempted))
         }
 
-        let descriptionOfAttempted = descriptionOfExpectation(actual: mocker, function: function, arguments: arguments, countSpecifier: countSpecifier)
-        let result = mocker.didCall(function: function, withArguments: arguments, countSpecifier: countSpecifier)
+        let descriptionOfAttempted = descriptionOfExpectation(actual: spyable, function: function, arguments: arguments, countSpecifier: countSpecifier)
+        let result = spyable.didCall(function: function, withArguments: arguments, countSpecifier: countSpecifier)
 
         return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
     }
@@ -16,7 +16,7 @@ public func haveReceived(_ function: String, with arguments: GloballyEquatable..
 
 // MARK: Private
 
-private func descriptionOfExpectation(actual: Mocker, function: String, arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfExpectation(actual: Spyable, function: String, arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive <\(function)> on <\(type(of: actual))>"
 
     if !arguments.isEmpty {

@@ -1,5 +1,5 @@
 //
-//  Mocker.swift
+//  Spyable.swift
 //  SpryExample
 //
 //  Created by Brian Radebaugh on 6/27/17.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol Mocker : class {
+public protocol Spyable : class {
     // For Interal Use ONLY -> Implement as empty properties when conforming to protocol
     // Implementation Example:
     // var called = (functionList: [String](), argumentsList: [[GloballyEquatable]]())
@@ -51,9 +51,9 @@ public enum CountSpecifier {
     case atMost(Int)
 }
 
-// MARK - Mocker Extension
+// MARK - Spyable Extension
 
-public extension Mocker {
+public extension Spyable {
     func recordCall(function: String = #function, arguments: GloballyEquatable...) {
         let call = RecordedCall(function: function, arguments: arguments)
         _calls.append(call)
