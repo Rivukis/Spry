@@ -44,7 +44,7 @@ public enum Argument : CustomStringConvertible, GloballyEquatable, Equatable {
     }
 }
 
-public func isEqualArgsLists(specifiedArgs: Array<GloballyEquatable>, actualArgs: Array<GloballyEquatable>) -> Bool {
+public func isEqualArgsLists(specifiedArgs: Array<GloballyEquatable>, actualArgs: Array<Any>) -> Bool {
     if specifiedArgs.count != actualArgs.count {
         return false
     }
@@ -61,7 +61,7 @@ public func isEqualArgsLists(specifiedArgs: Array<GloballyEquatable>, actualArgs
     return true
 }
 
-private func isEqualArgs(specifiedArg: GloballyEquatable, actualArg: GloballyEquatable) -> Bool {
+private func isEqualArgs(specifiedArg: GloballyEquatable, actualArg: Any) -> Bool {
     if let passedArgAsArgumentEnum = specifiedArg as? Argument {
         switch passedArgAsArgumentEnum {
         case .anything:
@@ -76,9 +76,11 @@ private func isEqualArgs(specifiedArg: GloballyEquatable, actualArg: GloballyEqu
 
             return cleanedType == cleanedRecordedArgType
         }
-    } else {
+    } else if let actualArg = actualArg as? GloballyEquatable {
         return specifiedArg.isEqualTo(actualArg)
     }
+
+    fatalError("\(type(of: actualArg)) must conform to Globally Equatable")
 }
 
 private func isNil(_ value: Any) -> Bool {

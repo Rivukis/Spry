@@ -8,8 +8,6 @@
 
 import Foundation
 
-// MARK: Private Extensions
-
 public protocol Stubable: class {
     var _stubs: [Stub] { get set }
 
@@ -74,6 +72,11 @@ public class Stub: CustomStringConvertible {
     }
 }
 
+private enum Fallback<T> {
+    case noFallback
+    case fallback(T)
+}
+
 // MARK - Stubable Extension
 
 public extension Stubable {
@@ -85,56 +88,33 @@ public extension Stubable {
     }
 
     func returnValue<T>(function: String = #function, arguments: Any...) -> T {
-        return getReturnValue(function: function, arguments: arguments)
+        return stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
     }
 
     func returnValue<T>(asType _: T.Type, function: String = #function, arguments: Any...) -> T {
-        return getReturnValue(function: function, arguments: arguments)
+        return stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
     }
 
     func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, arguments: Any...) -> T {
-        let stubsForFunctionName = _stubs.filter{ $0.function == function }
-
-        if stubsForFunctionName.isEmpty {
-            return fallbackValue
-        }
-
-        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
-
-        for stub in stubsWithArgs {
-            let equatableArguments = arguments.map { $0 as! GloballyEquatable }
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: equatableArguments), let value = stub.returnValue(for: arguments) as? T {
-                return value
-            }
-        }
-
-        for stub in stubsWithoutArgs {
-            if let value = stub.returnValue(for: arguments) as? T {
-                return value
-            }
-        }
-
-        return fallbackValue
+        return stubbedValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
     // MARK: - Protocol Extention Helper Functions
 
-    private func getReturnValue<T>(function: String, arguments: [Any]) -> T {
+    private func stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
 
         print(_stubs)
         print(function)
 
         if stubsForFunctionName.isEmpty {
-            let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-            fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")
+            return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
         }
 
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            let equatableArguments = arguments.map { $0 as! GloballyEquatable }
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: equatableArguments), let value = stub.returnValue(for: arguments) as? T {
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue(for: arguments) as? T {
                 return value
             }
         }
@@ -149,8 +129,18 @@ public extension Stubable {
             }
         }
 
-        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubsForFunctionName)>.")    }
+        return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
+    }
+
+    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: String, arguments: [Any]) -> T {
+        switch fallback {
+        case .noFallback:
+            let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+            fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
+        case .fallback(let value):
+            return value
+        }
+    }
 }
 
 // MARK: Private Extensions

@@ -56,7 +56,7 @@ private protocol StringService : class {
     func giveMeAnotherString() -> String
     func giveMeAnOptional() -> String?
     func giveMeAString(string: String) -> String
-    func callThisCompletion(closure: () -> Void)
+    func callThisCompletion(string: String, closure: () -> Void)
 }
 
 // The Real Class
@@ -98,7 +98,7 @@ private class RealStringService : StringService {
         return string
     }
 
-    func callThisCompletion(closure: () -> Void) {
+    func callThisCompletion(string: String, closure: () -> Void) {
 
     }
 }
@@ -145,8 +145,8 @@ private class StubStringService : StringService, Stubable {
         return returnValue(arguments: string)
     }
 
-    func callThisCompletion(closure: () -> Void) {
-        return returnValue(arguments: closure)
+    func callThisCompletion(string: String, closure: () -> Void) {
+        return returnValue(arguments: string, closure)
     }
 }
 
@@ -199,8 +199,8 @@ private class TestObject {
         return service.giveMeAString(string: string)
     }
 
-    func callThisCompletion(_ closure: () -> Void) {
-        service.callThisCompletion(closure: closure)
+    func callThisCompletion(string: String, _ closure: () -> Void) {
+        service.callThisCompletion(string: string, closure: closure)
     }
 }
 
@@ -450,14 +450,36 @@ class StubableSpec: QuickSpec {
                     var turnToTrue = false
 
                     beforeEach {
-                        stringService.stub("callThisCompletion(closure:)").andDo { arguments in
-                            let completion = arguments[0] as! () -> Void
+                        stringService.stub("callThisCompletion(string:closure:)").andDo { arguments in
+                            let completion = arguments[1] as! () -> Void
                             completion()
 
                             return Void()
                         }
 
-                        subject.callThisCompletion {
+                        subject.callThisCompletion(string: "") {
+                            turnToTrue = true
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(turnToTrue).to(beTrue())
+                    }
+                }
+
+                context("when also verifying arguments") {
+                    var turnToTrue = false
+
+                    beforeEach {
+                        let expectedargument = "expectedargument"
+                        stringService.stub("callThisCompletion(string:closure:)").with(expectedargument, Argument.anything).andDo { arguments in
+                            let completion = arguments[1] as! () -> Void
+                            completion()
+
+                            return Void()
+                        }
+
+                        subject.callThisCompletion(string: expectedargument) {
                             turnToTrue = true
                         }
                     }
