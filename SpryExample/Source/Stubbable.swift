@@ -1,5 +1,5 @@
 //
-//  Stubable.swift
+//  Stubbable.swift
 //  SpryExample
 //
 //  Created by Brian Radebaugh on 6/27/17.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol Stubable: class {
+public protocol Stubbable: class {
     var _stubs: [Stub] { get set }
 
     func stub(_ function: String) -> Stub
@@ -77,9 +77,9 @@ private enum Fallback<T> {
     case fallback(T)
 }
 
-// MARK - Stubable Extension
+// MARK - Stubbable Extension
 
-public extension Stubable {
+public extension Stubbable {
     func stub(_ function: String) -> Stub {
         let stub = Stub(function: function)
         _stubs.append(stub)
