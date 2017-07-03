@@ -1,5 +1,7 @@
 # Work in Progress
 
+TODO: finish README.md
+
 The framework is ready to use. Still need some clean up, documentation, and upload to cocoapods.
 
 # Spry
