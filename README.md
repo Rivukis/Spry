@@ -215,13 +215,15 @@ target "<YOUR_TARGET>" do
     # App pods go here
 
     abstract_target 'Tests' do
-        nherit! :search_paths
+        inherit! :search_paths
         target "<YOUR_TARGET>Tests"
 
         pod 'Spry'
 
-        #Uncomment next line to get a Nimble Matcher for for spy objects (requires Quick/Nimble)
-        #pod 'Spry-Nimble'
+        #Uncomment the following lines to import Quick/Nimble as well as a Nimble Matcher that uses Spry's Spyable objects.
+        #pod 'Quick'
+        #pod 'Nimble'
+        #pod 'Spry+Nimble'
     end
 end
 ```
