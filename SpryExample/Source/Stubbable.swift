@@ -13,8 +13,8 @@ public protocol Stubbable: class {
 
     func stub(_ function: String) -> Stub
 
-    func returnValue<T>(function: String, arguments: Any..., asType _: T.Type) -> T
-    func returnValue<T>(function: String, arguments: Any..., fallbackValue: T) -> T
+    func stubbedValue<T>(function: String, arguments: Any..., asType _: T.Type) -> T
+    func stubbedValue<T>(function: String, arguments: Any..., fallbackValue: T) -> T
 }
 
 // MARK: - Helper Objects
@@ -87,27 +87,18 @@ public extension Stubbable {
     }
 
     // TODO: rename to stubbedValue()
-    func returnValue<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
-        return internal_returnValue(function: function, arguments: arguments, fallback: .noFallback)
+    func stubbedValue<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
+        return internal_stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
     }
 
-    func returnValue<T>(function: String = #function, arguments: Any..., fallbackValue: T) -> T {
-        return internal_returnValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
+    func stubbedValue<T>(function: String = #function, arguments: Any..., fallbackValue: T) -> T {
+        return internal_stubbedValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
-    // MARK: - Internal Helpers
+    // MARK: - Internal Helper Functions
 
-    internal func internal_returnValue<T>(function: String, arguments: [Any], fallback: Fallback<T> = .noFallback) -> T {
-        return private_stubbedValue(function: function, arguments: arguments, fallback: fallback)
-    }
-
-    // MARK: - Protocol Extention Helper Functions
-
-    private func private_stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
+    internal func internal_stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
-
-        print(_stubs)
-        print(function)
 
         if stubsForFunctionName.isEmpty {
             return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
@@ -133,6 +124,8 @@ public extension Stubbable {
 
         return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
     }
+
+    // MARK: - Private Helper Functions
 
     private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: String, arguments: [Any]) -> T {
         switch fallback {

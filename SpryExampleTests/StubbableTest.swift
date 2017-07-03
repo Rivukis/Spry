@@ -39,7 +39,7 @@ private final class StubSpecialString : SpecialString, Stubbable {
     var _stubs = [Stub]()
 
     func myStringValue() -> String {
-        return returnValue()
+        return stubbedValue()
     }
 }
 
@@ -127,47 +127,47 @@ private class StubStringService : StringService, Stubbable {
     var _stubs = [Stub]()
 
     func giveMeAString() -> String {
-        return returnValue()
+        return stubbedValue()
     }
 
     func hereAreTwoStrings(string1: String, string2: String) -> Bool {
-        return returnValue(arguments: string1, string2)
+        return stubbedValue(arguments: string1, string2)
     }
 
     func hereComesATuple() -> (String, String) {
-        return returnValue()
+        return stubbedValue()
     }
 
     func hereComesAProtocol() -> SpecialString {
-        return returnValue()
+        return stubbedValue()
     }
 
     func hereComesProtocolsInATuple() -> (SpecialString, SpecialString) {
-        return returnValue()
+        return stubbedValue()
     }
 
     func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T {
-        return returnValue()
+        return stubbedValue()
     }
 
     func hereComesAClosure() -> () -> String {
-        return returnValue()
+        return stubbedValue()
     }
 
     func giveMeAStringWithFallbackValue() -> String {
-        return returnValue(fallbackValue: "fallback value")
+        return stubbedValue(fallbackValue: "fallback value")
     }
 
     func giveMeAnOptional() -> String? {
-        return returnValue()
+        return stubbedValue()
     }
 
     func giveMeAString(string: String) -> String {
-        return returnValue(arguments: string)
+        return stubbedValue(arguments: string)
     }
 
     func callThisCompletion(string: String, closure: () -> Void) {
-        return returnValue(arguments: string, closure)
+        return stubbedValue(arguments: string, closure)
     }
 }
 

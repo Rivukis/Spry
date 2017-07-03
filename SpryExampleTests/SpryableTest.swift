@@ -3,8 +3,7 @@ import Nimble
 import SpryExample
 
 private class SpryStringService: Spryable {
-    var _calls: [RecordedCall] = []
-    var _stubs: [Stub] = []
+    var _spry: (calls: [RecordedCall], stubs: [Stub]) = ([], [])
     
     func getAString() -> String {
         return spryify()
