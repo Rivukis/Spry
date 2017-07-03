@@ -1,14 +1,22 @@
+//
+//  StubbableTest.swift
+//  SpryExample
+//
+//  Created by Brian Radebaugh on 8/1/16.
+//  Copyright © 2016 Brian Radebaugh. All rights reserved.
+//
+
 import Quick
 import Nimble
 import SpryExample
 
-// ********** a protocol as a return value **********
+// MARK: - Test Helper Protocols
 
 private protocol SpecialString {
     func myStringValue() -> String
 }
 
-// final
+// final class
 private final class AlwaysLowerCase: SpecialString {
     let value: String
 
@@ -21,7 +29,7 @@ private final class AlwaysLowerCase: SpecialString {
     }
 }
 
-// NOT final
+// Non-final class
 private class NumbersOnly: SpecialString {
     let value: Int
 
@@ -35,7 +43,7 @@ private class NumbersOnly: SpecialString {
 }
 
 // stubbed version
-private final class StubSpecialString : SpecialString, Stubbable {
+private final class StubSpecialString: SpecialString, Stubbable {
     var _stubs = [Stub]()
 
     func myStringValue() -> String {
@@ -44,7 +52,6 @@ private final class StubSpecialString : SpecialString, Stubbable {
 }
 
 // protocol with self or associated type requirements
-
 private protocol ProtocolWithSelfRequirement {
     func me() -> Self
 }
@@ -57,8 +64,8 @@ private final class MyClass: ProtocolWithSelfRequirement {
 
 // ********** the service to be stubbed **********
 
-// The Protocol
-private protocol StringService : class {
+// MARK: - The Protocol
+private protocol StringService: class {
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
     func hereComesATuple() -> (String, String)
@@ -72,58 +79,9 @@ private protocol StringService : class {
     func callThisCompletion(string: String, closure: () -> Void)
 }
 
-// The Real Class
-private class RealStringService : StringService {
-    func giveMeAString() -> String {
-        return "a real string"
-    }
+// MARK: - The Stub
 
-    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
-        // do real stuff with strings
-        return true
-    }
-
-    func hereComesATuple() -> (String, String) {
-        return ("first real value", "second real value")
-    }
-
-    func hereComesAProtocol() -> SpecialString {
-        return NumbersOnly(value: 12345)
-    }
-
-    func hereComesProtocolsInATuple() -> (SpecialString, SpecialString) {
-        return (NumbersOnly(value: 123), AlwaysLowerCase(value: "2nd real value"))
-    }
-
-    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T {
-        return object
-    }
-
-    func hereComesAClosure() -> () -> String {
-        return { "a real string in a closure" }
-    }
-
-    func giveMeAStringWithFallbackValue() -> String {
-        return "another real string"
-    }
-
-    func giveMeAnOptional() -> String? {
-        return nil
-    }
-
-    func giveMeAString(string: String) -> String {
-        return string
-    }
-
-    func callThisCompletion(string: String, closure: () -> Void) {
-
-    }
-}
-
-
-// ********** stub the service **********
-
-private class StubStringService : StringService, Stubbable {
+private class StubStringService: StringService, Stubbable {
     var _stubs = [Stub]()
 
     func giveMeAString() -> String {

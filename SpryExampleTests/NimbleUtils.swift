@@ -1,5 +1,5 @@
 // ****************************** IMPORTANT ******************************
-// The code in this file comes from Nimble which can be found at https://github.com/Quick/Nimble
+// The code in this file comes from the Nimble project which can be found at https://github.com/Quick/Nimble
 // This file is needed to test the 'haveReceived' matcher properly
 // ****************************** IMPORTANT ******************************
 

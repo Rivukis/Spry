@@ -2,11 +2,11 @@
 //  Argument.swift
 //  SpryExample
 //
-//  Created by Brian Radebaugh on 6/27/17.
-//  Copyright © 2017 Brian Radebaugh. All rights reserved.
+//  Created by Brian Radebaugh on 11/3/15.
+//  Copyright © 2015 Brian Radebaugh. All rights reserved.
 //
 
-public enum Argument : CustomStringConvertible, GloballyEquatable, Equatable {
+public enum Argument: CustomStringConvertible, GloballyEquatable, Equatable {
     case anything
     case nonNil
     case `nil`

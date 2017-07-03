@@ -1,3 +1,11 @@
+//
+//  SpyableTest.swift
+//  SpryExample
+//
+//  Created by Brian Radebaugh on 11/1/15.
+//  Copyright © 2015 Brian Radebaugh. All rights reserved.
+//
+
 import XCTest
 import SpryExample
 
@@ -7,7 +15,7 @@ extension NSObject: GloballyEquatable {}
 extension Optional: GloballyEquatable {}
 
 private class TestClass: Spyable {
-    var _calls = [RecordedCall]()
+    var _calls: [RecordedCall] = []
 
     func doStuff() {
         recordCall()

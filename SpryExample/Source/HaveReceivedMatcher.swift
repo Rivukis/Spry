@@ -1,3 +1,11 @@
+//
+//  HaveReceivedMatcher.swift
+//  SpryExample
+//
+//  Created by Brian Radebaugh on 11/14/15.
+//  Copyright © 2015 Brian Radebaugh. All rights reserved.
+//
+
 import Nimble
 
 public func haveReceived(_ function: String, with arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Spyable> {
