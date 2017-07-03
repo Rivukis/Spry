@@ -20,9 +20,7 @@ public class RecordedCall: CustomStringConvertible {
     let function: String
     let arguments: [Any]
 
-    /**
-     A beautified description. Used for debugging purposes.
-     */
+    /// A beautified description. Used for debugging purposes.
     public var description: String {
         return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0)>"}.joined(separator: ", ")))>"
     }
@@ -58,14 +56,16 @@ public enum CountSpecifier {
 }
 
 /**
- A protocol used to spy on objects. A small amount of boilerplate is requried.
+ A protocol used to spy on an object's function calls. A small amount of boilerplate is requried.
  
- All the functions specified in this protocol come with default implementation that should NOT be overridden.
+ - Important: All the functions specified in this protocol come with default implementation that should NOT be overridden.
  
- * var _calls: [RecordedCall] - Used internally to keep track of a recorded calls.
+ - Note: The `Spryable` protocol exists as a convenience when conforming to both `Spyable` and `Stubbable`.
+ 
+ * var _calls: [RecordedCall] - Used internally to keep track of recorded calls.
  * recoredCall(function: String, arguments: Any...) - Used to record a call.
  * clearRecordedLists() - Used to clear out all recorded calls.
- * didCall(function: String, withArguments arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
+ * didCall(function: String, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
  */
 public protocol Spyable: class {
     /**
@@ -83,36 +83,37 @@ public protocol Spyable: class {
     var _calls: [RecordedCall] { get set }
 
     /**
-     Used to record a call. Must call in every function for Spyable to work properly.
+     Used to record a function call. Must call in every function for Spyable to work properly.
      
-     - Important: Do NOT implement function. Use default implement provided by Spry.
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
 
-     - Parameter function: The function to be recorded. Defaults to `#function`.
-     - Parameter arguments: The arguments to be recorded.
+     - Parameter function: The function signature to be recorded. Defaults to #function.
+     - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Spyable to work properly.
      */
     func recordCall(function: String, arguments: Any...)
-
-    // Used if you want to reset the called function/arguments lists
 
     /**
      Used to clear out all recorded function calls.
      
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
      - Important: The spied object will have NO way of knowing about calls made before this function is called. Use with caution.
      */
     func clearRecordedLists()
 
-    // Used to determine if a call was made (Only use this is not using the Nimble Matcher)
-
     /**
      Used to determine if a function has been called with the specified arguments and with the amount of times specified.
      
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+     - Important: Only use this function if NOT using the provided `haveReceived()` matcher used in conjunction with [Quick/Nimble](https://github.com/Quick).
+
      - Parameter function: The function signature as a `String`.
      - Parameter arguments: The arguments specified. If this value is an empty array, then any parameters passed into the actual function call will result in a success (i.e. passing in `[]` is equivalent to passing in Argument.anything for every expected parameter.)
      - Parameter countSpecifier: Used to specify the amount of times this function needs to be called for a successful result. See `CountSpecifier` for more detials.
      
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
-    func didCall(function: String, withArguments arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> DidCallResult
+    func didCall(function: String, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult
 }
 
 // MARK - Spyable Extension
@@ -126,7 +127,7 @@ public extension Spyable {
         _calls = []
     }
     
-    func didCall(function: String, withArguments arguments: [GloballyEquatable] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
+    func didCall(function: String, withArguments arguments: [AnyEquatable] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
         case .exactly(let count): success = timesCalled(function, arguments: arguments) == count
@@ -147,14 +148,14 @@ public extension Spyable {
 
     // MARK: - Private Functions
     
-    private func timesCalled(_ function: String, arguments: [GloballyEquatable]) -> Int {
+    private func timesCalled(_ function: String, arguments: [AnyEquatable]) -> Int {
         return numberOfMatchingCalls(function: function, arguments: arguments, calls: _calls)
     }
 }
 
 // MARK: Private Functions
 
-private func numberOfMatchingCalls(function: String, arguments: [GloballyEquatable], calls: [RecordedCall]) -> Int {
+private func numberOfMatchingCalls(function: String, arguments: [AnyEquatable], calls: [RecordedCall]) -> Int {
     let matchingFunctions = calls.filter{ $0.function == function }
 
     // if no args passed in then only check if function was called (allows user to not care about args being passed in)
@@ -166,7 +167,7 @@ private func numberOfMatchingCalls(function: String, arguments: [GloballyEquatab
 }
 
 
-private func matchingIndexesFor(functionName: String, functionList: Array<String>) -> [Int] {
+private func matchingIndexesFor(functionName: String, functionList: [String]) -> [Int] {
     return functionList.enumerated().map { $1 == functionName ? $0 : -1 }.filter { $0 != -1 }
 }
 

@@ -8,7 +8,7 @@
 
 import Nimble
 
-public func haveReceived(_ function: String, with arguments: GloballyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Spyable> {
+public func haveReceived(_ function: String, with arguments: AnyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Spyable> {
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
@@ -24,7 +24,7 @@ public func haveReceived(_ function: String, with arguments: GloballyEquatable..
 
 // MARK: Private
 
-private func descriptionOfExpectation(actual: Spyable, function: String, arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfExpectation(actual: Spyable, function: String, arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive <\(function)> on <\(type(of: actual))>"
 
     if !arguments.isEmpty {
@@ -57,7 +57,7 @@ private func descriptionOfExpectation(actual: Spyable, function: String, argumen
     return descriptionOfAttempt
 }
 
-private func descriptionOfNilAttempt(arguments: [GloballyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfNilAttempt(arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive function"
 
     if arguments.count != 0 {

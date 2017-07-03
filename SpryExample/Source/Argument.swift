@@ -6,7 +6,15 @@
 //  Copyright © 2015 Brian Radebaugh. All rights reserved.
 //
 
-public enum Argument: CustomStringConvertible, GloballyEquatable, Equatable {
+/**
+ Argument specifier used by Spyable and Stubbable. Used for non-Equatable comparision.
+ 
+ * .anything - Every value matches this qualification.
+ * .nonNil - Every value matches this qualification except Optional.none
+ * .nil - Only Optional.nil matches this qualification.
+ * .instanceOf(type:) - Only objects whose type is exactly the type passed in match this qualification (subtypes do NOT qualify).
+ */
+public enum Argument: CustomStringConvertible, AnyEquatable, Equatable {
     case anything
     case nonNil
     case `nil`
@@ -44,7 +52,7 @@ public enum Argument: CustomStringConvertible, GloballyEquatable, Equatable {
     }
 }
 
-public func isEqualArgsLists(specifiedArgs: Array<GloballyEquatable>, actualArgs: Array<Any>) -> Bool {
+internal func isEqualArgsLists(specifiedArgs: [AnyEquatable], actualArgs: [Any]) -> Bool {
     if specifiedArgs.count != actualArgs.count {
         return false
     }
@@ -61,7 +69,7 @@ public func isEqualArgsLists(specifiedArgs: Array<GloballyEquatable>, actualArgs
     return true
 }
 
-private func isEqualArgs(specifiedArg: GloballyEquatable, actualArg: Any) -> Bool {
+private func isEqualArgs(specifiedArg: AnyEquatable, actualArg: Any) -> Bool {
     if let passedArgAsArgumentEnum = specifiedArg as? Argument {
         switch passedArgAsArgumentEnum {
         case .anything:
@@ -76,8 +84,8 @@ private func isEqualArgs(specifiedArg: GloballyEquatable, actualArg: Any) -> Boo
 
             return cleanedType == cleanedRecordedArgType
         }
-    } else if let actualArg = actualArg as? GloballyEquatable {
-        return specifiedArg.isEqualTo(actualArg)
+    } else if let actualArg = actualArg as? AnyEquatable {
+        return specifiedArg.isEqual(to: actualArg)
     }
 
     fatalError("\(type(of: actualArg)) must conform to Globally Equatable")

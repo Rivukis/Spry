@@ -1,25 +1,26 @@
 //
-//  GloballyEquatable.swift
+//  AnyEquatable.swift
 //  SpryExample
 //
 //  Created by Brian Radebaugh on 4/2/16.
 //  Copyright © 2016 Brian Radebaugh. All rights reserved.
 //
 
-// MARK: OptionalType
-
-public protocol OptionalType {}
-extension Optional: OptionalType {}
-
-// MARK: GloballyEquatable
-
-// In order to use GloballyEquatable, conform to Equatable
-public protocol GloballyEquatable {
-    func isEqualTo(_ other: GloballyEquatable) -> Bool
+/**
+ Used to conpare any two arguments. Uses Equatable's `==(lhs:rhs:)` operator for conparision.
+ 
+ - Important: Never manually conform to `AnyEquatable`.
+ - Note: If a compiler error says you do NOT conform to `AnyEquatable` then conform to `Equatable`. This will remove the error.
+ */
+public protocol AnyEquatable {
+    func isEqual(to other: AnyEquatable) -> Bool
 }
 
-public extension GloballyEquatable where Self: Equatable {
-    public func isEqualTo(_ other: GloballyEquatable) -> Bool {
+/**
+ Default implementation for `AnyEquatable` when `Self` is `Equatable`.
+ */
+public extension AnyEquatable where Self: Equatable {
+    public func isEqual(to other: AnyEquatable) -> Bool {
         // if 'self' is non-optional and 'other' is optional and other's .Some's associated value's type equals self's type
         // then the if let below will auto unwrap 'other' to be the non-optional version of self's type
         if type(of: self) != type(of: other) {
@@ -34,8 +35,19 @@ public extension GloballyEquatable where Self: Equatable {
     }
 }
 
-public extension GloballyEquatable where Self: OptionalType {
-    public func isEqualTo(_ other: GloballyEquatable) -> Bool {
+// MARK: - OptionalType
+
+/**
+ Used to specify an `Optional` constraint. This is needed until Swift supports extensions where Self can be constrained to a type. 
+ */
+public protocol OptionalType {}
+extension Optional: OptionalType {}
+
+/**
+ Default implementation for `AnyEquatable` when `Self` is `OptionalType` (aka `Optional`).
+ */
+public extension AnyEquatable where Self: OptionalType {
+    public func isEqual(to other: AnyEquatable) -> Bool {
         if type(of: self) != type(of: other) {
             return false
         }
@@ -62,15 +74,15 @@ public extension GloballyEquatable where Self: OptionalType {
             return false
         }
 
-        guard let selfsContainedValueAsGE = selfsWrappedValue as? GloballyEquatable else {
-            assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to GloballyEquatable")
+        guard let selfsContainedValueAsGE = selfsWrappedValue as? AnyEquatable else {
+            assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to AnyEquatable")
             return false
         }
-        guard let othersContainedValueAsGE = othersWrappedValue as? GloballyEquatable else {
-            assertionFailure("\(type(of: othersWrappedValue)) does NOT conform to GloballyEquatable")
+        guard let othersContainedValueAsGE = othersWrappedValue as? AnyEquatable else {
+            assertionFailure("\(type(of: othersWrappedValue)) does NOT conform to AnyEquatable")
             return false
         }
 
-        return selfsContainedValueAsGE.isEqualTo(othersContainedValueAsGE)
+        return selfsContainedValueAsGE.isEqual(to: othersContainedValueAsGE)
     }
 }

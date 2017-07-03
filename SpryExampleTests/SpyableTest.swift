@@ -9,10 +9,10 @@
 import XCTest
 import SpryExample
 
-extension String: GloballyEquatable {}
-extension Int: GloballyEquatable {}
-extension NSObject: GloballyEquatable {}
-extension Optional: GloballyEquatable {}
+extension String: AnyEquatable {}
+extension Int: AnyEquatable {}
+extension NSObject: AnyEquatable {}
+extension Optional: AnyEquatable {}
 
 private class TestClass: Spyable {
     var _calls: [RecordedCall] = []
@@ -236,9 +236,9 @@ class SpyableTest: XCTestCase {
         XCTAssertTrue(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.instanceOf(type: String.self)]).success, "should SUCCEED to call function with 'instance of String' argument")
         XCTAssertFalse(testClass.didCall(function: "doStuffWith(string:)", withArguments: [Argument.instanceOf(type: Int.self)]).success, "should FAIL to call function with 'instance of Int' argument")
         
-        let expectedArgs1: Array<GloballyEquatable> = [Argument.instanceOf(type: Optional<String>.self), Argument.instanceOf(type: Optional<Int>.self)]
+        let expectedArgs1: [AnyEquatable] = [Argument.instanceOf(type: Optional<String>.self), Argument.instanceOf(type: Optional<Int>.self)]
         XCTAssertTrue(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: expectedArgs1).success, "should SUCCEED to call function with 'instance of String?' and ' instance of Int?' arguments")
-        let expectedArgs2: Array<GloballyEquatable> = [Argument.instanceOf(type: String.self), Argument.instanceOf(type: Int.self)]
+        let expectedArgs2: [AnyEquatable] = [Argument.instanceOf(type: String.self), Argument.instanceOf(type: Int.self)]
         XCTAssertFalse(testClass.didCall(function: "doWeirdStuffWith(string:int:)", withArguments: expectedArgs2).success, "should FAIL to call function with 'instance of String' and 'instance of Int' arguments")
     }
 
