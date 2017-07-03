@@ -16,4 +16,5 @@ Pod::Spec.new do |s|
   s.source_files = 'SpryExample/Spry+Nimble_Source/*'
 
   s.dependency 'Nimble'
+  s.dependency 'Spry'
 end
