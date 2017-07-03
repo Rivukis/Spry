@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		045C10AFB4042D9FF599F000 /* Pods_Tests_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9F0816AE7C4B5490AAFC44 /* Pods_Tests_SpryExampleTests.framework */; };
 		0F88A6018844A48B28A70B48 /* Pods_SpryExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CBCE14618A091169555908 /* Pods_SpryExample.framework */; };
+		7A27A6181F09B589001D956D /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27A6171F09B589001D956D /* Spryable.swift */; };
+		7A27A61A1F09C130001D956D /* SpryableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27A6191F09C130001D956D /* SpryableTest.swift */; };
 		7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */; };
 		7A2BFC561F00D27E00BB12C1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC551F00D27E00BB12C1 /* ViewController.swift */; };
 		7A2BFC591F00D27E00BB12C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2BFC571F00D27E00BB12C1 /* Main.storyboard */; };
@@ -40,6 +42,8 @@
 		4A7564DE57AC34D112DF850E /* Pods-Tests-SpryExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests-SpryExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5548485DE352075DC9645F8B /* Pods-Tests-SpryExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests-SpryExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		74E8701AC756C09395104A62 /* Pods-SpryExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.debug.xcconfig"; sourceTree = "<group>"; };
+		7A27A6171F09B589001D956D /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spryable.swift; sourceTree = "<group>"; };
+		7A27A6191F09C130001D956D /* SpryableTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryableTest.swift; sourceTree = "<group>"; };
 		7A2BFC501F00D27E00BB12C1 /* SpryExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpryExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A2BFC551F00D27E00BB12C1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +135,7 @@
 		7A2BFC671F00D27E00BB12C1 /* SpryExampleTests */ = {
 			isa = PBXGroup;
 			children = (
+				7A27A6191F09C130001D956D /* SpryableTest.swift */,
 				7A2BFC781F00D36700BB12C1 /* SpyableTest.swift */,
 				7A2FE8A31F0242120062AE72 /* StubbableTest.swift */,
 				7A8654F31F00F62200D425B6 /* ArgumentTest.swift */,
@@ -144,6 +149,7 @@
 		7A2BFC731F00D32800BB12C1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7A27A6171F09B589001D956D /* Spryable.swift */,
 				7A2BFC751F00D32800BB12C1 /* Spyable.swift */,
 				7A2FE8A11F023D480062AE72 /* Stubbable.swift */,
 				7A8654EE1F00EE9E00D425B6 /* GloballyEquatable.swift */,
@@ -379,6 +385,7 @@
 				7A2BFC561F00D27E00BB12C1 /* ViewController.swift in Sources */,
 				7A2BFC761F00D32800BB12C1 /* HaveReceivedMatcher.swift in Sources */,
 				7A8654EF1F00EE9E00D425B6 /* GloballyEquatable.swift in Sources */,
+				7A27A6181F09B589001D956D /* Spryable.swift in Sources */,
 				7A2FE8A21F023D480062AE72 /* Stubbable.swift in Sources */,
 				7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */,
 				7A8654F11F00F13F00D425B6 /* Argument.swift in Sources */,
@@ -395,6 +402,7 @@
 				7A2BFC7B1F00D36700BB12C1 /* HaveReceivedMatcherTest.swift in Sources */,
 				7A8654F41F00F62200D425B6 /* ArgumentTest.swift in Sources */,
 				7A2FE8A41F0242120062AE72 /* StubbableTest.swift in Sources */,
+				7A27A61A1F09C130001D956D /* SpryableTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

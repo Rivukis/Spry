@@ -13,9 +13,8 @@ public protocol Stubbable: class {
 
     func stub(_ function: String) -> Stub
 
-    func returnValue<T>(function: String, arguments: Any...) -> T
-    func returnValue<T>(asType _: T.Type, function: String, arguments: Any...) -> T
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String, arguments: Any...) -> T
+    func returnValue<T>(function: String, arguments: Any..., asType _: T.Type) -> T
+    func returnValue<T>(function: String, arguments: Any..., fallbackValue: T) -> T
 }
 
 // MARK: - Helper Objects
@@ -72,7 +71,7 @@ public class Stub: CustomStringConvertible {
     }
 }
 
-private enum Fallback<T> {
+internal enum Fallback<T> {
     case noFallback
     case fallback(T)
 }
@@ -87,21 +86,24 @@ public extension Stubbable {
         return stub
     }
 
-    func returnValue<T>(function: String = #function, arguments: Any...) -> T {
-        return stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
+    // TODO: rename to stubbedValue()
+    func returnValue<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
+        return internal_returnValue(function: function, arguments: arguments, fallback: .noFallback)
     }
 
-    func returnValue<T>(asType _: T.Type, function: String = #function, arguments: Any...) -> T {
-        return stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
+    func returnValue<T>(function: String = #function, arguments: Any..., fallbackValue: T) -> T {
+        return internal_returnValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
-    func returnValue<T>(withFallbackValue fallbackValue: T, function: String = #function, arguments: Any...) -> T {
-        return stubbedValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
+    // MARK: - Internal Helpers
+
+    internal func internal_returnValue<T>(function: String, arguments: [Any], fallback: Fallback<T> = .noFallback) -> T {
+        return private_stubbedValue(function: function, arguments: arguments, fallback: fallback)
     }
 
     // MARK: - Protocol Extention Helper Functions
 
-    private func stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
+    private func private_stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.function == function }
 
         print(_stubs)

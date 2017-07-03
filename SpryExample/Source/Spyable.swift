@@ -11,7 +11,7 @@ import Foundation
 public protocol Spyable : class {
     // For Interal Use ONLY -> Implement as empty properties when conforming to protocol
     // Implementation Example:
-    // var called = (functionList: [String](), argumentsList: [[GloballyEquatable]]())
+    // var _calls: [RecordedCall] = []
     var _calls: [RecordedCall] { get set }
 
     // **MUST** call in every method you want to spy
@@ -55,6 +55,10 @@ public enum CountSpecifier {
 
 public extension Spyable {
     func recordCall(function: String = #function, arguments: GloballyEquatable...) {
+        internal_recordCall(function: function, arguments: arguments)
+    }
+
+    internal func internal_recordCall(function: String, arguments: [GloballyEquatable]) {
         let call = RecordedCall(function: function, arguments: arguments)
         _calls.append(call)
     }

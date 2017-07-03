@@ -43,6 +43,18 @@ private final class StubSpecialString : SpecialString, Stubbable {
     }
 }
 
+// protocol with self or associated type requirements
+
+private protocol ProtocolWithSelfRequirement {
+    func me() -> Self
+}
+
+private final class MyClass: ProtocolWithSelfRequirement {
+    func me() -> MyClass {
+        return self
+    }
+}
+
 // ********** the service to be stubbed **********
 
 // The Protocol
@@ -52,6 +64,7 @@ private protocol StringService : class {
     func hereComesATuple() -> (String, String)
     func hereComesAProtocol() -> SpecialString
     func hereComesProtocolsInATuple() -> (SpecialString, SpecialString)
+    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T
     func hereComesAClosure() -> () -> String
     func giveMeAStringWithFallbackValue() -> String
     func giveMeAnOptional() -> String?
@@ -80,6 +93,10 @@ private class RealStringService : StringService {
 
     func hereComesProtocolsInATuple() -> (SpecialString, SpecialString) {
         return (NumbersOnly(value: 123), AlwaysLowerCase(value: "2nd real value"))
+    }
+
+    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T {
+        return object
     }
 
     func hereComesAClosure() -> () -> String {
@@ -129,12 +146,16 @@ private class StubStringService : StringService, Stubbable {
         return returnValue()
     }
 
+    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T {
+        return returnValue()
+    }
+
     func hereComesAClosure() -> () -> String {
         return returnValue()
     }
 
     func giveMeAStringWithFallbackValue() -> String {
-        return returnValue(withFallbackValue: "fallback value")
+        return returnValue(fallbackValue: "fallback value")
     }
 
     func giveMeAnOptional() -> String? {
@@ -228,6 +249,19 @@ class StubbableSpec: QuickSpec {
                     let tuple = subject.hereComesProtocolsInATuple()
                     expect(tuple.0.myStringValue()).to(equal(expectedFirstHalf.myStringValue()))
                     expect(tuple.1.myStringValue()).to(equal(expectedSecondHalf))
+                }
+            }
+
+            describe("returning a protocol with self or associated type requirements") {
+                let expectedMyClass = MyClass()
+
+                beforeEach {
+                    subject.stub("hereComesProtocolWithSelfRequirements(object:)").andReturn(expectedMyClass)
+                }
+
+                it("should be able to stub a tuple of protocols as a return type") {
+                    let actualMyClass = subject.hereComesProtocolWithSelfRequirements(object: MyClass())
+                    expect(actualMyClass).to(beIdenticalTo(expectedMyClass))
                 }
             }
 
