@@ -38,9 +38,9 @@ public class Stub: CustomStringConvertible {
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
-        let argumentsString = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        let returnString = stubType == nil ? "nil" : "\(stubType!)"
-        return "Stub(function: <\(function)>, args: <\(argumentsString)>, returnValue: <\(returnString)>)"
+        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+        let returnDescription = stubType == nil ? "nil" : "\(stubType!)"
+        return "Stub(function: <\(function)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
     }
 
     /**
@@ -48,7 +48,12 @@ public class Stub: CustomStringConvertible {
      
      - Note: If no arguments are specified then any arguments may be passed in and the stubbed value will still be returned.
      
-     - Parameter arguments: The specified arguments needed for the stub to succeed.
+     ## Example ##
+     ```swift
+     service.stub("functionSignature").with("expected argument")
+     ```
+     
+     - Parameter arguments: The specified arguments needed for the stub to succeed. See `Argument` for ways other ways of constraining expected arguments besides Equatable.
      
      - Returns: A stub object used to add additional `with()` or to add `andReturn()` or `andDo()`.
      */
@@ -60,9 +65,18 @@ public class Stub: CustomStringConvertible {
     /**
      Used to specify the return value for the stubbed function.
      
-     - Important: This allows any object to be passed in but the stub will ONLY work if the correct type is passed in.
+     - Important: This allows `Any` object to be passed in but the stub will ONLY work if the correct type is passed in.
      
      - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
+     
+     ## Example ##
+     ```swift
+     // arguments do NOT matter
+     service.stub("functionSignature()").andReturn("stubbed value")
+     
+     // arguments matter
+     service.stub("functionSignature()").with("expected argument").andReturn("stubbed value")
+     ```
 
      - Parameter value: The value to be returned by the stubbed function.
      */
@@ -74,6 +88,21 @@ public class Stub: CustomStringConvertible {
      Used to specify a closure to be executed in place of the stubbed function.
      
      - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
+     
+     ## Example ##
+     ```swift
+     // arguments do NOT matter (closure will be called if `functionSignature()` is called)
+     service.stub("functionSignature()").andDo { arguments in
+         // do test specific things (like call a completion block)
+         return "stubbed value"
+     }
+
+     // arguments matter (closure will NOT be called unless the arguments match what is passed in the `with()` function)
+     service.stub("functionSignature()").with("expected argument").andDo { arguments in
+         // do test specific things (like call a completion block)
+         return "stubbed value"
+     }
+     ```
 
      - Parameter closure: The closure to be executed. The array of parameters that will be passed in correspond to the parameters being passed into the stubbed function. The return value must match the stubbed function's return type and will be the return value of the stubbed function.
      */

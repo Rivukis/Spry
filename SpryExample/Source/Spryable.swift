@@ -13,7 +13,6 @@ import Foundation
 
  See Spyable and Stubbable or more information.
  */
-
 public protocol Spryable: Spyable, Stubbable {
     /**
      For internal use ONLY. Convenience property to help conform to Spyable and Stubbable with less effort.
@@ -21,6 +20,8 @@ public protocol Spryable: Spyable, Stubbable {
      See `Spyable`'s `_calls` and `Stubbable`'s `_stubs` or more information.
 
      - Important: Do not modify this properties value.
+     
+     - Note: This property satisfies both `Spyable`'s and `Stubbable`'s property requirements. There is no need to implement `_calls` and `_stubs` when conforming to `Spryable`.
 
      ## Example Conformance ##
      ```swift

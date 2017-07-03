@@ -25,7 +25,7 @@ public class RecordedCall: CustomStringConvertible {
         return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0)>"}.joined(separator: ", ")))>"
     }
 
-    init(function: String, arguments: [Any]) {
+    internal init(function: String, arguments: [Any]) {
         self.function = function
         self.arguments = arguments
     }
@@ -40,6 +40,11 @@ public class RecordedCall: CustomStringConvertible {
 public struct DidCallResult {
     public let success: Bool
     public let recordedCallsDescription: String
+
+    internal init(success: Bool, recordedCallsDescription: String) {
+        self.success = success
+        self.recordedCallsDescription = recordedCallsDescription
+    }
 }
 
 /**
