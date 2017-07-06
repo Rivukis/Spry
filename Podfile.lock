@@ -1,15 +1,29 @@
 PODS:
   - Nimble (7.0.1)
   - Quick (1.1.0)
+  - Spry (1.0.1)
+  - Spry+Nimble (1.0):
+    - Nimble
+    - Spry
 
 DEPENDENCIES:
   - Nimble
   - Quick
+  - Spry (from `./`)
+  - Spry+Nimble (from `./`)
+
+EXTERNAL SOURCES:
+  Spry:
+    :path: "./"
+  Spry+Nimble:
+    :path: "./"
 
 SPEC CHECKSUMS:
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
   Quick: dafc587e21eed9f4cab3249b9f9015b0b7a7f71d
+  Spry: 8349b9bebae7508474a9d4bcb900b8c16f2460e2
+  Spry+Nimble: 034f1f9f471e633aa354bc7dc80188cff07d2ce2
 
-PODFILE CHECKSUM: 6ec0086f287ee001537925e792edd20ab5c2a414
+PODFILE CHECKSUM: 26c2d2ab7150abcfd6e1bbdc96fa1a4b3d5507a4
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0

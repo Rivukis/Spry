@@ -5,11 +5,12 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 target "SpryExample" do
-    pod 'Quick'
-    pod 'Nimble'
-
-    abstract_target 'Tests' do
+    target 'SpryExampleTests' do
         inherit! :search_paths
-        target "SpryExampleTests"
+
+        pod 'Quick'
+        pod 'Nimble'
+        pod 'Spry', :path => './'
+        pod 'Spry+Nimble', :path => './'
     end
 end
