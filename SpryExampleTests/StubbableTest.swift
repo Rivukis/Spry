@@ -66,6 +66,8 @@ private final class MyClass: ProtocolWithSelfRequirement {
 
 // MARK: - The Protocol
 private protocol StringService: class {
+    var myProperty: String { get }
+
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
     func hereComesATuple() -> (String, String)
@@ -83,6 +85,10 @@ private protocol StringService: class {
 
 private class StubStringService: StringService, Stubbable {
     var _stubs = [Stub]()
+
+    var myProperty: String {
+        return stubbedValue()
+    }
 
     func giveMeAString() -> String {
         return stubbedValue()
@@ -137,6 +143,18 @@ class StubbableSpec: QuickSpec {
 
             beforeEach {
                 subject = StubStringService()
+            }
+
+            describe("stubbing a property") {
+                let expectedString = "expected"
+
+                beforeEach {
+                    subject.stub("myProperty").andReturn(expectedString)
+                }
+
+                it("should get a string from the stubbed service") {
+                    expect(subject.myProperty).to(equal(expectedString))
+                }
             }
 
             describe("returning a simple value") {

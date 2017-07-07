@@ -17,6 +17,21 @@ extension Optional: AnyEquatable {}
 private class TestClass: Spyable {
     var _calls: [RecordedCall] = []
 
+    var ivarProperty: String = "" {
+        didSet {
+            recordCall(arguments: ivarProperty)
+        }
+    }
+
+    var readOnlyProperty: String {
+        set {
+            recordCall(arguments: newValue)
+        }
+        get {
+            return ""
+        }
+    }
+
     func doStuff() {
         recordCall()
     }
@@ -59,6 +74,30 @@ class SpyableTest: XCTestCase {
     }
 
     // MARK: - Did Call Tests
+
+    func testDidCallIvarProperty() {
+        // given
+        let testClass = TestClass()
+
+        // when
+        testClass.ivarProperty = "new value"
+
+        // then
+        XCTAssertTrue(testClass.didCall(function: "ivarProperty").success, "should SUCCEED to set property")
+        XCTAssertTrue(testClass.didCall(function: "ivarProperty", withArguments: ["new value"]).success, "should SUCCEED to set property with new value")
+    }
+
+    func testDidCallReadOnlyProperty() {
+        // given
+        let testClass = TestClass()
+
+        // when
+        testClass.readOnlyProperty = "new value"
+
+        // then
+        XCTAssertTrue(testClass.didCall(function: "readOnlyProperty").success, "should SUCCEED to set property")
+        XCTAssertTrue(testClass.didCall(function: "readOnlyProperty", withArguments: ["new value"]).success, "should SUCCEED to set property with new value")
+    }
     
     func testDidCallFunction() {
         // given
