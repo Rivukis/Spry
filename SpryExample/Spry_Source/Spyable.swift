@@ -146,6 +146,7 @@ public extension Spyable {
 
     // MARK: - Internal Functions
 
+    /// This is for `Spryable` to act as a pass-through to record a call.
     internal func internal_recordCall(function: String, arguments: [Any]) {
         let call = RecordedCall(function: function, arguments: arguments)
         _calls.append(call)

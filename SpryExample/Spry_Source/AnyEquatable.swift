@@ -70,15 +70,15 @@ public extension AnyEquatable where Self: OptionalType {
         if selfsWrappedValue == nil && othersWrappedValue == nil {
             return true
         }
-        if selfsWrappedValue == nil || othersWrappedValue == nil {
+        guard let selfsWrappedValueNonOptional = selfsWrappedValue, let othersWrappedValueNonOptional = othersWrappedValue else {
             return false
         }
 
-        guard let selfsContainedValueAsGE = selfsWrappedValue as? AnyEquatable else {
+        guard let selfsContainedValueAsGE = selfsWrappedValueNonOptional as? AnyEquatable else {
             assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to AnyEquatable")
             return false
         }
-        guard let othersContainedValueAsGE = othersWrappedValue as? AnyEquatable else {
+        guard let othersContainedValueAsGE = othersWrappedValueNonOptional as? AnyEquatable else {
             assertionFailure("\(type(of: othersWrappedValue)) does NOT conform to AnyEquatable")
             return false
         }
