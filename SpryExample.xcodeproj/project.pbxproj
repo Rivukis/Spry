@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		045C10AFB4042D9FF599F000 /* Pods_Tests_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9F0816AE7C4B5490AAFC44 /* Pods_Tests_SpryExampleTests.framework */; };
 		0F88A6018844A48B28A70B48 /* Pods_SpryExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CBCE14618A091169555908 /* Pods_SpryExample.framework */; };
 		7A27A61A1F09C130001D956D /* SpryableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27A6191F09C130001D956D /* SpryableTest.swift */; };
 		7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */; };
@@ -19,13 +18,14 @@
 		7A2BFC7B1F00D36700BB12C1 /* HaveReceivedMatcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC791F00D36700BB12C1 /* HaveReceivedMatcherTest.swift */; };
 		7A2FE8A41F0242120062AE72 /* StubbableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8A31F0242120062AE72 /* StubbableTest.swift */; };
 		7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */; };
-		7A4BDE6B1F0A1D6F00A35375 /* AnyEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE661F0A1D6F00A35375 /* AnyEquatable.swift */; };
-		7A4BDE6C1F0A1D6F00A35375 /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE671F0A1D6F00A35375 /* Argument.swift */; };
-		7A4BDE6D1F0A1D6F00A35375 /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE681F0A1D6F00A35375 /* Spryable.swift */; };
-		7A4BDE6E1F0A1D6F00A35375 /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE691F0A1D6F00A35375 /* Spyable.swift */; };
-		7A4BDE6F1F0A1D7000A35375 /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE6A1F0A1D6F00A35375 /* Stubbable.swift */; };
-		7A4BDE711F0A1D7A00A35375 /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE701F0A1D7A00A35375 /* HaveReceivedMatcher.swift */; };
 		7A8654F41F00F62200D425B6 /* ArgumentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8654F31F00F62200D425B6 /* ArgumentTest.swift */; };
+		A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */; };
+		ED0065FB1F0D938B009DC2AC /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE701F0A1D7A00A35375 /* HaveReceivedMatcher.swift */; };
+		ED0065FE1F0D9508009DC2AC /* AnyEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE661F0A1D6F00A35375 /* AnyEquatable.swift */; };
+		ED0065FF1F0D9508009DC2AC /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE671F0A1D6F00A35375 /* Argument.swift */; };
+		ED0066001F0D9508009DC2AC /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE681F0A1D6F00A35375 /* Spryable.swift */; };
+		ED0066011F0D9508009DC2AC /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE691F0A1D6F00A35375 /* Spyable.swift */; };
+		ED0066021F0D9508009DC2AC /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE6A1F0A1D6F00A35375 /* Stubbable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4A7564DE57AC34D112DF850E /* Pods-Tests-SpryExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests-SpryExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5548485DE352075DC9645F8B /* Pods-Tests-SpryExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests-SpryExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpryExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E8701AC756C09395104A62 /* Pods-SpryExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.debug.xcconfig"; sourceTree = "<group>"; };
 		7A27A6191F09C130001D956D /* SpryableTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryableTest.swift; sourceTree = "<group>"; };
 		7A2BFC501F00D27E00BB12C1 /* SpryExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpryExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +65,7 @@
 		7A8654F31F00F62200D425B6 /* ArgumentTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentTest.swift; sourceTree = "<group>"; };
 		97CBCE14618A091169555908 /* Pods_SpryExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpryExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9837E16BB68D3120490898EF /* Pods-SpryExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.release.xcconfig"; sourceTree = "<group>"; };
+		B651727304E2FD212D035A72 /* Pods-SpryExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BE9F0816AE7C4B5490AAFC44 /* Pods_Tests_SpryExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests_SpryExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				045C10AFB4042D9FF599F000 /* Pods_Tests_SpryExampleTests.framework in Frameworks */,
+				A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +94,7 @@
 			children = (
 				97CBCE14618A091169555908 /* Pods_SpryExample.framework */,
 				BE9F0816AE7C4B5490AAFC44 /* Pods_Tests_SpryExampleTests.framework */,
+				5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,8 +173,8 @@
 			children = (
 				74E8701AC756C09395104A62 /* Pods-SpryExample.debug.xcconfig */,
 				9837E16BB68D3120490898EF /* Pods-SpryExample.release.xcconfig */,
-				4A7564DE57AC34D112DF850E /* Pods-Tests-SpryExampleTests.debug.xcconfig */,
-				5548485DE352075DC9645F8B /* Pods-Tests-SpryExampleTests.release.xcconfig */,
+				B651727304E2FD212D035A72 /* Pods-SpryExampleTests.debug.xcconfig */,
+				2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -297,7 +299,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		22B0F5CAE5E909950E2B4489 /* [CP] Copy Pods Resources */ = {
@@ -312,7 +314,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests-SpryExampleTests/Pods-Tests-SpryExampleTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		58294558D5DA01F7C4A35C40 /* [CP] Embed Pods Frameworks */ = {
@@ -383,13 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A2BFC561F00D27E00BB12C1 /* ViewController.swift in Sources */,
-				7A4BDE6B1F0A1D6F00A35375 /* AnyEquatable.swift in Sources */,
-				7A4BDE6F1F0A1D7000A35375 /* Stubbable.swift in Sources */,
-				7A4BDE6D1F0A1D6F00A35375 /* Spryable.swift in Sources */,
 				7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */,
-				7A4BDE6E1F0A1D6F00A35375 /* Spyable.swift in Sources */,
-				7A4BDE711F0A1D7A00A35375 /* HaveReceivedMatcher.swift in Sources */,
-				7A4BDE6C1F0A1D6F00A35375 /* Argument.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,11 +393,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED0065FB1F0D938B009DC2AC /* HaveReceivedMatcher.swift in Sources */,
+				ED0065FE1F0D9508009DC2AC /* AnyEquatable.swift in Sources */,
+				ED0066011F0D9508009DC2AC /* Spyable.swift in Sources */,
 				7A2BFC7A1F00D36700BB12C1 /* SpyableTest.swift in Sources */,
 				7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */,
 				7A2BFC7B1F00D36700BB12C1 /* HaveReceivedMatcherTest.swift in Sources */,
+				ED0066021F0D9508009DC2AC /* Stubbable.swift in Sources */,
+				ED0066001F0D9508009DC2AC /* Spryable.swift in Sources */,
 				7A8654F41F00F62200D425B6 /* ArgumentTest.swift in Sources */,
 				7A2FE8A41F0242120062AE72 /* StubbableTest.swift in Sources */,
+				ED0065FF1F0D9508009DC2AC /* Argument.swift in Sources */,
 				7A27A61A1F09C130001D956D /* SpryableTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,7 +565,7 @@
 		};
 		7A2BFC711F00D27E00BB12C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A7564DE57AC34D112DF850E /* Pods-Tests-SpryExampleTests.debug.xcconfig */;
+			baseConfigurationReference = B651727304E2FD212D035A72 /* Pods-SpryExampleTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -581,7 +583,7 @@
 		};
 		7A2BFC721F00D27E00BB12C1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5548485DE352075DC9645F8B /* Pods-Tests-SpryExampleTests.release.xcconfig */;
+			baseConfigurationReference = 2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

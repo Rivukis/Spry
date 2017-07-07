@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
   s.source_files = 'SpryExample/Spry+Nimble_Source/*'
 
+  s.framework = 'XCTest'
   s.dependency 'Nimble'
   s.dependency 'Spry'
 end
