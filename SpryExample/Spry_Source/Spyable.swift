@@ -73,6 +73,8 @@ public enum CountSpecifier {
  * didCall(function: String, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
  */
 public protocol Spyable: class {
+    associatedtype Function: StringRepresentable
+
     /**
      For internal use ONLY.
      
@@ -95,7 +97,7 @@ public protocol Spyable: class {
      - Parameter function: The function signature to be recorded. Defaults to #function.
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Spyable to work properly.
      */
-    func recordCall(function: String, arguments: Any...)
+    func recordCall(_ functionName: String, arguments: Any..., file: String, line: Int)
 
     /**
      Used to clear out all recorded function calls.
@@ -118,13 +120,14 @@ public protocol Spyable: class {
      
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
-    func didCall(function: String, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult
+    func didCall(_ function: Function, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult
 }
 
 // MARK - Spyable Extension
 
 public extension Spyable {
-    func recordCall(function: String = #function, arguments: Any...) {
+    func recordCall(_ functionName: String = #function, arguments: Any..., file: String = #file, line: Int = #line) {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
@@ -132,7 +135,7 @@ public extension Spyable {
         _calls = []
     }
     
-    func didCall(function: String, withArguments arguments: [AnyEquatable] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
+    func didCall(_ function: Function, withArguments arguments: [AnyEquatable] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
         case .exactly(let count): success = timesCalled(function, arguments: arguments) == count
@@ -147,15 +150,15 @@ public extension Spyable {
     // MARK: - Internal Functions
 
     /// This is for `Spryable` to act as a pass-through to record a call.
-    internal func internal_recordCall(function: String, arguments: [Any]) {
-        let call = RecordedCall(function: function, arguments: arguments)
+    internal func internal_recordCall(function: Function, arguments: [Any]) {
+        let call = RecordedCall(function: function.rawValue, arguments: arguments)
         _calls.append(call)
     }
 
     // MARK: - Private Functions
     
-    private func timesCalled(_ function: String, arguments: [AnyEquatable]) -> Int {
-        return numberOfMatchingCalls(function: function, arguments: arguments, calls: _calls)
+    private func timesCalled(_ function: Function, arguments: [AnyEquatable]) -> Int {
+        return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
     }
 }
 

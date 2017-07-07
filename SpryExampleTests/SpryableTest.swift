@@ -11,6 +11,10 @@ import Nimble
 import SpryExample
 
 private class SpryStringService: Spryable {
+    enum Function: String, StringRepresentable {
+        case getAString = "getAString()"
+    }
+
     var _spry: (calls: [RecordedCall], stubs: [Stub]) = ([], [])
     
     func getAString() -> String {
@@ -30,13 +34,13 @@ class SpryableSpec: QuickSpec {
 
             describe("recording calls") {
                 beforeEach {
-                    subject.stub("getAString()").andReturn("")
+                    subject.stub(.getAString).andReturn("")
 
                     _ = subject.getAString()
                 }
 
                 it("should have recorded the call using Spyable") {
-                    let result = subject.didCall(function: "getAString()")
+                    let result = subject.didCall(.getAString)
                     expect(result.success).to(beTrue())
                 }
             }
@@ -45,7 +49,7 @@ class SpryableSpec: QuickSpec {
                 let expectedString = "stubbed string"
 
                 beforeEach {
-                    subject.stub("getAString()").andReturn(expectedString)
+                    subject.stub(.getAString).andReturn(expectedString)
                 }
 
                 it("should return the stubbed value using Stubbable") {
