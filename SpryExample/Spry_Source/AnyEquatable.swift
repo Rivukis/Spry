@@ -16,9 +16,8 @@ public protocol AnyEquatable {
     func isEqual(to other: AnyEquatable) -> Bool
 }
 
-/**
- Default implementation for `AnyEquatable` when `Self` is `Equatable`.
- */
+// MARK: - AnyEquatable where Self: Equatable
+
 public extension AnyEquatable where Self: Equatable {
     public func isEqual(to other: AnyEquatable) -> Bool {
         // if 'self' is non-optional and 'other' is optional and other's .Some's associated value's type equals self's type
@@ -43,9 +42,8 @@ public extension AnyEquatable where Self: Equatable {
 public protocol OptionalType {}
 extension Optional: OptionalType {}
 
-/**
- Default implementation for `AnyEquatable` when `Self` is `OptionalType` (aka `Optional`).
- */
+// MARK: - AnyEquatable where Self: OptionalType
+
 public extension AnyEquatable where Self: OptionalType {
     public func isEqual(to other: AnyEquatable) -> Bool {
         if type(of: self) != type(of: other) {
