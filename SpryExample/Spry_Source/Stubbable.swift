@@ -140,15 +140,15 @@ public class Stub: CustomStringConvertible {
  */
 public protocol Stubbable: class {
     /**
-     For internal use ONLY.
+     This is where the stubs are held.
 
      Should ONLY read from this property when debugging.
 
-     - Important: Do not modify this properties value.
+     - Important: Do not modify this property's value.
 
      ## Example Conformance ##
      ```swift
-     var _calls: [RecordedCall] = []
+     var _stubs: [Stub] = []
      ```
      */
     var _stubs: [Stub] { get set }

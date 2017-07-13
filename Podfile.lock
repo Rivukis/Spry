@@ -1,8 +1,8 @@
 PODS:
   - Nimble (7.0.1)
   - Quick (1.1.0)
-  - Spry (1.0.1)
-  - Spry+Nimble (1.0):
+  - Spry (1.1)
+  - Spry+Nimble (1.1):
     - Nimble
     - Spry
 
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
   Quick: dafc587e21eed9f4cab3249b9f9015b0b7a7f71d
-  Spry: 8349b9bebae7508474a9d4bcb900b8c16f2460e2
-  Spry+Nimble: 034f1f9f471e633aa354bc7dc80188cff07d2ce2
+  Spry: 48fdb26e1ce7da5cad2f6d3d3ec0edb763287cf7
+  Spry+Nimble: 47b092774feee5c8fcee3a791636cfbf6145b338
 
 PODFILE CHECKSUM: 26c2d2ab7150abcfd6e1bbdc96fa1a4b3d5507a4
 

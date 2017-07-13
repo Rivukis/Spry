@@ -11,8 +11,8 @@ import Nimble
 import SpryExample
 
 private class SpryStringService: Spryable {
-    var _spry: (calls: [RecordedCall], stubs: [Stub]) = ([], [])
-    
+    var _spry: SpryProperties = SpryProperties()
+
     func getAString() -> String {
         return spryify()
     }

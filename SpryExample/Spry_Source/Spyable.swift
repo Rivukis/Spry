@@ -20,14 +20,14 @@ public class RecordedCall: CustomStringConvertible {
     let function: String
     let arguments: [Any]
 
-    /// A beautified description. Used for debugging purposes.
-    public var description: String {
-        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0)>"}.joined(separator: ", ")))>"
-    }
-
     internal init(function: String, arguments: [Any]) {
         self.function = function
         self.arguments = arguments
+    }
+
+    /// A beautified description. Used for debugging purposes.
+    public var description: String {
+        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0)>"}.joined(separator: ", ")))>"
     }
 }
 
@@ -74,11 +74,11 @@ public enum CountSpecifier {
  */
 public protocol Spyable: class {
     /**
-     For internal use ONLY.
+     This is where the recorded calls are held.
      
      Should ONLY read from this property when debugging.
      
-     - Important: Do not modify this properties value.
+     - Important: Do not modify this property's value.
      
      ## Example Conformance ##
      ```swift
