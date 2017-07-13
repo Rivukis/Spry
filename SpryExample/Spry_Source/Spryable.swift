@@ -8,48 +8,12 @@
 
 import Foundation
 
-// MARK: - Public Helper Objects
-
-/**
- Used internally. Should never need to use or know about this type.
-
- * function: String - The function signature of a recorded call. Defaults to `#function`.
- * arguments: [Any] - The arguments passed in when the function was recorded.
- */
-public class SpryProperties: CustomStringConvertible {
-    var _calls: [RecordedCall] = []
-    var _stubs: [Stub] = []
-
-    public init() {}
-
-    /// A beautified description. Used for debugging purposes.
-    public var description: String {
-        return "SpryableProperties(_calls: <\(_calls)>, _stubs: <\(_stubs)))>"
-    }
-}
-
 /**
  Convenience protocol to conform to and use Spyable and Stubbable protocols with less effort.
 
  See Spyable and Stubbable or more information.
  */
 public protocol Spryable: Spyable, Stubbable {
-    /**
-     Convenience property to help conform to Spyable and Stubbable with less effort.
-
-     See `Spyable`'s `_calls` and `Stubbable`'s `_stubs` for more information.
-
-     - Important: Do not modify this properties value.
-     
-     - Note: This property satisfies both `Spyable`'s and `Stubbable`'s property requirements. There is no need to implement `_calls` and `_stubs` when conforming to `Spryable`.
-
-     ## Example Conformance ##
-     ```swift
-     var _spry: SpryProperties = SpryProperties()
-     ```
-     */
-    var _spry: SpryProperties { get set }
-
     /**
      Convenience function to record a call and return the stubbed value.
 
@@ -78,24 +42,6 @@ public protocol Spryable: Spyable, Stubbable {
 }
 
 public extension Spryable {
-    public var _calls: [RecordedCall] {
-        get {
-            return _spry._calls
-        }
-        set {
-            _spry._calls = newValue
-        }
-    }
-
-    public var _stubs: [Stub] {
-        get {
-            return _spry._stubs
-        }
-        set {
-            _spry._stubs = newValue
-        }
-    }
-
     func spryify<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
         internal_recordCall(function: function, arguments: arguments)
         return internal_stubbedValue(function: function, arguments: arguments, fallback: .noFallback)

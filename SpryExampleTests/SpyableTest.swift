@@ -15,8 +15,6 @@ extension NSObject: AnyEquatable {}
 extension Optional: AnyEquatable {}
 
 private class TestClass: Spyable {
-    var _calls: [RecordedCall] = []
-
     var ivarProperty: String = "" {
         didSet {
             recordCall(arguments: ivarProperty)

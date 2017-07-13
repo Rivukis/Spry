@@ -15,8 +15,6 @@ import Spry_Nimble
 
 class HaveReceivedMatcherTest: XCTestCase {
     class TestClass: Spyable {
-        var _calls: [RecordedCall] = []
-
         func doStuff() {
             self.recordCall()
         }

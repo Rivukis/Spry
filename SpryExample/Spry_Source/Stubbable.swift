@@ -8,6 +8,20 @@
 
 import Foundation
 
+/**
+ A global NSMapTable to hold onto stubs for types conforming to Stubbable. This map table has "weak to strong objects" options.
+
+ - Important: Do NOT use this object.
+ */
+private var stubsMapTable: NSMapTable<AnyObject, StubArray> = NSMapTable.weakToStrongObjects()
+
+/**
+ This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
+ */
+private class StubArray {
+    var stubs: [Stub] = []
+}
+
 // MARK: - Public Helper Objects
 
 /**
@@ -140,20 +154,6 @@ public class Stub: CustomStringConvertible {
  */
 public protocol Stubbable: class {
     /**
-     This is where the stubs are held.
-
-     Should ONLY read from this property when debugging.
-
-     - Important: Do not modify this property's value.
-
-     ## Example Conformance ##
-     ```swift
-     var _stubs: [Stub] = []
-     ```
-     */
-    var _stubs: [Stub] { get set }
-
-    /**
      Used to stub a function. All stubs must proved either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
      
      See `Stub` for specifying arguments and return value.
@@ -195,6 +195,26 @@ internal enum Fallback<T> {
 // MARK - Stubbable Extension
 
 public extension Stubbable {
+    /**
+     This is where the stubs are held.
+
+     Should ONLY read from this property when debugging.
+
+     - Important: Do not modify this property's value.
+     */
+    public var _stubs: [Stub] {
+        set {
+            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
+            stubArray.stubs = newValue
+            stubsMapTable.setObject(stubArray, forKey: self)
+        }
+        get {
+            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
+            stubsMapTable.setObject(stubArray, forKey: self)
+            return stubArray.stubs
+        }
+    }
+
     func stub(_ function: String) -> Stub {
         let stub = Stub(function: function)
         _stubs.append(stub)

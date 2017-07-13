@@ -8,6 +8,20 @@
 
 import Foundation
 
+/**
+ A global NSMapTable to hold onto calls for types conforming to Spyable. This map table has "weak to strong objects" options.
+ 
+ - Important: Do NOT use this object.
+ */
+private var callsMapTable: NSMapTable<AnyObject, RecordedCallArray> = NSMapTable.weakToStrongObjects()
+
+/**
+ This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
+ */
+private class RecordedCallArray {
+    var calls: [RecordedCall] = []
+}
+
 // MARK: - Public Helper Objects
 
 /**
@@ -74,20 +88,6 @@ public enum CountSpecifier {
  */
 public protocol Spyable: class {
     /**
-     This is where the recorded calls are held.
-     
-     Should ONLY read from this property when debugging.
-     
-     - Important: Do not modify this property's value.
-     
-     ## Example Conformance ##
-     ```swift
-     var _calls: [RecordedCall] = []
-     ```
-     */
-    var _calls: [RecordedCall] { get set }
-
-    /**
      Used to record a function call. Must call in every function for Spyable to work properly.
      
      - Important: Do NOT implement function. Use default implementation provided by Spry.
@@ -124,6 +124,26 @@ public protocol Spyable: class {
 // MARK - Spyable Extension
 
 public extension Spyable {
+    /**
+     This is where the recorded calls are held.
+
+     Should ONLY read from this property when debugging.
+
+     - Important: Do not modify this property's value.
+     */
+    public var _calls: [RecordedCall] {
+        set {
+            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
+            recordedCallArray.calls = newValue
+            callsMapTable.setObject(recordedCallArray, forKey: self)
+        }
+        get {
+            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
+            callsMapTable.setObject(recordedCallArray, forKey: self)
+            return recordedCallArray.calls
+        }
+    }
+
     func recordCall(function: String = #function, arguments: Any...) {
         internal_recordCall(function: function, arguments: arguments)
     }
