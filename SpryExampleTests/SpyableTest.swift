@@ -25,8 +25,6 @@ private class TestClass: Spyable {
         case doCrazyStuffWith = "doCrazyStuffWith(object:)"
     }
 
-    var _calls: [RecordedCall] = []
-
     var ivarProperty: String = "" {
         didSet {
             recordCall(arguments: ivarProperty)

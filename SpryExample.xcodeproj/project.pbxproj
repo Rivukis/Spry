@@ -18,7 +18,7 @@
 		7A2BFC7B1F00D36700BB12C1 /* HaveReceivedMatcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC791F00D36700BB12C1 /* HaveReceivedMatcherTest.swift */; };
 		7A2FE8A41F0242120062AE72 /* StubbableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8A31F0242120062AE72 /* StubbableTest.swift */; };
 		7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */; };
-		7A4BDE851F0F79B400A35375 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE831F0F78EF00A35375 /* StringRepresentable.swift */; };
+		7A78A7A81F1759290089D01B /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE831F0F78EF00A35375 /* StringRepresentable.swift */; };
 		7A8654F41F00F62200D425B6 /* ArgumentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8654F31F00F62200D425B6 /* ArgumentTest.swift */; };
 		A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */; };
 		ED0065FB1F0D938B009DC2AC /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BDE701F0A1D7A00A35375 /* HaveReceivedMatcher.swift */; };
@@ -408,7 +408,7 @@
 				7A2FE8A41F0242120062AE72 /* StubbableTest.swift in Sources */,
 				ED0065FF1F0D9508009DC2AC /* Argument.swift in Sources */,
 				7A27A61A1F09C130001D956D /* SpryableTest.swift in Sources */,
-				7A4BDE851F0F79B400A35375 /* StringRepresentable.swift in Sources */,
+				7A78A7A81F1759290089D01B /* StringRepresentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

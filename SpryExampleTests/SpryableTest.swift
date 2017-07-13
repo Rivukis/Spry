@@ -15,8 +15,6 @@ private class SpryStringService: Spryable {
         case getAString = "getAString()"
     }
 
-    var _spry: (calls: [RecordedCall], stubs: [Stub]) = ([], [])
-    
     func getAString() -> String {
         return spryify()
     }

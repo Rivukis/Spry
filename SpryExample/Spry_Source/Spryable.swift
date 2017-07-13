@@ -17,22 +17,6 @@ public protocol Spryable: Spyable, Stubbable {
     associatedtype Function: StringRepresentable
 
     /**
-     For internal use ONLY. Convenience property to help conform to Spyable and Stubbable with less effort.
-
-     See `Spyable`'s `_calls` and `Stubbable`'s `_stubs` or more information.
-
-     - Important: Do not modify this properties value.
-     
-     - Note: This property satisfies both `Spyable`'s and `Stubbable`'s property requirements. There is no need to implement `_calls` and `_stubs` when conforming to `Spryable`.
-
-     ## Example Conformance ##
-     ```swift
-     var _spry: (calls: [RecordedCall], stubs: [Stub]) = ([], [])
-     ```
-     */
-    var _spry: (calls: [RecordedCall], stubs: [Stub]) { get set }
-
-    /**
      Convenience function to record a call and return the stubbed value.
 
      See `Spyable`'s `recordCall()` and `Stubbable`'s `stubbedValue()` for more information.
@@ -60,24 +44,6 @@ public protocol Spryable: Spyable, Stubbable {
 }
 
 public extension Spryable {
-    public var _calls: [RecordedCall] {
-        get {
-            return _spry.calls
-        }
-        set {
-            _spry.calls = newValue
-        }
-    }
-
-    public var _stubs: [Stub] {
-        get {
-            return _spry.stubs
-        }
-        set {
-            _spry.stubs = newValue
-        }
-    }
-
     func spryify<T>(_ functionName: String = #function, arguments: Any..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)

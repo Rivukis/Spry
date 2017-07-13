@@ -7,7 +7,7 @@
 //
 
 /**
- Used to conpare any two arguments. Uses Equatable's `==(lhs:rhs:)` operator for conparision.
+ Used to compare any two arguments. Uses Equatable's `==(lhs:rhs:)` operator for comparision.
  
  - Important: Never manually conform to `AnyEquatable`.
  - Note: If a compiler error says you do NOT conform to `AnyEquatable` then conform to `Equatable`. This will remove the error.

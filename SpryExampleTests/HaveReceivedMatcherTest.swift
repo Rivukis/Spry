@@ -21,8 +21,6 @@ class HaveReceivedMatcherTest: XCTestCase {
             case doThingsWith = "doThingsWith(string:int:)"
         }
 
-        var _calls: [RecordedCall] = []
-
         func doStuff() {
             self.recordCall()
         }
