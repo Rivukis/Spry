@@ -44,8 +44,6 @@ private class NumbersOnly: SpecialString {
 
 // stubbed version
 private final class StubSpecialString: SpecialString, Stubbable {
-    var _stubs = [Stub]()
-
     func myStringValue() -> String {
         return stubbedValue()
     }
@@ -84,8 +82,6 @@ private protocol StringService: class {
 // MARK: - The Stub
 
 private class StubStringService: StringService, Stubbable {
-    var _stubs = [Stub]()
-
     var myProperty: String {
         return stubbedValue()
     }
