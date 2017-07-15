@@ -44,6 +44,10 @@ private class NumbersOnly: SpecialString {
 
 // stubbed version
 private final class StubSpecialString: SpecialString, Stubbable {
+    enum Function: String, StringRepresentable {
+        case myStringValue = "myStringValue()"
+    }
+
     func myStringValue() -> String {
         return stubbedValue()
     }
@@ -82,6 +86,21 @@ private protocol StringService: class {
 // MARK: - The Stub
 
 private class StubStringService: StringService, Stubbable {
+    enum Function: String, StringRepresentable {
+        case myProperty
+        case giveMeAString = "giveMeAString()"
+        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
+        case hereComesATuple = "hereComesATuple()"
+        case hereComesAProtocol = "hereComesAProtocol()"
+        case hereComesProtocolsInATuple = "hereComesProtocolsInATuple()"
+        case hereComesProtocolWithSelfRequirements = "hereComesProtocolWithSelfRequirements(object:)"
+        case hereComesAClosure = "hereComesAClosure()"
+        case giveMeAStringWithFallbackValue = "giveMeAStringWithFallbackValue()"
+        case giveMeAnOptional = "giveMeAnOptional()"
+        case giveMeAString_string = "giveMeAString(string:)"
+        case callThisCompletion = "callThisCompletion(string:closure:)"
+    }
+
     var myProperty: String {
         return stubbedValue()
     }
@@ -145,7 +164,7 @@ class StubbableSpec: QuickSpec {
                 let expectedString = "expected"
 
                 beforeEach {
-                    subject.stub("myProperty").andReturn(expectedString)
+                    subject.stub(.myProperty).andReturn(expectedString)
                 }
 
                 it("should get a string from the stubbed service") {
@@ -157,7 +176,7 @@ class StubbableSpec: QuickSpec {
                 let expectedString = "expected"
 
                 beforeEach {
-                    subject.stub("giveMeAString()").andReturn(expectedString)
+                    subject.stub(.giveMeAString).andReturn(expectedString)
                 }
 
                 it("should get a string from the stubbed service") {
@@ -167,7 +186,7 @@ class StubbableSpec: QuickSpec {
 
             describe("returning a tuple") {
                 beforeEach {
-                    subject.stub("hereComesATuple()").andReturn(("hello", "world"))
+                    subject.stub(.hereComesATuple).andReturn(("hello", "world"))
                 }
 
                 it("should be able to stub a tuple return type") {
@@ -181,7 +200,7 @@ class StubbableSpec: QuickSpec {
                 let expectedValue = NumbersOnly(value: 123)
 
                 beforeEach {
-                    subject.stub("hereComesAProtocol()").andReturn(expectedValue)
+                    subject.stub(.hereComesAProtocol).andReturn(expectedValue)
                 }
 
                 it("should be able to stub a protocol return type") {
@@ -195,9 +214,9 @@ class StubbableSpec: QuickSpec {
 
                 beforeEach {
                     let specialString = StubSpecialString()
-                    specialString.stub("myStringValue()").andReturn(expectedValue)
+                    specialString.stub(.myStringValue).andReturn(expectedValue)
 
-                    subject.stub("hereComesAProtocol()").andReturn(specialString)
+                    subject.stub(.hereComesAProtocol).andReturn(specialString)
                 }
 
                 it("should be able to stub a tuple of protocols as a return type") {
@@ -212,9 +231,9 @@ class StubbableSpec: QuickSpec {
 
                 beforeEach {
                     let secondHalfSpecialString = StubSpecialString()
-                    secondHalfSpecialString.stub("myStringValue()").andReturn(expectedSecondHalf)
+                    secondHalfSpecialString.stub(.myStringValue).andReturn(expectedSecondHalf)
 
-                    subject.stub("hereComesProtocolsInATuple()").andReturn((expectedFirstHalf, secondHalfSpecialString))
+                    subject.stub(.hereComesProtocolsInATuple).andReturn((expectedFirstHalf, secondHalfSpecialString))
                 }
 
                 it("should be able to use real and another stubbed object") {
@@ -228,7 +247,7 @@ class StubbableSpec: QuickSpec {
                 let expectedMyClass = MyClass()
 
                 beforeEach {
-                    subject.stub("hereComesProtocolWithSelfRequirements(object:)").andReturn(expectedMyClass)
+                    subject.stub(.hereComesProtocolWithSelfRequirements).andReturn(expectedMyClass)
                 }
 
                 it("should be able to stub a tuple of protocols as a return type") {
@@ -241,7 +260,7 @@ class StubbableSpec: QuickSpec {
                 let expectedString = "string from closure"
 
                 beforeEach {
-                    subject.stub("hereComesAClosure()").andReturn({ expectedString })
+                    subject.stub(.hereComesAClosure).andReturn({ expectedString })
                 }
 
                 it("should get a closure from the stubbed service") {
@@ -251,11 +270,11 @@ class StubbableSpec: QuickSpec {
             }
 
             describe("returning an optional") {
-                context("when stubbed with an optional") {
+                context("when stubbed with an optional .some") {
                     let expectedReturn: String? = "i should be returned"
 
                     beforeEach {
-                        subject.stub("giveMeAnOptional()").andReturn(expectedReturn)
+                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn as Any)
                     }
 
                     it("should return the stubbed value") {
@@ -267,11 +286,21 @@ class StubbableSpec: QuickSpec {
                     let expectedReturn = "i should be returned"
 
                     beforeEach {
-                        subject.stub("giveMeAnOptional()").andReturn(expectedReturn)
+                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
                     }
 
                     it("should return the stubbed value") {
                         expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when stubbed with nil") {
+                    beforeEach {
+                        subject.stub(.giveMeAnOptional).andReturn(nil as String? as Any)
+                    }
+
+                    it("should return the stubbed value") {
+                        expect(subject.giveMeAnOptional()).to(beNil())
                     }
                 }
             }
@@ -282,7 +311,7 @@ class StubbableSpec: QuickSpec {
                     let expectedReturn = "i should be returned"
 
                     beforeEach {
-                        subject.stub("giveMeAString(string:)").with(expectedArg).andReturn(expectedReturn)
+                        subject.stub(.giveMeAString_string).with(expectedArg).andReturn(expectedReturn)
                     }
 
                     it("should return the stubbed value") {
@@ -292,7 +321,7 @@ class StubbableSpec: QuickSpec {
 
                 context("when the args do NOT match what is stubbed") {
                     beforeEach {
-                        subject.stub("giveMeAString(string:)").with("not expected").andReturn("return value")
+                        subject.stub(.giveMeAString_string).with("not expected").andReturn("return value")
                     }
 
                     it("should fatal error") {
@@ -304,7 +333,7 @@ class StubbableSpec: QuickSpec {
                     let expectedReturn = "i should be returned"
 
                     beforeEach {
-                        subject.stub("giveMeAString(string:)").andReturn(expectedReturn)
+                        subject.stub(.giveMeAString_string).andReturn(expectedReturn)
                     }
 
                     it("should return the stubbed value") {
@@ -316,7 +345,7 @@ class StubbableSpec: QuickSpec {
                     let expectedReturn = "i should be returned"
 
                     beforeEach {
-                        subject.stub("giveMeAString(string:)").with(Argument.instanceOf(type: String.self)).andReturn(expectedReturn)
+                        subject.stub(.giveMeAString_string).with(Argument.instanceOf(type: String.self)).andReturn(expectedReturn)
                     }
 
                     it("should return the stubbed value") {
@@ -330,7 +359,7 @@ class StubbableSpec: QuickSpec {
                     let expectedString = "stubbed value"
 
                     beforeEach {
-                        subject.stub("giveMeAStringWithFallbackValue()").andReturn(expectedString)
+                        subject.stub(.giveMeAStringWithFallbackValue).andReturn(expectedString)
                     }
 
                     it("should return the stubbed value") {
@@ -340,7 +369,7 @@ class StubbableSpec: QuickSpec {
 
                 context("when the function is NOT stubbed with the appropriate type") {
                     beforeEach {
-                        subject.stub("giveMeAStringWithFallbackValue()").andReturn(100)
+                        subject.stub(.giveMeAStringWithFallbackValue).andReturn(100)
                     }
 
                     it("should return the fallback value") {
@@ -364,7 +393,7 @@ class StubbableSpec: QuickSpec {
 
                 context("when the value is stubbed with the wrong type") {
                     beforeEach {
-                        subject.stub("giveMeAString()").andReturn(50)
+                        subject.stub(.giveMeAString).andReturn(50)
                     }
 
                     it("should fatal error") {
@@ -378,7 +407,7 @@ class StubbableSpec: QuickSpec {
                     let expectedString = "expected"
 
                     beforeEach {
-                        subject.stub("giveMeAString()").andDo { _ in
+                        subject.stub(.giveMeAString).andDo { _ in
                             return expectedString
                         }
                     }
@@ -390,7 +419,7 @@ class StubbableSpec: QuickSpec {
 
                 describe("respecting passed in arguments and the return value") {
                     beforeEach {
-                        subject.stub("hereAreTwoStrings(string1:string2:)").andDo { arguments in
+                        subject.stub(.hereAreTwoStrings).andDo { arguments in
                             let string1 = arguments[0] as! String
                             let string2 = arguments[1] as! String
 
@@ -407,7 +436,7 @@ class StubbableSpec: QuickSpec {
                     var turnToTrue = false
 
                     beforeEach {
-                        subject.stub("callThisCompletion(string:closure:)").andDo { arguments in
+                        subject.stub(.callThisCompletion).andDo { arguments in
                             let completion = arguments[1] as! () -> Void
                             completion()
 
@@ -430,7 +459,7 @@ class StubbableSpec: QuickSpec {
 
                         beforeEach {
                             let expectedargument = "expectedargument"
-                            subject.stub("callThisCompletion(string:closure:)").with(expectedargument, Argument.anything).andDo { arguments in
+                            subject.stub(.callThisCompletion).with(expectedargument, Argument.anything).andDo { arguments in
                                 let completion = arguments[1] as! () -> Void
                                 completion()
 
@@ -449,7 +478,7 @@ class StubbableSpec: QuickSpec {
 
                     context("when the arguments do NOT match") {
                         beforeEach {
-                            subject.stub("hereAreTwoStrings(string1:string2:)").with("what is needed", Argument.anything).andDo { _ in
+                            subject.stub(.hereAreTwoStrings).with("what is needed", Argument.anything).andDo { _ in
                                 return Void()
                             }
                         }

@@ -14,6 +14,8 @@ import Foundation
  See Spyable and Stubbable or more information.
  */
 public protocol Spryable: Spyable, Stubbable {
+    associatedtype Function: StringRepresentable
+
     /**
      Convenience function to record a call and return the stubbed value.
 
@@ -25,7 +27,7 @@ public protocol Spryable: Spyable, Stubbable {
      - Parameter arguments: The function arguments being passed in.
      - Parameter asType: The type to be returned. Defaults to using type inference. Only specify if needed or for performance.
      */
-    func spryify<T>(function: String, arguments: Any..., asType _: T.Type) -> T
+    func spryify<T>(_ functionName: String, arguments: Any..., asType _: T.Type, file: String, line: Int) -> T
 
     /**
      Convenience function to record a call and return the stubbed value.
@@ -38,17 +40,19 @@ public protocol Spryable: Spyable, Stubbable {
      - Parameter arguments: The function arguments being passed in.
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
-    func spryify<T>(function: String, arguments: Any..., fallbackValue: T) -> T
+    func spryify<T>(_ functionName: String, arguments: Any..., fallbackValue: T, file: String, line: Int) -> T
 }
 
 public extension Spryable {
-    func spryify<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
+    func spryify<T>(_ functionName: String = #function, arguments: Any..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
-        return internal_stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
+        return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
-    func spryify<T>(function: String = #function, arguments: Any..., fallbackValue: T) -> T {
+    func spryify<T>(_ functionName: String = #function, arguments: Any..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
-        return internal_stubbedValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
+        return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 }

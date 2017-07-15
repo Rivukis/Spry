@@ -41,11 +41,11 @@ public class Stub: CustomStringConvertible {
 
     private var stubType: StubType?
 
-    fileprivate let function: String
+    fileprivate let functionName: String
     fileprivate private(set) var arguments: [AnyEquatable] = []
 
-    fileprivate init(function: String) {
-        self.function = function
+    fileprivate init(functionName: String) {
+        self.functionName = functionName
     }
 
     // MARK: - Public
@@ -54,7 +54,7 @@ public class Stub: CustomStringConvertible {
     public var description: String {
         let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
         let returnDescription = stubType == nil ? "nil" : "\(stubType!)"
-        return "Stub(function: <\(function)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
+        return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
     }
 
     /**
@@ -153,6 +153,8 @@ public class Stub: CustomStringConvertible {
  * stubbedValue<T>(function:arguments:fallbackValue:) -> T - Used to return the stubbed value or the fallback value if no stub is found.
  */
 public protocol Stubbable: class {
+    associatedtype Function: StringRepresentable
+
     /**
      Used to stub a function. All stubs must proved either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
      
@@ -162,7 +164,7 @@ public protocol Stubbable: class {
 
      - Parameter function: The function signature to be stubbed. Defaults to #function.
      */
-    func stub(_ function: String) -> Stub
+    func stub(_ function: Function) -> Stub
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
@@ -173,7 +175,7 @@ public protocol Stubbable: class {
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
      - Parameter asType: The type to be returned. Defaults to using type inference. Only specify if needed or for performance.
      */
-    func stubbedValue<T>(function: String, arguments: Any..., asType _: T.Type) -> T
+    func stubbedValue<T>(_ functionName: String, arguments: Any..., asType _: T.Type, file: String, line: Int) -> T
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
@@ -184,7 +186,7 @@ public protocol Stubbable: class {
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
-    func stubbedValue<T>(function: String, arguments: Any..., fallbackValue: T) -> T
+    func stubbedValue<T>(_ functionName: String, arguments: Any..., fallbackValue: T, file: String, line: Int) -> T
 }
 
 internal enum Fallback<T> {
@@ -215,26 +217,27 @@ public extension Stubbable {
         }
     }
 
-    func stub(_ function: String) -> Stub {
-        let stub = Stub(function: function)
+    func stub(_ function: Function) -> Stub {
+        let stub = Stub(functionName: function.rawValue)
         _stubs.append(stub)
 
         return stub
     }
 
-    // TODO: rename to stubbedValue()
-    func stubbedValue<T>(function: String = #function, arguments: Any..., asType _: T.Type = T.self) -> T {
-        return internal_stubbedValue(function: function, arguments: arguments, fallback: .noFallback)
+    func stubbedValue<T>(_ functionName: String = #function, arguments: Any..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
-    func stubbedValue<T>(function: String = #function, arguments: Any..., fallbackValue: T) -> T {
-        return internal_stubbedValue(function: function, arguments: arguments, fallback: .fallback(fallbackValue))
+    func stubbedValue<T>(_ functionName: String = #function, arguments: Any..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
     // MARK: - Internal Helper Functions
 
-    internal func internal_stubbedValue<T>(function: String, arguments: [Any], fallback: Fallback<T>) -> T {
-        let stubsForFunctionName = _stubs.filter{ $0.function == function }
+    internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any], fallback: Fallback<T>) -> T {
+        let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
 
         if stubsForFunctionName.isEmpty {
             return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
@@ -263,11 +266,11 @@ public extension Stubbable {
 
     // MARK: - Private Helper Functions
 
-    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: String, arguments: [Any]) -> T {
+    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: Function, arguments: [Any]) -> T {
         switch fallback {
         case .noFallback:
             let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-            fatalError("No return value found for <\(type(of: self)).\(function)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
+            fatalError("No return value found for <\(type(of: self)).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
         case .fallback(let value):
             return value
         }
