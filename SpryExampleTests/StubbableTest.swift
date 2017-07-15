@@ -270,11 +270,11 @@ class StubbableSpec: QuickSpec {
             }
 
             describe("returning an optional") {
-                context("when stubbed with an optional") {
+                context("when stubbed with an optional .some") {
                     let expectedReturn: String? = "i should be returned"
 
                     beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
+                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn as Any)
                     }
 
                     it("should return the stubbed value") {
@@ -291,6 +291,16 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when stubbed with nil") {
+                    beforeEach {
+                        subject.stub(.giveMeAnOptional).andReturn(nil as String? as Any)
+                    }
+
+                    it("should return the stubbed value") {
+                        expect(subject.giveMeAnOptional()).to(beNil())
                     }
                 }
             }
