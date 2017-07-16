@@ -35,14 +35,14 @@ private class StubArray {
 
 public class Stub: CustomStringConvertible {
     enum StubType {
-        case andReturn(Any)
-        case andDo(([Any]) -> Any)
+        case andReturn(Any?)
+        case andDo(([Any?]) -> Any?)
     }
 
     private var stubType: StubType?
 
     fileprivate let functionName: String
-    fileprivate private(set) var arguments: [AnyEquatable] = []
+    fileprivate private(set) var arguments: [SpryEquatable] = []
 
     fileprivate init(functionName: String) {
         self.functionName = functionName
@@ -71,7 +71,7 @@ public class Stub: CustomStringConvertible {
      
      - Returns: A stub object used to add additional `with()` or to add `andReturn()` or `andDo()`.
      */
-    public func with(_ arguments: AnyEquatable...) -> Stub {
+    public func with(_ arguments: SpryEquatable...) -> Stub {
         self.arguments += arguments
         return self
     }
@@ -94,7 +94,7 @@ public class Stub: CustomStringConvertible {
 
      - Parameter value: The value to be returned by the stubbed function.
      */
-    public func andReturn(_ value: Any) {
+    public func andReturn(_ value: Any?) {
         stubType = .andReturn(value)
     }
 
@@ -120,13 +120,13 @@ public class Stub: CustomStringConvertible {
 
      - Parameter closure: The closure to be executed. The array of parameters that will be passed in correspond to the parameters being passed into the stubbed function. The return value must match the stubbed function's return type and will be the return value of the stubbed function.
      */
-    public func andDo(_ closure: @escaping ([Any]) -> Any) {
+    public func andDo(_ closure: @escaping ([Any?]) -> Any?) {
         stubType = .andDo(closure)
     }
 
     // MARK: - Fileprivate
 
-    fileprivate func returnValue(for args: [Any]) -> Any {
+    fileprivate func returnValue(for args: [Any?]) -> Any? {
         guard let stubType = stubType else {
             fatalError("Must add `andReturn` or `andDo` to properly stub an object")
         }
@@ -175,7 +175,7 @@ public protocol Stubbable: class {
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
      - Parameter asType: The type to be returned. Defaults to using type inference. Only specify if needed or for performance.
      */
-    func stubbedValue<T>(_ functionName: String, arguments: Any..., asType _: T.Type, file: String, line: Int) -> T
+    func stubbedValue<T>(_ functionName: String, arguments: Any?..., asType _: T.Type, file: String, line: Int) -> T
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
@@ -186,7 +186,7 @@ public protocol Stubbable: class {
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
-    func stubbedValue<T>(_ functionName: String, arguments: Any..., fallbackValue: T, file: String, line: Int) -> T
+    func stubbedValue<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
 }
 
 internal enum Fallback<T> {
@@ -224,19 +224,19 @@ public extension Stubbable {
         return stub
     }
 
-    func stubbedValue<T>(_ functionName: String = #function, arguments: Any..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
+    func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
-    func stubbedValue<T>(_ functionName: String = #function, arguments: Any..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
+    func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
     // MARK: - Internal Helper Functions
 
-    internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any], fallback: Fallback<T>) -> T {
+    internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any?], fallback: Fallback<T>) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
 
         if stubsForFunctionName.isEmpty {
@@ -252,12 +252,18 @@ public extension Stubbable {
         }
 
         for stub in stubsWithoutArgs {
-            if let value = stub.returnValue as? T {
-                return value
-            }
+            let value1 = stub.returnValue(for: arguments)
 
-            if let value = stub.returnValue(for: arguments) as? T {
-                return value
+            if value1 == nil {
+                // nils won't cast to T even when T is Optional unless cast to Any first
+                if let value = value1 as Any as? T {
+                    return value
+                }
+            } else {
+                // values won't cast to T when T is a protocol if values is cast to Any first
+                if let value = value1 as? T {
+                    return value
+                }
             }
         }
 
@@ -266,10 +272,10 @@ public extension Stubbable {
 
     // MARK: - Private Helper Functions
 
-    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: Function, arguments: [Any]) -> T {
+    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: Function, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
-            let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+            let argumentsDescription = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
             fatalError("No return value found for <\(type(of: self)).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
         case .fallback(let value):
             return value

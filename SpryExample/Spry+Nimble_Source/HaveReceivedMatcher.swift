@@ -31,7 +31,7 @@ import Spry
  - Parameter arguments: Expected arguments. Will fail if the actual arguments don't equate to what is passed in here. Passing in no arguments is equivalent to passing in `Argument.anything` for every expected argument.
  - Parameter countSpecifier: Used to be more strict about the number of times this function should have been called with the passed in arguments. Defaults to .atLeast(1).
  */
-public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: AnyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T> {
+public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: SpryEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T> {
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
@@ -47,7 +47,7 @@ public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: Any
 
 // MARK: Private
 
-private func descriptionOfExpectation(actualType: Any.Type, functionName: String, arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfExpectation(actualType: Any.Type, functionName: String, arguments: [SpryEquatable], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive <\(functionName)> on <\(actualType)>"
 
     if !arguments.isEmpty {
@@ -80,7 +80,7 @@ private func descriptionOfExpectation(actualType: Any.Type, functionName: String
     return descriptionOfAttempt
 }
 
-private func descriptionOfNilAttempt(arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfNilAttempt(arguments: [SpryEquatable], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive function"
 
     if arguments.count != 0 {

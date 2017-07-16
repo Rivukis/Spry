@@ -1,5 +1,5 @@
 //
-//  AnyEquatable.swift
+//  SpryEquatable.swift
 //  SpryExample
 //
 //  Created by Brian Radebaugh on 4/2/16.
@@ -9,25 +9,19 @@
 /**
  Used to compare any two arguments. Uses Equatable's `==(lhs:rhs:)` operator for comparision.
  
- - Important: Never manually conform to `AnyEquatable`.
- - Note: If a compiler error says you do NOT conform to `AnyEquatable` then conform to `Equatable`. This will remove the error.
+ - Important: Never manually conform to `SpryEquatable`.
+ - Note: If a compiler error says you do NOT conform to `SpryEquatable` then conform to `Equatable`. This will remove the error.
  */
-public protocol AnyEquatable {
-    func isEqual(to other: AnyEquatable) -> Bool
+public protocol SpryEquatable {
+    func isEqual(to actual: SpryEquatable?) -> Bool
 }
 
-// MARK: - AnyEquatable where Self: Equatable
+// MARK: - SpryEquatable where Self: Equatable
 
-public extension AnyEquatable where Self: Equatable {
-    public func isEqual(to other: AnyEquatable) -> Bool {
-        // if 'self' is non-optional and 'other' is optional and other's .Some's associated value's type equals self's type
-        // then the if let below will auto unwrap 'other' to be the non-optional version of self's type
-        if type(of: self) != type(of: other) {
-            return false
-        }
-
-        if let other = other as? Self {
-            return self == other
+public extension SpryEquatable where Self: Equatable {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        if let actual = actual as? Self {
+            return self == actual
         }
 
         return false
@@ -42,45 +36,31 @@ public extension AnyEquatable where Self: Equatable {
 public protocol OptionalType {}
 extension Optional: OptionalType {}
 
-// MARK: - AnyEquatable where Self: OptionalType
+// MARK: - SpryEquatable where Self: OptionalType
 
-public extension AnyEquatable where Self: OptionalType {
-    public func isEqual(to other: AnyEquatable) -> Bool {
-        if type(of: self) != type(of: other) {
-            return false
-        }
-
+public extension SpryEquatable where Self: OptionalType {
+    public func isEqual(to actual: SpryEquatable?) -> Bool {
         let selfMirror = Mirror(reflecting: self)
-        let otherMirror = Mirror(reflecting: other)
 
         guard selfMirror.displayStyle == .optional else {
             assertionFailure("\(type(of: self)) should NOT conform to OptionalType, this is reserved for Optional<Wrapped>")
             return false
         }
-        guard otherMirror.displayStyle == .optional else {
-            assertionFailure("\(type(of: other)) should NOT conform to OptionalType, this is reserved for Optional<Wrapped>")
-            return false
-        }
 
         let selfsWrappedValue = selfMirror.children.first?.value
-        let othersWrappedValue = otherMirror.children.first?.value
 
-        if selfsWrappedValue == nil && othersWrappedValue == nil {
+        if selfsWrappedValue == nil && actual == nil {
             return true
         }
-        guard let selfsWrappedValueNonOptional = selfsWrappedValue, let othersWrappedValueNonOptional = othersWrappedValue else {
+        guard let selfsWrappedValueAsNonOptional = selfsWrappedValue, let actual = actual else {
             return false
         }
 
-        guard let selfsContainedValueAsGE = selfsWrappedValueNonOptional as? AnyEquatable else {
-            assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to AnyEquatable")
-            return false
-        }
-        guard let othersContainedValueAsGE = othersWrappedValueNonOptional as? AnyEquatable else {
-            assertionFailure("\(type(of: othersWrappedValue)) does NOT conform to AnyEquatable")
+        guard let selfsContainedValueAsSE = selfsWrappedValueAsNonOptional as? SpryEquatable else {
+            assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to SpryEquatable")
             return false
         }
 
-        return selfsContainedValueAsGE.isEqual(to: othersContainedValueAsGE)
+        return selfsContainedValueAsSE.isEqual(to: actual)
     }
 }

@@ -98,6 +98,7 @@ private class StubStringService: StringService, Stubbable {
         case giveMeAStringWithFallbackValue = "giveMeAStringWithFallbackValue()"
         case giveMeAnOptional = "giveMeAnOptional()"
         case giveMeAString_string = "giveMeAString(string:)"
+        case takeAnOptionalString = "takeAnOptionalString(string:)"
         case callThisCompletion = "callThisCompletion(string:closure:)"
     }
 
@@ -142,6 +143,10 @@ private class StubStringService: StringService, Stubbable {
     }
 
     func giveMeAString(string: String) -> String {
+        return stubbedValue(arguments: string)
+    }
+
+    func takeAnOptionalString(string: String?) -> String {
         return stubbedValue(arguments: string)
     }
 
@@ -274,7 +279,7 @@ class StubbableSpec: QuickSpec {
                     let expectedReturn: String? = "i should be returned"
 
                     beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn as Any)
+                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
                     }
 
                     it("should return the stubbed value") {
@@ -296,7 +301,7 @@ class StubbableSpec: QuickSpec {
 
                 context("when stubbed with nil") {
                     beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(nil as String? as Any)
+                        subject.stub(.giveMeAnOptional).andReturn(nil as String?)
                     }
 
                     it("should return the stubbed value") {
@@ -341,15 +346,41 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
-                context("when using an argument specifier") {
-                    let expectedReturn = "i should be returned"
+                describe("Argument specifiers") {
+                    context("when the specifier is .anything") {
+                        let expectedReturn = "i should be returned"
 
-                    beforeEach {
-                        subject.stub(.giveMeAString_string).with(Argument.instanceOf(type: String.self)).andReturn(expectedReturn)
+                        beforeEach {
+                            subject.stub(.giveMeAString_string).with(Argument.anything).andReturn(expectedReturn)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.giveMeAString(string: "any string should work")).to(equal(expectedReturn))
+                        }
                     }
 
-                    it("should return the stubbed value") {
-                        expect(subject.giveMeAString(string: "any string should work")).to(equal(expectedReturn))
+                    context("when the specifier is .nonNil") {
+                        let expectedReturn = "i should be returned"
+
+                        beforeEach {
+                            subject.stub(.giveMeAString_string).with(Argument.nonNil).andReturn(expectedReturn)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.giveMeAString(string: "any string should work")).to(equal(expectedReturn))
+                        }
+                    }
+
+                    context("when the specifier is .nil") {
+                        let expectedReturn = "i should be returned"
+
+                        beforeEach {
+                            subject.stub(.takeAnOptionalString).with(Argument.nil).andReturn(expectedReturn)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
+                        }
                     }
                 }
             }
