@@ -9,21 +9,21 @@ PODS:
 DEPENDENCIES:
   - Nimble
   - Quick
-  - Spry (from `./`)
-  - Spry+Nimble (from `./`)
+  - Spry (from `./../`)
+  - Spry+Nimble (from `./../`)
 
 EXTERNAL SOURCES:
   Spry:
-    :path: "./"
+    :path: "./../"
   Spry+Nimble:
-    :path: "./"
+    :path: "./../"
 
 SPEC CHECKSUMS:
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
   Quick: dafc587e21eed9f4cab3249b9f9015b0b7a7f71d
-  Spry: 48fdb26e1ce7da5cad2f6d3d3ec0edb763287cf7
-  Spry+Nimble: 47b092774feee5c8fcee3a791636cfbf6145b338
+  Spry: be2f1dad6249b81d6a53e747b49f15073b6f9bb5
+  Spry+Nimble: fa7a2557f730e5866883399afc8b3aea82767c46
 
-PODFILE CHECKSUM: 26c2d2ab7150abcfd6e1bbdc96fa1a4b3d5507a4
+PODFILE CHECKSUM: 132c62485b9fac744661fe95b354f302832fb5d6
 
 COCOAPODS: 1.1.1

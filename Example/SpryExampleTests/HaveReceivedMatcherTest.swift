@@ -9,12 +9,17 @@
 import XCTest
 import Quick
 import SpryExample
-import Spry_Nimble
 
 @testable import Nimble
 
 class HaveReceivedMatcherTest: XCTestCase {
     class TestClass: Spyable {
+        enum Function: String, StringRepresentable {
+            case doStuff = "doStuff()"
+            case doStuffWith = "doStuffWith(string:)"
+            case doThingsWith = "doThingsWith(string:int:)"
+        }
+
         func doStuff() {
             self.recordCall()
         }
@@ -36,8 +41,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuff()
 
         // THEN
-        expect(testClass).to(haveReceived("doStuff()"))
-        expect(testClass).toNot(haveReceived("doThings()"))
+        expect(testClass).to(haveReceived(.doStuff))
+        expect(testClass).toNot(haveReceived(.doThingsWith))
     }
 
     func testCallFailureMessage() {
@@ -46,9 +51,9 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "swift")
 
         // WHEN
-        let toFailingTest = { expect(testClass).to(haveReceived("doStuff()")) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuffWith(string:)")) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuff()")) }
+        let toFailingTest = { expect(testClass).to(haveReceived(.doStuff)) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuffWith)) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff)) }
 
         // THEN
         let toExpectedMessage = "expected to receive <doStuff()> on <TestClass>, got <doStuffWith(string:) with swift>"
@@ -69,8 +74,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "string")
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", countSpecifier: .exactly(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", countSpecifier: .exactly(2)))
+        expect(testClass).to(haveReceived(.doStuffWith, countSpecifier: .exactly(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, countSpecifier: .exactly(2)))
     }
 
     func testCallWithCountFailureMessage() {
@@ -79,13 +84,13 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuff()
 
         // WHEN
-        let toFailingTest1 = { expect(testClass).to(haveReceived("doDifferentStuff()", countSpecifier: .exactly(1))) }
-        let toFailingTest2 = { expect(testClass).to(haveReceived("doStuff()", countSpecifier: .exactly(2))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuff()", countSpecifier: .exactly(1))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuff()", countSpecifier: .exactly(1))) }
+        let toFailingTest1 = { expect(testClass).to(haveReceived(.doStuffWith, countSpecifier: .exactly(1))) }
+        let toFailingTest2 = { expect(testClass).to(haveReceived(.doStuff, countSpecifier: .exactly(2))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuff, countSpecifier: .exactly(1))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff, countSpecifier: .exactly(1))) }
 
         // THEN
-        let toExpectedMessage1 = "expected to receive <doDifferentStuff()> on <TestClass> exactly 1 time, got <doStuff()>"
+        let toExpectedMessage1 = "expected to receive <doStuffWith(string:)> on <TestClass> exactly 1 time, got <doStuff()>"
         failsWithErrorMessage(toExpectedMessage1) { toFailingTest1() }
 
         let toExpectedMessage2 = "expected to receive <doStuff()> on <TestClass> exactly 2 times, got <doStuff()>"
@@ -106,8 +111,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "string")
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", countSpecifier: .atLeast(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", countSpecifier: .atLeast(2)))
+        expect(testClass).to(haveReceived(.doStuffWith, countSpecifier: .atLeast(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, countSpecifier: .atLeast(2)))
     }
 
     func testCallWithAtLeastFailureMessage() {
@@ -117,9 +122,9 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuff()
 
         // WHEN
-        let toFailingTest = { expect(testClass).to(haveReceived("doStuff()", countSpecifier: .atLeast(3))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuff()", countSpecifier: .atLeast(2))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuff()", countSpecifier: .atLeast(2))) }
+        let toFailingTest = { expect(testClass).to(haveReceived(.doStuff, countSpecifier: .atLeast(3))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuff, countSpecifier: .atLeast(2))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff, countSpecifier: .atLeast(2))) }
 
         // THEN
         let toExpectedMessage = "expected to receive <doStuff()> on <TestClass> at least 3 times, got <doStuff()>, <doStuff()>"
@@ -140,8 +145,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "string")
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", countSpecifier: .atMost(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", countSpecifier: .atMost(0)))
+        expect(testClass).to(haveReceived(.doStuffWith, countSpecifier: .atMost(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, countSpecifier: .atMost(0)))
     }
 
     func testCallWithAtMostFailureMessage() {
@@ -154,10 +159,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // WHEN
-        let toFailingTest1 = { expect(testClass).to(haveReceived("doStuffWith(string:)", countSpecifier: .atMost(1))) }
-        let toFailingTest2 = { expect(testClass).to(haveReceived("doStuff()", countSpecifier: .atMost(2))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuff()", countSpecifier: .atMost(4))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuff()", countSpecifier: .atMost(1))) }
+        let toFailingTest1 = { expect(testClass).to(haveReceived(.doStuffWith, countSpecifier: .atMost(1))) }
+        let toFailingTest2 = { expect(testClass).to(haveReceived(.doStuff, countSpecifier: .atMost(2))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuff, countSpecifier: .atMost(4))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff, countSpecifier: .atMost(1))) }
 
         // THEN
         let got = "got <doStuff()>, <doStuff()>, <doStuff()>, <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>"
@@ -183,10 +188,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doThingsWith(string: "nimble", int: 5)
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", with: "quick"))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble"))
-        expect(testClass).to(haveReceived("doThingsWith(string:int:)", with: "nimble", 5))
-        expect(testClass).toNot(haveReceived("doThingsWith(string:int:)", with: "nimble", 10))
+        expect(testClass).to(haveReceived(.doStuffWith, with: "quick"))
+        expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble"))
+        expect(testClass).to(haveReceived(.doThingsWith, with: "nimble", 5))
+        expect(testClass).toNot(haveReceived(.doThingsWith, with: "nimble", 10))
     }
 
     func testCallWithArgumentsFailureMessage() {
@@ -195,9 +200,9 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // WHEN
-        let toFailingTest = { expect(testClass).to(haveReceived("doStuffWith(string:)", with: "quick")) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble")) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuffWith(string:)", with: "call matcher")) }
+        let toFailingTest = { expect(testClass).to(haveReceived(.doStuffWith, with: "quick")) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble")) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher")) }
 
         // THEN
         let toExpectedMessage = "expected to receive <doStuffWith(string:)> on <TestClass> with <quick>, got <doStuffWith(string:) with nimble>"
@@ -220,10 +225,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doThingsWith(string: "nimble", int: 5)
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .exactly(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .exactly(2)))
-        expect(testClass).to(haveReceived("doThingsWith(string:int:)", with: "nimble", 5, countSpecifier: .exactly(1)))
-        expect(testClass).toNot(haveReceived("doThingsWith(string:int:)", with: "nimble", 5, countSpecifier: .exactly(2)))
+        expect(testClass).to(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .exactly(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .exactly(2)))
+        expect(testClass).to(haveReceived(.doThingsWith, with: "nimble", 5, countSpecifier: .exactly(1)))
+        expect(testClass).toNot(haveReceived(.doThingsWith, with: "nimble", 5, countSpecifier: .exactly(2)))
     }
 
     func testCallWithArgumentsAndCountFailureMessage() {
@@ -233,15 +238,15 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // WHEN
-        let toFailingTest1 = { expect(testClass).to(haveReceived("doDifferentStuffWith(string:)", with: "swift", countSpecifier: .exactly(1))) }
-        let toFailingTest2 = { expect(testClass).to(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .exactly(2))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .exactly(1))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuffWith(string:)", with: "call matcher", countSpecifier: .exactly(1))) }
+        let toFailingTest1 = { expect(testClass).to(haveReceived(.doStuff, with: "swift", countSpecifier: .exactly(1))) }
+        let toFailingTest2 = { expect(testClass).to(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .exactly(2))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .exactly(1))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher", countSpecifier: .exactly(1))) }
 
         // THEN
         let got = "got <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>"
 
-        let toExpectedMessage1 = "expected to receive <doDifferentStuffWith(string:)> on <TestClass> with <swift> exactly 1 time, \(got)"
+        let toExpectedMessage1 = "expected to receive <doStuff()> on <TestClass> with <swift> exactly 1 time, \(got)"
         failsWithErrorMessage(toExpectedMessage1) { toFailingTest1() }
 
         let toExpectedMessage2 = "expected to receive <doStuffWith(string:)> on <TestClass> with <nimble> exactly 2 times, \(got)"
@@ -263,8 +268,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .atLeast(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .atLeast(2)))
+        expect(testClass).to(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .atLeast(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .atLeast(2)))
     }
 
     func testCallWithArgumentsAndAtLeastFailureMessage() {
@@ -275,14 +280,14 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // WHEN
-        let toFailingTest = { expect(testClass).to(haveReceived("doDifferentStuffWith(string:)", with: "quick", countSpecifier: .atLeast(2))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .atLeast(2))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuffWith(string:)", with: "call matcher", countSpecifier: .atLeast(2))) }
+        let toFailingTest = { expect(testClass).to(haveReceived(.doStuff, with: "quick", countSpecifier: .atLeast(2))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .atLeast(2))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher", countSpecifier: .atLeast(2))) }
 
         // THEN
         let got = "got <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>, <doStuffWith(string:) with nimble>"
 
-        let toExpectedMessage = "expected to receive <doDifferentStuffWith(string:)> on <TestClass> with <quick> at least 2 times, \(got)"
+        let toExpectedMessage = "expected to receive <doStuff()> on <TestClass> with <quick> at least 2 times, \(got)"
         failsWithErrorMessage(toExpectedMessage) { toFailingTest() }
 
         let toNotExpectedMessage = "expected to not receive <doStuffWith(string:)> on <TestClass> with <nimble> at least 2 times, \(got)"
@@ -301,8 +306,8 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "nimble")
 
         // THEN
-        expect(testClass).to(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .atMost(1)))
-        expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "nimble", countSpecifier: .atMost(0)))
+        expect(testClass).to(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .atMost(1)))
+        expect(testClass).toNot(haveReceived(.doStuffWith, with: "nimble", countSpecifier: .atMost(0)))
     }
 
     func testCallWithArgumentsAndAtMostFailureMessage() {
@@ -315,10 +320,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         testClass.doStuffWith(string: "swift")
 
         // WHEN
-        let toFailingTest1 = { expect(testClass).to(haveReceived("doThingsWith(string:int:)", with: "call matcher", 5, countSpecifier: .atMost(1))) }
-        let toFailingTest2 = { expect(testClass).to(haveReceived("doStuffWith(string:)", with: "swift", countSpecifier: .atMost(2))) }
-        let toNotFailingTest = { expect(testClass).toNot(haveReceived("doStuffWith(string:)", with: "swift", countSpecifier: .atMost(4))) }
-        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived("doStuffWith(string:)", with: "swift", countSpecifier: .atMost(1))) }
+        let toFailingTest1 = { expect(testClass).to(haveReceived(.doThingsWith, with: "call matcher", 5, countSpecifier: .atMost(1))) }
+        let toFailingTest2 = { expect(testClass).to(haveReceived(.doStuffWith, with: "swift", countSpecifier: .atMost(2))) }
+        let toNotFailingTest = { expect(testClass).toNot(haveReceived(.doStuffWith, with: "swift", countSpecifier: .atMost(4))) }
+        let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "swift", countSpecifier: .atMost(1))) }
 
         // THEN
         let got = "got <doThingsWith(string:int:) with call matcher, 5>, <doThingsWith(string:int:) with call matcher, 5>, <doStuffWith(string:) with swift>, <doStuffWith(string:) with swift>, <doStuffWith(string:) with swift>"

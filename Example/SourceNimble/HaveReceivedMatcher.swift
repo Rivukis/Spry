@@ -31,15 +31,15 @@ import Spry
  - Parameter arguments: Expected arguments. Will fail if the actual arguments don't equate to what is passed in here. Passing in no arguments is equivalent to passing in `Argument.anything` for every expected argument.
  - Parameter countSpecifier: Used to be more strict about the number of times this function should have been called with the passed in arguments. Defaults to .atLeast(1).
  */
-public func haveReceived(_ function: String, with arguments: AnyEquatable..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<Spyable> {
+public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: SpryEquatable?..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T> {
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
             return PredicateResult(bool: false, message: .expectedActualValueTo(descriptionOfAttempted))
         }
 
-        let descriptionOfAttempted = descriptionOfExpectation(actual: spyable, function: function, arguments: arguments, countSpecifier: countSpecifier)
-        let result = spyable.didCall(function: function, withArguments: arguments, countSpecifier: countSpecifier)
+        let descriptionOfAttempted = descriptionOfExpectation(actualType: type(of: spyable), functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
+        let result = spyable.didCall(function, withArguments: arguments, countSpecifier: countSpecifier)
 
         return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
     }
@@ -47,11 +47,17 @@ public func haveReceived(_ function: String, with arguments: AnyEquatable..., co
 
 // MARK: Private
 
-private func descriptionOfExpectation(actual: Spyable, function: String, arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
-    var descriptionOfAttempt = "receive <\(function)> on <\(type(of: actual))>"
+private func descriptionOfExpectation(actualType: Any.Type, functionName: String, arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> String {
+    var descriptionOfAttempt = "receive <\(functionName)> on <\(actualType)>"
 
     if !arguments.isEmpty {
-        let argumentsDescription = arguments.map{ "<\($0)>" }.joined(separator: ", ")
+        let argumentsDescription = arguments.map { element in
+            if let element = element {
+                return "<\(element)>"
+            } else {
+                return "<nil>"
+            }
+            }.joined(separator: ", ")
         descriptionOfAttempt += " with \(argumentsDescription)"
     }
 
@@ -80,7 +86,7 @@ private func descriptionOfExpectation(actual: Spyable, function: String, argumen
     return descriptionOfAttempt
 }
 
-private func descriptionOfNilAttempt(arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> String {
+private func descriptionOfNilAttempt(arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> String {
     var descriptionOfAttempt = "receive function"
 
     if arguments.count != 0 {

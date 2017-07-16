@@ -14,11 +14,10 @@
  * .nil - Only Optional.nil matches this qualification.
  * .instanceOf(type:) - Only objects whose type is exactly the type passed in match this qualification (subtypes do NOT qualify).
  */
-public enum Argument: CustomStringConvertible, AnyEquatable, Equatable {
+public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
     case anything
     case nonNil
     case `nil`
-    case instanceOf(type: Any.Type)
 
     public var description: String {
         switch self {
@@ -28,8 +27,6 @@ public enum Argument: CustomStringConvertible, AnyEquatable, Equatable {
             return "Argument.NonNil"
         case .nil:
             return "Argument.Nil"
-        case .instanceOf(let type):
-            return "Argument.InstanceOf(\(type))"
         }
     }
 
@@ -41,18 +38,15 @@ public enum Argument: CustomStringConvertible, AnyEquatable, Equatable {
             return true
         case (.nil, .nil):
             return true
-        case (.instanceOf(let a1), .instanceOf(let b1)):
-            return a1 == b1
 
         case (.anything, _): return false
         case (.nonNil, _): return false
         case (.nil, _): return false
-        case (.instanceOf(_), _): return false
         }
     }
 }
 
-internal func isEqualArgsLists(specifiedArgs: [AnyEquatable], actualArgs: [Any]) -> Bool {
+internal func isEqualArgsLists(specifiedArgs: [SpryEquatable?], actualArgs: [Any?]) -> Bool {
     if specifiedArgs.count != actualArgs.count {
         return false
     }
@@ -69,7 +63,7 @@ internal func isEqualArgsLists(specifiedArgs: [AnyEquatable], actualArgs: [Any])
     return true
 }
 
-private func isEqualArgs(specifiedArg: AnyEquatable, actualArg: Any) -> Bool {
+private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool {
     if let passedArgAsArgumentEnum = specifiedArg as? Argument {
         switch passedArgAsArgumentEnum {
         case .anything:
@@ -78,28 +72,33 @@ private func isEqualArgs(specifiedArg: AnyEquatable, actualArg: Any) -> Bool {
             return !isNil(actualArg)
         case .nil:
             return isNil(actualArg)
-        case .instanceOf(let type):
-            let cleanedType = "\(type)".replaceMatching(regex: "\\.Type+$", withString: "")
-            let cleanedRecordedArgType = "\(type(of: actualArg))"
-
-            return cleanedType == cleanedRecordedArgType
         }
-    } else if let actualArg = actualArg as? AnyEquatable {
-        return specifiedArg.isEqual(to: actualArg)
     }
 
-    fatalError("\(type(of: actualArg)) must conform to Globally Equatable")
+    guard let specifiedArgReal = specifiedArg, let actualArgReal = actualArg else {
+        return isNil(specifiedArg) && isNil(actualArg)
+    }
+
+    guard let actualArgRealAsSE = actualArgReal as? SpryEquatable else {
+        fatalError("\(type(of: actualArgReal)) must conform to Spry Equatable")
+    }
+
+    return specifiedArgReal.isEqual(to: actualArgRealAsSE)
 }
 
-private func isNil(_ value: Any) -> Bool {
-    let mirror = Mirror(reflecting: value)
-    let hasAValue = mirror.children.first?.value != nil
-
-    return mirror.displayStyle == .optional && !hasAValue
-}
-
-private extension String {
-    func replaceMatching(regex: String, withString string: String) -> String {
-        return self.replacingOccurrences(of: regex, with: string, options: .regularExpression, range: nil)
+/**
+ This is a helper function to find out if a value is nil.
+ 
+ (x == nil) will only return yes if x is Optional<Type>.none but will return true if x is Optional<Optional<Type\>>.some(Optional<Type>.none)
+ */
+internal func isNil(_ value: Any?) -> Bool {
+    if let unwrappedValue = value {
+        let mirror = Mirror(reflecting: unwrappedValue)
+        if mirror.displayStyle == .optional {
+            return isNil(mirror.children.first)
+        }
+        return false
+    } else {
+        return true
     }
 }

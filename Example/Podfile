@@ -10,7 +10,7 @@ target "SpryExample" do
 
         pod 'Quick'
         pod 'Nimble'
-        pod 'Spry', :path => './'
-        pod 'Spry+Nimble', :path => './'
+        pod 'Spry', :path => './../'
+        pod 'Spry+Nimble', :path => './../'
     end
 end

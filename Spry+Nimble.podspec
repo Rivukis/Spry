@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Rivukis/Spry.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '9.0'
-  s.source_files = 'SpryExample/Spry+Nimble_Source/*'
+  s.source_files = 'Example/SourceNimble/*'
 
   s.framework = 'XCTest'
   s.dependency 'Nimble'
