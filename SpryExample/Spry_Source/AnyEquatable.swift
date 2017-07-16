@@ -49,7 +49,7 @@ public extension SpryEquatable where Self: OptionalType {
 
         let selfsWrappedValue = selfMirror.children.first?.value
 
-        if selfsWrappedValue == nil && actual == nil {
+        if isNil(selfsWrappedValue) && isNil(actual) {
             return true
         }
         guard let selfsWrappedValueAsNonOptional = selfsWrappedValue, let actual = actual else {

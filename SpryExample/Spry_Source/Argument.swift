@@ -69,18 +69,14 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
         case .anything:
             return true
         case .nonNil:
-            return actualArg != nil
+            return !isNil(actualArg)
         case .nil:
-            return actualArg == nil
+            return isNil(actualArg)
         }
     }
 
-    if specifiedArg == nil && actualArg == nil {
-        return true
-    }
-
     guard let specifiedArgReal = specifiedArg, let actualArgReal = actualArg else {
-        return specifiedArg == nil && actualArg == nil
+        return isNil(specifiedArg) && isNil(actualArg)
     }
 
     guard let actualArgRealAsSE = actualArgReal as? SpryEquatable else {
@@ -88,4 +84,19 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
     }
 
     return specifiedArgReal.isEqual(to: actualArgRealAsSE)
+}
+
+/**
+ This is a helper function to find out if a value is nil.
+ 
+ (x == nil) will only return yes if x is Optional<Type>.none but will not if x is Optional<Optional<Type\>>.some(Optional<Type>.none)
+ 
+ if 'let'ing a value will unwrap an object all the way (regardless of nested optionals).
+ */
+internal func isNil(_ value: Any?) -> Bool {
+    if let _ = value {
+        return false
+    } else {
+        return true
+    }
 }

@@ -53,7 +53,7 @@ public class Stub: CustomStringConvertible {
     /// A beautified description. Used for debugging purposes.
     public var description: String {
         let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        let returnDescription = stubType == nil ? "nil" : "\(stubType!)"
+        let returnDescription = isNil(stubType) ? "nil" : "\(stubType!)"
         return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
     }
 
@@ -252,17 +252,17 @@ public extension Stubbable {
         }
 
         for stub in stubsWithoutArgs {
-            let value1 = stub.returnValue(for: arguments)
+            let rawValue = stub.returnValue(for: arguments)
 
-            if value1 == nil {
+            if isNil(rawValue) {
                 // nils won't cast to T even when T is Optional unless cast to Any first
-                if let value = value1 as Any as? T {
-                    return value
+                if let castedValue = rawValue as Any as? T {
+                    return castedValue
                 }
             } else {
                 // values won't cast to T when T is a protocol if values is cast to Any first
-                if let value = value1 as? T {
-                    return value
+                if let castedValue = rawValue as? T {
+                    return castedValue
                 }
             }
         }
