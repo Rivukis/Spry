@@ -6,14 +6,22 @@
 //  Copyright © 2016 Brian Radebaugh. All rights reserved.
 //
 
+import Foundation
+
 /**
  Used to compare any two arguments. Uses Equatable's `==(lhs:rhs:)` operator for comparision.
- 
+
  - Important: Never manually conform to `SpryEquatable`.
  - Note: If a compiler error says you do NOT conform to `SpryEquatable` then conform to `Equatable`. This will remove the error.
  */
 public protocol SpryEquatable {
     func isEqual(to actual: SpryEquatable?) -> Bool
+}
+
+public extension SpryEquatable {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        fatalError("\(type(of: self)) does NOT conform to Equatable. Conforming to Equatable is required for SpryEquatable.")
+    }
 }
 
 // MARK: - SpryEquatable where Self: Equatable
@@ -31,7 +39,7 @@ public extension SpryEquatable where Self: Equatable {
 // MARK: - OptionalType
 
 /**
- Used to specify an `Optional` constraint. This is needed until Swift supports extensions where Self can be constrained to a type. 
+ Used to specify an `Optional` constraint. This is needed until Swift supports extensions where Self can be constrained to a type.
  */
 public protocol OptionalType {}
 extension Optional: OptionalType {}
@@ -64,3 +72,11 @@ public extension SpryEquatable where Self: OptionalType {
         return selfsContainedValueAsSE.isEqual(to: actual)
     }
 }
+
+// MARK: - Default Conformers
+
+extension Optional: SpryEquatable {}
+extension String: SpryEquatable {}
+extension Int: SpryEquatable {}
+extension Double: SpryEquatable {}
+extension NSObject: SpryEquatable {}

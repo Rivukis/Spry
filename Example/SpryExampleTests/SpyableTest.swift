@@ -9,11 +9,6 @@
 import XCTest
 import SpryExample
 
-extension String: SpryEquatable {}
-extension Int: SpryEquatable {}
-extension NSObject: SpryEquatable {}
-extension Optional: SpryEquatable {}
-
 private class TestClass: Spyable {
     enum Function: String, StringRepresentable {
         case ivarProperty
