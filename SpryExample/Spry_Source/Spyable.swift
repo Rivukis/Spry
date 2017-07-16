@@ -32,16 +32,16 @@ private class RecordedCallArray {
  */
 public class RecordedCall: CustomStringConvertible {
     let function: String
-    let arguments: [Any]
+    let arguments: [Any?]
 
-    internal init(function: String, arguments: [Any]) {
+    internal init(function: String, arguments: [Any?]) {
         self.function = function
         self.arguments = arguments
     }
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
-        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0)>"}.joined(separator: ", ")))>"
+        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")))>"
     }
 }
 
@@ -84,7 +84,7 @@ public enum CountSpecifier {
  * var _calls: [RecordedCall] - Used internally to keep track of recorded calls.
  * recoredCall(function: String, arguments: Any...) - Used to record a call.
  * clearRecordedLists() - Used to clear out all recorded calls.
- * didCall(function: String, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
+ * didCall(function: String, withArguments arguments: [SpryEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
  */
 public protocol Spyable: class {
     associatedtype Function: StringRepresentable
@@ -97,7 +97,7 @@ public protocol Spyable: class {
      - Parameter function: The function signature to be recorded. Defaults to #function.
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Spyable to work properly.
      */
-    func recordCall(_ functionName: String, arguments: Any..., file: String, line: Int)
+    func recordCall(_ functionName: String, arguments: Any?..., file: String, line: Int)
 
     /**
      Used to clear out all recorded function calls.
@@ -120,7 +120,7 @@ public protocol Spyable: class {
      
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
-    func didCall(_ function: Function, withArguments arguments: [AnyEquatable], countSpecifier: CountSpecifier) -> DidCallResult
+    func didCall(_ function: Function, withArguments arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> DidCallResult
 }
 
 // MARK - Spyable Extension
@@ -146,7 +146,7 @@ public extension Spyable {
         }
     }
 
-    func recordCall(_ functionName: String = #function, arguments: Any..., file: String = #file, line: Int = #line) {
+    func recordCall(_ functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
@@ -155,7 +155,7 @@ public extension Spyable {
         _calls = []
     }
     
-    func didCall(_ function: Function, withArguments arguments: [AnyEquatable] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
+    func didCall(_ function: Function, withArguments arguments: [SpryEquatable?] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
         case .exactly(let count): success = timesCalled(function, arguments: arguments) == count
@@ -170,21 +170,21 @@ public extension Spyable {
     // MARK: - Internal Functions
 
     /// This is for `Spryable` to act as a pass-through to record a call.
-    internal func internal_recordCall(function: Function, arguments: [Any]) {
+    internal func internal_recordCall(function: Function, arguments: [Any?]) {
         let call = RecordedCall(function: function.rawValue, arguments: arguments)
         _calls.append(call)
     }
 
     // MARK: - Private Functions
     
-    private func timesCalled(_ function: Function, arguments: [AnyEquatable]) -> Int {
+    private func timesCalled(_ function: Function, arguments: [SpryEquatable?]) -> Int {
         return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
     }
 }
 
 // MARK: Private Functions
 
-private func numberOfMatchingCalls(function: String, arguments: [AnyEquatable], calls: [RecordedCall]) -> Int {
+private func numberOfMatchingCalls(function: String, arguments: [SpryEquatable?], calls: [RecordedCall]) -> Int {
     let matchingFunctions = calls.filter{ $0.function == function }
 
     // if no args passed in then only check if function was called (allows user to not care about args being passed in)
@@ -227,8 +227,14 @@ private func description(of calls: [RecordedCall]) -> String {
 
 // MARK: Private Extensions
 
-private extension Array {
+private extension Array where Element == Optional<Any> {
     func stringRepresentation() -> String {
-        return self.map{ "\($0)" }.joined(separator: ", ")
+        return self.map { element in
+            if let element = element {
+                return "\(element)"
+            } else {
+                return "nil"
+            }
+        }.joined(separator: ", ")
     }
 }

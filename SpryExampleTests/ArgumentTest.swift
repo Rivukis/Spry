@@ -15,12 +15,10 @@ class ArgumentTest: XCTestCase {
         let anything = Argument.anything
         let nonNil = Argument.nonNil
         let nilly = Argument.nil
-        let instanceOf = Argument.instanceOf(type: String.self)
 
         // then
         XCTAssertEqual("\(anything)", "Argument.Anything")
         XCTAssertEqual("\(nonNil)", "Argument.NonNil")
         XCTAssertEqual("\(nilly)", "Argument.Nil")
-        XCTAssertEqual("\(instanceOf)", "Argument.InstanceOf(String)")
     }
 }

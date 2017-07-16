@@ -9,10 +9,10 @@
 import XCTest
 import SpryExample
 
-extension String: AnyEquatable {}
-extension Int: AnyEquatable {}
-extension NSObject: AnyEquatable {}
-extension Optional: AnyEquatable {}
+extension String: SpryEquatable {}
+extension Int: SpryEquatable {}
+extension NSObject: SpryEquatable {}
+extension Optional: SpryEquatable {}
 
 private class TestClass: Spyable {
     enum Function: String, StringRepresentable {
@@ -184,7 +184,8 @@ class SpyableTest: XCTestCase {
 
         // then
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Int?]).success, "should SUCCEED to call correct function with correct Optional values")
-        XCTAssertFalse(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello", Optional<Int>.none]).success, "should FAIL to call correct function with correct but Non-Optional values")
+        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello", Optional<Int>.none]).success, "should SUCCEED to call correct function with correct but Non-Optional values")
+        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Any?]).success, "should SUCCEED to call correct function with incorrect Optional value type but correct 'nil'ness")
     }
 
     func testDidCallFunctionWithArgumentsANumberOfTimes() {
@@ -269,24 +270,6 @@ class SpyableTest: XCTestCase {
         // then
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: [Argument.anything, Argument.nil]).success, "should SUCCEED to call function with 'anything' and 'nil' arguments")
         XCTAssertFalse(testClass.didCall(.doWeirdStuffWith, withArguments: [Argument.nil, Argument.anything]).success, "should FAIL to call function with 'nil' and 'anything' arguments")
-    }
-
-    func testInstanceOfArgument() {
-        // given
-        let testClass = TestClass()
-
-        // when
-        testClass.doStuffWith(string: "hello")
-        testClass.doWeirdStuffWith(string: "hi", int: nil)
-
-        // then
-        XCTAssertTrue(testClass.didCall(.doStuffWith, withArguments: [Argument.instanceOf(type: String.self)]).success, "should SUCCEED to call function with 'instance of String' argument")
-        XCTAssertFalse(testClass.didCall(.doStuffWith, withArguments: [Argument.instanceOf(type: Int.self)]).success, "should FAIL to call function with 'instance of Int' argument")
-
-        let expectedArgs1: [AnyEquatable] = [Argument.instanceOf(type: Optional<String>.self), Argument.instanceOf(type: Optional<Int>.self)]
-        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: expectedArgs1).success, "should SUCCEED to call function with 'instance of String?' and ' instance of Int?' arguments")
-        let expectedArgs2: [AnyEquatable] = [Argument.instanceOf(type: String.self), Argument.instanceOf(type: Int.self)]
-        XCTAssertFalse(testClass.didCall(.doWeirdStuffWith, withArguments: expectedArgs2).success, "should FAIL to call function with 'instance of String' and 'instance of Int' arguments")
     }
 
     // MARK: - Did Call - Recorded Calls Description Tests

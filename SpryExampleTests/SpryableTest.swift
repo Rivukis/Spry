@@ -23,7 +23,7 @@ private class SpryStringService: Spryable {
 class SpryableSpec: QuickSpec {
     override func spec() {
 
-        describe("Stubbable") {
+        describe("Spryable") {
             var subject: SpryStringService!
 
             beforeEach {
