@@ -12,48 +12,163 @@ The framework is ready to use. Still need some clean up, documentation, and uplo
 
 Spry is a framework that allows spying and stubbing in Apple's Swift language. Also included is a [Nimble](https://github.com/Quick/Nimble "Nimble") matcher for the spied objects.
 
+## Spryable
+
+Conform to both Stubbable and Spyable at the same time! For information about Stubbable and Spyable see their respective sections below.
+
+### Example Stubbing an object that has a protocol interface
+
+```swift
+// The Protocol
+protocol StringService: class {
+    func giveMeAString(bool: Bool) -> String
+}
+
+// The Real Class
+class RealStringService: StringService {
+    func giveMeAString(bool: Bool) -> String {
+        // do real things
+        return "string"
+    }
+}
+
+// The Stub Class
+class FakeStringService: StringService, Stubable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString(bool:)"
+    }
+
+    func giveMeAString(bool: Bool) -> String {
+        return spryify(arguments: bool) // <-- **REQUIRED**
+    }
+}
+```
+
+### Example Stubbing an object by subclassing
+
+Can also use inheritance with the subclass overriding all functions and replacing implementation with `return stubbedValue()`. However, this is problematic as it could lead to forgotten functions.
+
+```swift
+// The Real Class
+class RealStringService {
+    func giveMeAString(bool: Bool) -> String {
+        // do real things
+        return "string"
+    }
+}
+
+// The Stub Class
+class FakeStringService: RealStringService, Stubable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString(bool:)"
+    }
+
+    override func giveMeAString(bool: Bool) -> String {
+        return spryify(arguments: bool) // <-- **REQUIRED**
+    }
+}
+
 ## Stubable
 
 ### Abilities
 
-- Stub return values for an injected object
-- Specify return values that only get returned if the specified arguments are passed into the stubbed function
-- Rich `fatalError()` messages that include a detailed list of all stubbed functions
-- Easy to implement (especially if already using protocols!)
-..- Create an object that conforms to `Stubable`
-..- Paste in one variable declaration with a default value to conform to `Stubable` Protocol
-..- In every function (the ones that should be stubbed) return result of the `returnValue()` function passing in all arguments (if any)
+* Stub return values for an injected object `andReturn()`
+    * When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
+* Stub implementation for an injected object `andDo()`
+    * When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
+* Specify return values that only get returned if the specified arguments are passed into the stubbed function
+* Rich `fatalError()` messages that include a detailed list of all stubbed functions
+* Easy to implement
+    * Create an object that conforms to `Stubable`
+    * In every function (the ones that should be stubbed) return result of the `returnValue()` function passing in all arguments (if any)
 
-### Example Stub
+### Example Stubbing an object that has a protocol interface
 
 ```swift
 // The Protocol
 protocol StringService: class {
     func giveMeAString() -> String
-    func hereAreTwoStrings(string1: String, string2: String)
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool
+    func iHaveACompletionClosure(string: String, completion: () -> Void)
 }
 
 // The Real Class
 class RealStringService: StringService {
     func giveMeAString() -> String {
-        return "a real string"
+        // do real things
+        return "string"
     }
 
-    func hereAreTwoStrings(string1: String, string2: String) {
-        // do real stuff with strings
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        // do real things
+        return true
+    }
+
+    func iHaveACompletionClosure(string: String, completion: () -> Void) {
+        // do real things
     }
 }
 
 // The Stub Class
-class StringServiceTestDouble: StringService, Stubable {
-    var _stubs: [Stub] = [] // <-- **REQUIRED**
+class FakeStringService: StringService, Stubable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString()"
+        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
+    }
 
     func giveMeAString() -> String {
-        return returnValue() // <-- **REQUIRED**
+        return stubbedValue() // <-- **REQUIRED**
     }
 
     func hereAreTwoStrings(string1: String, string2: String) -> Bool {
-        return returnValue(arguments: string1, string2) // <-- **REQUIRED**
+        return stubbedValue(arguments: string1, string2) // <-- **REQUIRED**
+    }
+
+    func iHaveACompletionClosure(string: String, completion: () -> Void) {
+        return stubbedValue(arguments: string, completion) // <-- **REQUIRED**
+    }
+}
+```
+
+### Example Stubbing an object by subclassing
+
+Can also use inheritance with the subclass overriding all functions and replacing implementation with `return stubbedValue()`. However, this is problematic as it could lead to forgotten functions.
+
+```swift
+// The Real Class
+class RealStringService {
+    func giveMeAString() -> String {
+        // do real things
+        return "string"
+    }
+
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        // do real things
+        return true
+    }
+
+    func iHaveACompletionClosure(string: String, completion: () -> Void) {
+        // do real things
+    }
+}
+
+// The Stub Class
+class FakeStringService: RealStringService, Stubable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString()"
+        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
+    }
+
+    override func giveMeAString() -> String {
+        return stubbedValue() // <-- **REQUIRED**
+    }
+
+    override func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        return stubbedValue(arguments: string1, string2) // <-- **REQUIRED**
+    }
+
+    override func iHaveACompletionClosure(string: String, completion: () -> Void) {
+        return stubbedValue(arguments: string, completion) // <-- **REQUIRED**
     }
 }
 ```
@@ -62,48 +177,69 @@ class StringServiceTestDouble: StringService, Stubable {
 
 ```swift
 // will always return `"stubbed value"`
-stringServiceTestDouble.stub("hereAreTwoStrings(string1:string2:)").andReturn("stubbed value")
+fakeStringService.stub(.hereAreTwoStrings).andReturn("stubbed value")
 
 // specifying all arguments (will only return `true` if the arguments passed in match "first string" and "second string")
-stringServiceTestDouble.stub("hereAreTwoStrings(string1:string2:)").with("first string", "second string").andReturn(true)
+fakeStringService.stub(.hereAreTwoStrings).with("first string", "second string").andReturn(true)
 
 // using the Arguement enum (will only return `true` if the second argument is "only this string matters")
-stringServiceTestDouble.stub("hereAreTwoStrings(string1:string2:)").with(Argument.anything, "only this string matters").andReturn(true)
+fakeStringService.stub(.hereAreTwoStrings).with(Argument.anything, "only this string matters").andReturn(true)
+
+// using `andDo()` - Also has the ability to specify the arguments!
+fakeStringService.stub(.iHaveACompletionClosure).with("correct string", Argument.anything).andDo({ arguments in
+    // get the passed in argument
+    let completionClosure = arguments[0] as! () -> Void
+
+    // use the argument
+    completionClosure()
+
+    // return an appropriate value
+    return Void() // <-- will be returned by the stub
+})
 ```
 
 ## Spyable
+
+Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 
 ### Abilities
 
 - Test whether a function was called on an instance of a class
 - Rich Failure messages that include a detailed list of called functions and arguments
-- Easy to implement (especially if already using protocols!)
-..- Create an object that conforms to `Spyable`
-..- Paste in one variable declaration with a default value to conform to `Spyable` Protocol
-..- In every function (the ones that should be recorded) call the `recordCall()` function passing in all arguments (if any)
+- Easy to implement
+    * Create an object that conforms to `Spyable`
+    * In every function (the ones that should be recorded) call the `recordCall()` function passing in all arguments (if any)
 
-### Example Spy
+When using a protocol to declare the interface for an object, the compiler will tell you if/when the 'fake' doesn't conform.
+
+### Example Spying an object that has a protocol interface
+
 ```swift
 // The Protocol
 protocol StringService: class {
     func giveMeAString() -> String
-    func hereAreTwoStrings(string1: String, string2: String)
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool
 }
 
 // The Real Class
 class RealStringService: StringService {
     func giveMeAString() -> String {
-        return "a real string"
+        // do real things
+        return "string"
     }
 
-    func hereAreTwoStrings(string1: String, string2: String) {
-        // do real stuff with strings
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        // do real things
+        return true
     }
 }
 
 // The Spy Class
-class StringServiceTestDouble: StringService, Spyable {
-    var _calls: [RecordedCall] = [] // <-- **REQUIRED**
+class FakeStringService: StringService, Spyable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString()"
+        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
+    }
 
     func giveMeAString() -> String {
         recordCall() // <-- **REQUIRED**
@@ -117,80 +253,105 @@ class StringServiceTestDouble: StringService, Spyable {
 }
 ```
 
-> Could also use inheritance with the subclass overriding all functions and replacing implementation with `recordCall()` functions. However, this is unadvised as it could lead to forgotten functions when adding new functionality to the superclass in the future.
+### Example Spying an object by subclassing
+
+Can also use inheritance with the subclass overriding all functions and replacing implementation with `recordCall()`. However, this is problematic as it could lead to forgotten functions.
+
+```swift
+
+// The Real Class
+class RealStringService {
+    func giveMeAString() -> String {
+        // do real things
+        return "string"
+    }
+
+    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        // do real things
+        return true
+    }
+}
+
+// The Spy Class
+class FakeStringService: RealStringService, Spyable {
+    enum Function: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString()"
+        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
+    }
+
+    override func giveMeAString() -> String {
+        recordCall() // <-- **REQUIRED**
+        return ""
+    }
+
+    override func hereAreTwoStrings(string1: String, string2: String) -> Bool {
+        recordCall(arguments: string1, string2) // <-- **REQUIRED**
+        return false
+    }
+}
+```
 
 ## Have Received Matcher
 
-- All Call Matchers can be used with `to()` and `toNot()`
+This matcher is made to be used with [Nimble](https://github.com/Quick/Nimble "Nimble").
+
+All Call Matchers can be used with `to()` and `toNot()`
 
 ### Example Tests
 ```swift
 // passes if function was called
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)"))
+expect(spy).to(haveReceived(.functionName)
 
 // passes if function was called a number of times
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", countSpecifier: .exactly(1)))
+expect(spy).to(haveReceived(.functionName, countSpecifier: .exactly(1)))
 
 // passes if function was called at least a number of times
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", countSpecifier: .atLeast(2)))
+expect(spy).to(haveReceived(.functionName, countSpecifier: .atLeast(2)))
 
 // passes if function was called at most a number of times
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", countSpecifier: .atMost(1)))
+expect(spy).to(haveReceived(.functionName, countSpecifier: .atMost(1)))
 
 // passes if function was called with equivalent arguments
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", withArguments: "firstArg", "secondArg"))
+expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg"))
 
-// passes if function was called with arguments that pass the specified option
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", withArguments: Argument.nonNil, Argument.instanceOf(String.self)))
+// passes if function was called with arguments that pass the specified options
+expect(spy).to(haveReceived(.functionName, with: Argument.nonNil, Argument.anything, "thirdArg")
 
 // passes if function was called with equivalent arguments a number of times
-expect(spy).to(haveReceived("functionNameWith(arg1:arg2:)", withArguments: "firstArg", "secondArg", countSpecifier: .exactly(1)))
+expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg", countSpecifier: .exactly(1)))
 ```
 
-## GloballyEquatable
+## SpryEquatable
 
-- Spry uses `GloballyEquatable` protocol to equate arguments
-..- Make types conform to `GloballyEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
-..- To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
-..- Compiler won't let you run tests until all arguments being tested conform to `GloballyEquatable`
-..- NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `GloballyEquatable` (You should never implement methods declared in `GloballyEquatable`)
+* Spry uses `SpryEquatable` protocol to equate arguments
+    * Make types conform to `SpryEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
+    * To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
+    * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
 
-### Example GloballyEquatable Conformance
+### Example SpryEquatable Conformance
 ```swift
-extension Int : GloballyEquatable {}
-extension String : GloballyEquatable {}
-extension Optional : GloballyEquatable {}
-```
-
-### Example Equatable Conformance
-```swift
-// declare Person as Equatable
-struct Person: Equatable {
-    var name: String
-    var age: Int
+// custom type
+extension Person: Equatable, SpryEquatable {
+    public state func == (lhs: Person, rhs: Person) -> Bool {
+        return lhs.name == rhs.name
+            && lhs.age == rhs.age
+    }
 }
 
-// determine how you want two Persons to equate to true/false
-func == (lhs: Person, rhs: Person) -> Bool {
-    return lhs.name == rhs.name
-        && lhs.age == rhs.age
-}
+// existing type that is already Equatable
+extension String: SpryEquatable {}
 ```
 
 ## Argument Enum
 
 Use when the exact comparison of an argument using the `Equatable` protocol is not desired/needed.
 
-- `case anything`
-..- Used to indicate that absolutly anything passed in will be sufficient.
-- `case nonNil`
-..- Used to indicate that anything non-nil passed in will be sufficient.
-- `case nil`
-..- Used to indicate that only nil passed in will be sufficient.
-- `case instanceOf(type: Any.Type)`
-..- Used to indicate that anything of the given type passed in will be sufficient.
-..- NOTE: `String` and `String?` (aka String and Optional<String>) are not the same type.
-
+* `case anything`
+    * Used to indicate that absolutly anything passed in will be sufficient.
+* `case nonNil`
+    * Used to indicate that anything non-nil passed in will be sufficient.
+* `case nil`
+    * Used to indicate that only nil passed in will be sufficient.
 
 ## Motivation
 
@@ -205,18 +366,18 @@ This way you can write tests from the point of view of the class you are testing
 ## Installation
 
 Spry is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+it, simply add it your Podfile.
 
 ```ruby
-platform :ios, "9.0"
+platform :ios, '9.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
+
 use_frameworks!
 
 target "<YOUR_TARGET>" do
-    # App pods go here
-
-    abstract_target 'Tests' do
+    target '<YOUR_TARGET>Tests' do
         inherit! :search_paths
-        target "<YOUR_TARGET>Tests"
 
         pod 'Spry'
 
