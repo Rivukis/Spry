@@ -9,7 +9,6 @@
 import XCTest
 import Quick
 import SpryExample
-import Spry_Nimble
 
 @testable import Nimble
 
