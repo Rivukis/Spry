@@ -14,9 +14,9 @@ Spry is a framework that allows spying and stubbing in Apple's Swift language. A
 
 ## Spryable
 
-Conform to both Stubbable and Spyable at the same time! For information about Stubbable and Spyable see their respective sections below.
+Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#Stubbable) and [Spyable](#Spyable) see their respective sections below.
 
-### Example Stubbing an object that has a protocol interface
+### Example making a Spryable version of an object that has a protocol interface
 
 ```swift
 // The Protocol
@@ -44,9 +44,9 @@ class FakeStringService: StringService, Stubable {
 }
 ```
 
-### Example Stubbing an object by subclassing
+### Example making a Spryable version of an object by subclassing
 
-Can also use inheritance with the subclass overriding all functions and replacing implementation with `return stubbedValue()`. However, this is problematic as it could lead to forgotten functions.
+Can also use inheritance with the subclass overriding all functions and replacing implementation with `return spryify()`. However, this is problematic as it could lead to forgotten functions.
 
 ```swift
 // The Real Class
@@ -67,6 +67,7 @@ class FakeStringService: RealStringService, Stubable {
         return spryify(arguments: bool) // <-- **REQUIRED**
     }
 }
+```
 
 ## Stubable
 
@@ -381,7 +382,7 @@ target "<YOUR_TARGET>" do
 
         pod 'Spry'
 
-        #Uncomment the following lines to import Quick/Nimble as well as a Nimble Matcher that uses Spry's Spyable objects.
+        #Uncomment the following lines to import Quick/Nimble as well as a Nimble Matcher that to test if a 'fake' has received function calls.
         #pod 'Quick'
         #pod 'Nimble'
         #pod 'Spry+Nimble'
