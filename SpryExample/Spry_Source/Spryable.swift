@@ -14,6 +14,47 @@ import Foundation
  See Spyable and Stubbable or more information.
  */
 public protocol Spryable: Spyable, Stubbable {
+    /**
+     The type that represents function names when spying.
+
+     Ideal to use an enum with raw type of `String`. An enum with raw type of `String` also automatically satisfies StringRepresentable protocol.
+
+     Property signatures are just the property name
+
+     Function signatures are the function name with "()" at the end. If there are parameters then the public facing parameter names are listed in order with ":" after each. If a parameter does not have a public facing name then the private name is used instead
+
+     - Note: This associatedtype has the exact same name as Stubbable's and Spyable's so that a single type will satisfy both.
+
+     ## Example ##
+     ```swift
+     enum Function: String, StringRepresentable {
+         // property signatures are just the property name
+         case myProperty = "myProperty"
+
+         // function signatures are the function name with parameter names listed at the end in "()"
+         case giveMeAString = "noParameters()"
+         case hereAreTwoParameters = "hereAreTwoParameters(string1:string2:)"
+         case paramWithDifferentNames = "paramWithDifferentNames(publicName:)"
+         case paramWithNoPublicName = "paramWithNoPublicName(privateName:)"
+     }
+
+     func noParameters() -> Bool {
+         // ...
+     }
+
+     func hereAreTwoParameters(string1: String, string2: String) -> Bool {
+         // ...
+     }
+
+     func paramWithDifferentNames(publicName privateName: String) -> String {
+         // ...
+     }
+
+     func paramWithNoPublicName(_ privateName: String) -> String {
+         // ...
+     }
+     ```
+     */
     associatedtype Function: StringRepresentable
 
     /**

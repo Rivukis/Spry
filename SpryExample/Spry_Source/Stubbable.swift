@@ -16,143 +16,54 @@ import Foundation
 private var stubsMapTable: NSMapTable<AnyObject, StubArray> = NSMapTable.weakToStrongObjects()
 
 /**
- This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
- */
-private class StubArray {
-    var stubs: [Stub] = []
-}
-
-// MARK: - Public Helper Objects
-
-/**
- Object return by `stub()` call. Used to specify arguments and return values when stubbing.
-
- * var description: String - Description of `Stub`.
- * with(arguments:) -> Stub - Use to specify arguments for a given stub.
- * andReturn(value:) - Use to specify the return value for the stubbed function.
- * andDo(closure:) - Use to specify the closure to be executed when the stubbed function is called.
- */
-
-public class Stub: CustomStringConvertible {
-    enum StubType {
-        case andReturn(Any?)
-        case andDo(([Any?]) -> Any?)
-    }
-
-    private var stubType: StubType?
-
-    fileprivate let functionName: String
-    fileprivate private(set) var arguments: [SpryEquatable] = []
-
-    fileprivate init(functionName: String) {
-        self.functionName = functionName
-    }
-
-    // MARK: - Public
-
-    /// A beautified description. Used for debugging purposes.
-    public var description: String {
-        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        let returnDescription = isNil(stubType) ? "nil" : "\(stubType!)"
-        return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
-    }
-
-    /**
-     Used to specify arguments when stubbing.
-     
-     - Note: If no arguments are specified then any arguments may be passed in and the stubbed value will still be returned.
-     
-     ## Example ##
-     ```swift
-     service.stub("functionSignature").with("expected argument")
-     ```
-     
-     - Parameter arguments: The specified arguments needed for the stub to succeed. See `Argument` for ways other ways of constraining expected arguments besides Equatable.
-     
-     - Returns: A stub object used to add additional `with()` or to add `andReturn()` or `andDo()`.
-     */
-    public func with(_ arguments: SpryEquatable...) -> Stub {
-        self.arguments += arguments
-        return self
-    }
-
-    /**
-     Used to specify the return value for the stubbed function.
-     
-     - Important: This allows `Any` object to be passed in but the stub will ONLY work if the correct type is passed in.
-     
-     - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
-     
-     ## Example ##
-     ```swift
-     // arguments do NOT matter
-     service.stub("functionSignature()").andReturn("stubbed value")
-     
-     // arguments matter
-     service.stub("functionSignature()").with("expected argument").andReturn("stubbed value")
-     ```
-
-     - Parameter value: The value to be returned by the stubbed function.
-     */
-    public func andReturn(_ value: Any?) {
-        stubType = .andReturn(value)
-    }
-
-    /**
-     Used to specify a closure to be executed in place of the stubbed function.
-     
-     - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
-     
-     ## Example ##
-     ```swift
-     // arguments do NOT matter (closure will be called if `functionSignature()` is called)
-     service.stub("functionSignature()").andDo { arguments in
-         // do test specific things (like call a completion block)
-         return "stubbed value"
-     }
-
-     // arguments matter (closure will NOT be called unless the arguments match what is passed in the `with()` function)
-     service.stub("functionSignature()").with("expected argument").andDo { arguments in
-         // do test specific things (like call a completion block)
-         return "stubbed value"
-     }
-     ```
-
-     - Parameter closure: The closure to be executed. The array of parameters that will be passed in correspond to the parameters being passed into the stubbed function. The return value must match the stubbed function's return type and will be the return value of the stubbed function.
-     */
-    public func andDo(_ closure: @escaping ([Any?]) -> Any?) {
-        stubType = .andDo(closure)
-    }
-
-    // MARK: - Fileprivate
-
-    fileprivate func returnValue(for args: [Any?]) -> Any? {
-        guard let stubType = stubType else {
-            fatalError("Must add `andReturn` or `andDo` to properly stub an object")
-        }
-
-        switch stubType {
-        case .andReturn(let value):
-            return value
-        case .andDo(let closure):
-            return closure(args)
-        }
-    }
-}
-
-/**
  A protocol used to stub an object's functions. A small amount of boilerplate is requried.
 
  - Important: All the functions specified in this protocol come with default implementation that should NOT be overridden.
 
- - Note: The `Spryable` protocol exists as a convenience when conforming to both `Spyable` and `Stubbable`.
-
- * var _stubs: [Stub] - Used internally to keep track of stubs.
- * stub(function: String) -> Stub - Used to stub the specified function. See `Stub` for specifying arguments and the stubbed return value.
- * stubbedValue<T>(function:arguments:asType:) -> T - Used to return the stubbed value.
- * stubbedValue<T>(function:arguments:fallbackValue:) -> T - Used to return the stubbed value or the fallback value if no stub is found.
+ - Note: The `Spryable` protocol exists as a convenience to conform to both `Spyable` and `Stubbable` at the same time.
  */
 public protocol Stubbable: class {
+    /**
+     The type that represents function names when stubbing.
+     
+     Ideal to use an enum with raw type of `String`. An enum with raw type of `String` also automatically satisfies StringRepresentable protocol.
+     
+     Property signatures are just the property name
+     
+     Function signatures are the function name with "()" at the end. If there are parameters then the public facing parameter names are listed in order with ":" after each. If a parameter does not have a public facing name then the private name is used instead
+     
+     - Note: This associatedtype has the exact same name as Spyable's so that a single type will satisfy both.
+     
+     ## Example ##
+     ```swift
+     enum Function: String, StringRepresentable {
+         // property signatures are just the property name
+         case myProperty = "myProperty"
+     
+         // function signatures are the function name with parameter names listed at the end in "()"
+         case giveMeAString = "noParameters()"
+         case hereAreTwoParameters = "hereAreTwoParameters(string1:string2:)"
+         case paramWithDifferentNames = "paramWithDifferentNames(publicName:)"
+         case paramWithNoPublicName = "paramWithNoPublicName(privateName:)"
+     }
+     
+     func noParameters() -> Bool {
+         // ...
+     }
+
+     func hereAreTwoParameters(string1: String, string2: String) -> Bool {
+         // ...
+     }
+
+     func paramWithDifferentNames(publicName privateName: String) -> String {
+         // ...
+     }
+     
+     func paramWithNoPublicName(_ privateName: String) -> String {
+         // ...
+     }
+     ```
+     */
     associatedtype Function: StringRepresentable
 
     /**
@@ -162,7 +73,7 @@ public protocol Stubbable: class {
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
-     - Parameter function: The function signature to be stubbed. Defaults to #function.
+     - Parameter function: The `Function` to be stubbed.
      */
     func stub(_ function: Function) -> Stub
 
@@ -188,13 +99,6 @@ public protocol Stubbable: class {
      */
     func stubbedValue<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
 }
-
-internal enum Fallback<T> {
-    case noFallback
-    case fallback(T)
-}
-
-// MARK - Stubbable Extension
 
 public extension Stubbable {
     /**

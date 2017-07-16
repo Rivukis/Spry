@@ -16,77 +16,54 @@ import Foundation
 private var callsMapTable: NSMapTable<AnyObject, RecordedCallArray> = NSMapTable.weakToStrongObjects()
 
 /**
- This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
- */
-private class RecordedCallArray {
-    var calls: [RecordedCall] = []
-}
-
-// MARK: - Public Helper Objects
-
-/**
- Used internally. Should never need to use or know about this type.
-
- * function: String - The function signature of a recorded call. Defaults to `#function`.
- * arguments: [Any] - The arguments passed in when the function was recorded.
- */
-public class RecordedCall: CustomStringConvertible {
-    let function: String
-    let arguments: [Any?]
-
-    internal init(function: String, arguments: [Any?]) {
-        self.function = function
-        self.arguments = arguments
-    }
-
-    /// A beautified description. Used for debugging purposes.
-    public var description: String {
-        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")))>"
-    }
-}
-
-/**
- The resulting information when using the `didCall()` function.
-
- * success: Bool - `true` if the function was called given the criteria specified, otherwise `false`.
- * recordedCallsDescription: String - A list of all recorded calls. Helpful information if success if `false`.
- */
-public struct DidCallResult {
-    public let success: Bool
-    public let recordedCallsDescription: String
-
-    internal init(success: Bool, recordedCallsDescription: String) {
-        self.success = success
-        self.recordedCallsDescription = recordedCallsDescription
-    }
-}
-
-/**
- Used when specifying if a function was called.
-
- * .exactly - Will only succeed if the function was called exactly the number of times specified.
- * .atLeast - Will only succeed if the function was called the number of times specified or more.
- * .atMost - Will only succeed if the function was called the number of times specified or less.
- */
-public enum CountSpecifier {
-    case exactly(Int)
-    case atLeast(Int)
-    case atMost(Int)
-}
-
-/**
  A protocol used to spy on an object's function calls. A small amount of boilerplate is requried.
  
  - Important: All the functions specified in this protocol come with default implementation that should NOT be overridden.
  
- - Note: The `Spryable` protocol exists as a convenience when conforming to both `Spyable` and `Stubbable`.
- 
- * var _calls: [RecordedCall] - Used internally to keep track of recorded calls.
- * recoredCall(function: String, arguments: Any...) - Used to record a call.
- * clearRecordedLists() - Used to clear out all recorded calls.
- * didCall(function: String, withArguments arguments: [SpryEquatable], countSpecifier: CountSpecifier) -> DidCallResult - Used to find out if a call was made.
+ - Note: The `Spryable` protocol exists as a convenience to conform to both `Spyable` and `Stubbable` at the same time.
  */
 public protocol Spyable: class {
+    /**
+     The type that represents function names when spying.
+
+     Ideal to use an enum with raw type of `String`. An enum with raw type of `String` also automatically satisfies StringRepresentable protocol.
+
+     Property signatures are just the property name
+
+     Function signatures are the function name with "()" at the end. If there are parameters then the public facing parameter names are listed in order with ":" after each. If a parameter does not have a public facing name then the private name is used instead
+
+     - Note: This associatedtype has the exact same name as Stubbable's so that a single type will satisfy both.
+
+     ## Example ##
+     ```swift
+     enum Function: String, StringRepresentable {
+         // property signatures are just the property name
+         case myProperty = "myProperty"
+
+         // function signatures are the function name with parameter names listed at the end in "()"
+         case giveMeAString = "noParameters()"
+         case hereAreTwoParameters = "hereAreTwoParameters(string1:string2:)"
+         case paramWithDifferentNames = "paramWithDifferentNames(publicName:)"
+         case paramWithNoPublicName = "paramWithNoPublicName(privateName:)"
+     }
+
+     func noParameters() -> Bool {
+         // ...
+     }
+
+     func hereAreTwoParameters(string1: String, string2: String) -> Bool {
+         // ...
+     }
+
+     func paramWithDifferentNames(publicName privateName: String) -> String {
+         // ...
+     }
+
+     func paramWithNoPublicName(_ privateName: String) -> String {
+         // ...
+     }
+     ```
+     */
     associatedtype Function: StringRepresentable
 
     /**
@@ -114,7 +91,7 @@ public protocol Spyable: class {
      - Important: Do NOT implement function. Use default implementation provided by Spry.
      - Important: Only use this function if NOT using the provided `haveReceived()` matcher used in conjunction with [Quick/Nimble](https://github.com/Quick).
 
-     - Parameter function: The function signature as a `String`.
+     - Parameter function: The `Function` specified.
      - Parameter arguments: The arguments specified. If this value is an empty array, then any parameters passed into the actual function call will result in a success (i.e. passing in `[]` is equivalent to passing in Argument.anything for every expected parameter.)
      - Parameter countSpecifier: Used to specify the amount of times this function needs to be called for a successful result. See `CountSpecifier` for more detials.
      
