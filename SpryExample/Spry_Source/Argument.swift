@@ -89,12 +89,14 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
 /**
  This is a helper function to find out if a value is nil.
  
- (x == nil) will only return yes if x is Optional<Type>.none but will not if x is Optional<Optional<Type\>>.some(Optional<Type>.none)
- 
- if 'let'ing a value will unwrap an object all the way (regardless of nested optionals).
+ (x == nil) will only return yes if x is Optional<Type>.none but will return true if x is Optional<Optional<Type\>>.some(Optional<Type>.none)
  */
 internal func isNil(_ value: Any?) -> Bool {
-    if let _ = value {
+    if let unwrappedValue = value {
+        let mirror = Mirror(reflecting: unwrappedValue)
+        if mirror.displayStyle == .optional {
+            return isNil(mirror.children.first)
+        }
         return false
     } else {
         return true

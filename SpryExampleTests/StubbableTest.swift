@@ -310,8 +310,8 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("passing in args") {
-                context("when the args match what is stubbed") {
+            describe("passing in arguments") {
+                context("when the arguments match what is stubbed") {
                     let expectedArg = "im expected"
                     let expectedReturn = "i should be returned"
 
@@ -324,7 +324,7 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
-                context("when the args do NOT match what is stubbed") {
+                context("when the arguments do NOT match what is stubbed") {
                     beforeEach {
                         subject.stub(.giveMeAString_string).with("not expected").andReturn("return value")
                     }
@@ -334,7 +334,7 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
-                context("when there are no args passed in") {
+                context("when there are no arguments passed in") {
                     let expectedReturn = "i should be returned"
 
                     beforeEach {
@@ -343,6 +343,18 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.giveMeAString(string: "doesn't matter")).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is Optional.none") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeAnOptionalString).with(nil as Any?).andReturn(expectedReturn)
+                    }
+
+                    it("should return the stubbed value") {
+                        expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
                     }
                 }
 

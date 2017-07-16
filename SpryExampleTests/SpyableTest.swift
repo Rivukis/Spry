@@ -185,6 +185,7 @@ class SpyableTest: XCTestCase {
         // then
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Int?]).success, "should SUCCEED to call correct function with correct Optional values")
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello", Optional<Int>.none]).success, "should SUCCEED to call correct function with correct but Non-Optional values")
+        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Any?]).success, "should SUCCEED to call correct function with incorrect Optional value type but correct 'nil'ness")
     }
 
     func testDidCallFunctionWithArgumentsANumberOfTimes() {
