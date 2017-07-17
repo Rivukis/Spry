@@ -10,7 +10,7 @@ Spry is a framework that allows spying and stubbing in Apple's Swift language. A
 
 ## Spryable
 
-Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#Stubbable) and [Spyable](#Spyable) see their respective sections below.
+Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#stubbable) and [Spyable](#spyable) see their respective sections below.
 
 * Easy to implement
     * Create an object that conforms to `Spryable`
