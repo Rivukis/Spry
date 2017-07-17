@@ -8,13 +8,39 @@ TODO: Build example project.
 
 Spry is a framework that allows spying and stubbing in Apple's Swift language. Also included is a [Nimble](https://github.com/Quick/Nimble "Nimble") matcher for the spied objects.
 
+__Table of Contents__
+
+* [Spryable](#spryable)
+    * [Example Using Protocol](#example-making-a-spryable-version-of-an-object-that-has-a-protocol-interface)
+    * [Example Using Inheritance](#example-making-a-spryable-version-of-an-object-by-subclassing)
+* [Stubbable](#stubbable)
+    * [Abilities](#abilities)
+    * [Example Using Protocol](#example-making-a-stubbable-version-of-an-object-that-has-a-protocol-interface)
+    * [Example Using Inheritance](#example-making-a-stubbable-version-of-an-object-by-subclassing)
+    * [Example Stubbing](#example-stubbing)
+* [Spyable](#spyable)
+    * [Abilities](#abilities)
+    * [Example Using Protocol](#example-making-a-spyable-version-of-an-object-that-has-a-protocol-interface)
+    * [Example Using Inheritance](#example-making-a-spyable-version-of-an-object-by-subclassing)
+    * [Example Did Call](#example-did-call)
+* [Have Received Matcher](#have-received-matcher)
+    * [Example Have Received](#example-have-received)
+* [SpryEquatable](#spryequatable)
+    * [Defaulted Conformance List](#defaulted-conformance-list)
+    * [Example SpryEquatable Conformance](#example-spryEquatable-conformance)
+* [Argument Enum](#argument-enum)
+* [Motivation](#motivation)
+* [Installation](#installation)
+* [Contributors](#contributors)
+* [License](#license)
+
 ## Spryable
 
 Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#stubbable) and [Spyable](#spyable) see their respective sections below.
 
-* Easy to implement
-    * Create an object that conforms to `Spryable`
-    * In every function (the ones that should be stubbed and spied) return the result of `spryify()` passing in all arguments (if any)
+Easy to implement
+* Create an object that conforms to `Spryable`
+* In every function (the ones that should be stubbed and spied) return the result of `spryify()` passing in all arguments (if any)
 
 ### Example making a Spryable version of an object that has a protocol interface
 
@@ -85,7 +111,7 @@ class FakeStringService: RealStringService, Spryable {
 
 > When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
 
-### Example Stubbing an object that has a protocol interface
+### Example making a Stubbable version of an object that has a protocol interface
 
 ```swift
 // The Protocol
@@ -133,7 +159,7 @@ class FakeStringService: StringService, Stubbable {
 }
 ```
 
-### Example Stubbing an object by subclassing
+### Example making a Stubbable version of an object by subclassing
 
 Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed) and returning the result of `stubbedValue()`. However, this can problematic as it could lead to forgotten functions being overridden.
 
@@ -215,7 +241,7 @@ fakeStringService.stub(.iHaveACompletionClosure).with("correct string", Argument
 
 When using a protocol to declare the interface for an object, the compiler will tell you if/when the 'fake' doesn't conform.
 
-### Example Spying an object that has a protocol interface
+### Example making a Spyable version of an object that has a protocol interface
 
 ```swift
 // The Protocol
@@ -256,7 +282,7 @@ class FakeStringService: StringService, Spyable {
 }
 ```
 
-### Example Spying an object by subclassing
+### Example making a Spyable version of an object by subclassing
 
 Can also use inheritance where the subclass overrides all functions (the ones that should be spied) and calling `recordCall()`. However, this can problematic as it could lead to forgotten functions being overridden.
 
@@ -294,34 +320,74 @@ class FakeStringService: RealStringService, Spyable {
 }
 ```
 
+### Example Did Call
+
+__The Result__
+
+```swift
+// the result
+let result = spyable.didCall(.functionName)
+
+// was the function called on the fake?
+result.success
+
+// what was called on the fake?
+result.recordedCallsDescription
+```
+
+__How to Use__
+
+```swift
+// passes if function was called
+fake.didCall(.functionName)
+
+// passes if function was called a number of times
+fake.didCall(.functionName, countSpecifier: .exactly(1))
+
+// passes if function was called at least a number of times
+fake.didCall(.functionName, countSpecifier: .atLeast(1))
+
+// passes if function was called at most a number of times
+fake.didCall(.functionName, countSpecifier: .atMost(1))
+
+// passes if function was called with equivalent arguments
+fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"])
+
+// passes if function was called with arguments that pass the specified options
+fake.didCall(.functionName, withArguments: [Argument.nonNil, Argument.anything, "thirdArg"])
+
+// passes if function was called with equivalent arguments a number of times
+fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"], countSpecifier: .exactly(1))
+```
+
 ## Have Received Matcher
 
 Have Received Matcher is made to be used with [Nimble](https://github.com/Quick/Nimble "Nimble"). This matcher is part of a separate cocoapod called 'Spry+Nimble'. See below for installation.
 
 All Call Matchers can be used with `to()` and `toNot()`
 
-### Example Tests
+### Example Have Received
 ```swift
 // passes if function was called
-expect(spy).to(haveReceived(.functionName)
+expect(fake).to(haveReceived(.functionName)
 
 // passes if function was called a number of times
-expect(spy).to(haveReceived(.functionName, countSpecifier: .exactly(1)))
+expect(fake).to(haveReceived(.functionName, countSpecifier: .exactly(1)))
 
 // passes if function was called at least a number of times
-expect(spy).to(haveReceived(.functionName, countSpecifier: .atLeast(2)))
+expect(fake).to(haveReceived(.functionName, countSpecifier: .atLeast(2)))
 
 // passes if function was called at most a number of times
-expect(spy).to(haveReceived(.functionName, countSpecifier: .atMost(1)))
+expect(fake).to(haveReceived(.functionName, countSpecifier: .atMost(1)))
 
 // passes if function was called with equivalent arguments
-expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg"))
+expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg"))
 
 // passes if function was called with arguments that pass the specified options
-expect(spy).to(haveReceived(.functionName, with: Argument.nonNil, Argument.anything, "thirdArg")
+expect(fake).to(haveReceived(.functionName, with: Argument.nonNil, Argument.anything, "thirdArg")
 
 // passes if function was called with equivalent arguments a number of times
-expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg", countSpecifier: .exactly(1)))
+expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg", countSpecifier: .exactly(1)))
 ```
 
 ## SpryEquatable
@@ -331,7 +397,7 @@ expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg", countS
     * To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
     * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
 
-### Spry's Default Conformance List
+### Defaulted Conformance List
 * Optional (will `fatalError()` ta runtime if the wrapped type does not conform to SpryEquatable)
 * String
 * Int
