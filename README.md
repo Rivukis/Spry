@@ -72,7 +72,7 @@ class FakeStringService: StringService, Spryable {
 
 ### Example making a Spryable version of an object by subclassing
 
-Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed and spied) and returning the result of `spryify()`. However, this can problematic as it could lead to forgotten functions being overridden.
+Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed and spied) and returning the result of `spryify()`. However, this can be problematic as it could lead to forgotten functions being NOT being overridden.
 
 ```swift
 // The Real Class
@@ -161,7 +161,7 @@ class FakeStringService: StringService, Stubbable {
 
 ### Example making a Stubbable version of an object by subclassing
 
-Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed) and returning the result of `stubbedValue()`. However, this can problematic as it could lead to forgotten functions being overridden.
+Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed) and returning the result of `stubbedValue()`. However, this can be problematic as it could lead to forgotten functions being NOT being overridden.
 
 ```swift
 // The Real Class
@@ -284,7 +284,7 @@ class FakeStringService: StringService, Spyable {
 
 ### Example making a Spyable version of an object by subclassing
 
-Can also use inheritance where the subclass overrides all functions (the ones that should be spied) and calling `recordCall()`. However, this can problematic as it could lead to forgotten functions being overridden.
+Can also use inheritance where the subclass overrides all functions (the ones that should be spied) and calling `recordCall()`. However, this can be problematic as it could lead to forgotten functions being NOT being overridden.
 
 ```swift
 
@@ -423,7 +423,7 @@ extension String: SpryEquatable {}
 
 ## Argument Enum
 
-Use when the exact comparison of an argument using the `Equatable` protocol is not desired/needed.
+Use when the exact comparison of an argument using the `Equatable` protocol is not desired, needed, or possible.
 
 * `case anything`
     * Used to indicate that absolutly anything passed in will be sufficient.
