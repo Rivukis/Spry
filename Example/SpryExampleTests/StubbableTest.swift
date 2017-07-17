@@ -12,6 +12,8 @@ import SpryExample
 
 // MARK: - Test Helper Protocols
 
+private class MyNonSpryEquatableClass {}
+
 private protocol SpecialString {
     func myStringValue() -> String
 }
@@ -81,6 +83,10 @@ private protocol StringService: class {
     func giveMeAnOptional() -> String?
     func giveMeAString(string: String) -> String
     func callThisCompletion(string: String, closure: () -> Void)
+    func takeAnArrayOfSpryEquatable(array: [Int]) -> String
+    func takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass]) -> String
+    func takeADictionaryOfSpryEquatable(dictionary: [String: Int]) -> String
+    func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String
 }
 
 // MARK: - The Stub
@@ -100,6 +106,10 @@ private class StubStringService: StringService, Stubbable {
         case giveMeAString_string = "giveMeAString(string:)"
         case takeAnOptionalString = "takeAnOptionalString(string:)"
         case callThisCompletion = "callThisCompletion(string:closure:)"
+        case takeAnArrayOfSpryEquatable = "takeAnArrayOfSpryEquatable(array:)"
+        case takeAnArrayOfNonSpryEquatable = "takeAnArrayOfNonSpryEquatable(array:)"
+        case takeADictionaryOfSpryEquatable = "takeADictionaryOfSpryEquatable(dictionary:)"
+        case takeADictionaryOfNonSpryEquatable = "takeADictionaryOfNonSpryEquatable(dictionary:)"
     }
 
     var myProperty: String {
@@ -152,6 +162,22 @@ private class StubStringService: StringService, Stubbable {
 
     func callThisCompletion(string: String, closure: () -> Void) {
         return stubbedValue(arguments: string, closure)
+    }
+
+    func takeAnArrayOfSpryEquatable(array: [Int]) -> String {
+        return stubbedValue(arguments: array)
+    }
+
+    func takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass]) -> String {
+        return stubbedValue(arguments: array)
+    }
+
+    func takeADictionaryOfSpryEquatable(dictionary: [String: Int]) -> String {
+        return stubbedValue(arguments: dictionary)
+    }
+
+    func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String {
+        return stubbedValue(arguments: dictionary)
     }
 }
 
@@ -355,6 +381,65 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is an array of SpryEquatables") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeAnArrayOfSpryEquatable).with([1, 2, 3]).andReturn(expectedReturn)
+                        subject.stub(.takeAnArrayOfSpryEquatable).andReturn("should not get this")
+                    }
+
+                    it("should return the stubbed value") {
+                        expect(subject.takeAnArrayOfSpryEquatable(array: [1, 2, 3])).to(equal(expectedReturn))
+                        expect(subject.takeAnArrayOfSpryEquatable(array: [1, 2, 11111])).toNot(equal(expectedReturn))
+                        expect(subject.takeAnArrayOfSpryEquatable(array: [1, 3, 2])).toNot(equal(expectedReturn))
+                        expect(subject.takeAnArrayOfSpryEquatable(array: [1, 2, 3, 4])).toNot(equal(expectedReturn))
+                        expect(subject.takeAnArrayOfSpryEquatable(array: [1, 2])).toNot(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is an array of NON-SpryEquatables") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeAnArrayOfNonSpryEquatable).with([MyNonSpryEquatableClass()]).andReturn(expectedReturn)
+                        subject.stub(.takeAnArrayOfNonSpryEquatable).andReturn("should not get this")
+                    }
+
+                    it("should fatal error") {
+                        expect({ _ = subject.takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass()]) }()).to(throwAssertion())
+                    }
+                }
+
+                context("when the argument is a dictionary of SpryEquatables") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeADictionaryOfSpryEquatable).with(["one": 1, "two": 2]).andReturn(expectedReturn)
+                        subject.stub(.takeADictionaryOfSpryEquatable).andReturn("should not get this")
+                    }
+
+                    it("should return the stubbed value") {
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1, "two": 2])).to(equal(expectedReturn))
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1, "two": 2, "three": 3])).toNot(equal(expectedReturn))
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1])).toNot(equal(expectedReturn))
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 2, "two": 1])).toNot(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is a dictionary of NON-SpryEquatables") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeADictionaryOfNonSpryEquatable).with(["one": MyNonSpryEquatableClass()]).andReturn(expectedReturn)
+                        subject.stub(.takeADictionaryOfNonSpryEquatable).andReturn("should not get this")
+                    }
+
+                    it("should fatal error") {
+                        expect({ _ = subject.takeADictionaryOfNonSpryEquatable(dictionary: ["one": MyNonSpryEquatableClass()]) }()).to(throwAssertion())
                     }
                 }
 

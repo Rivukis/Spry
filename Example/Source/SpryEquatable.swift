@@ -36,6 +36,62 @@ public extension SpryEquatable where Self: Equatable {
     }
 }
 
+// MARK: - SpryEquatable for Arrays
+
+public extension Array {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        if let actual = actual as? Array<Element> {
+            if self.count != actual.count {
+                return false
+            }
+
+            return zip(self, actual).reduce(true) {
+                if !$0 {
+                    return false
+                }
+
+                if let selfElement = $1.0 as? SpryEquatable, let actualElement = $1.1 as? SpryEquatable {
+                    return selfElement.isEqual(to: actualElement)
+                }
+
+                fatalError("\(type(of: $1.0)) does NOT conform to SpryEquatable")
+            }
+        }
+
+        return false
+    }
+}
+
+// MARK: - SpryEquatable for Dictionarys
+
+public extension Dictionary {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        if let actual = actual as? Dictionary<Key, Value> {
+            if self.count != actual.count {
+                return false
+            }
+
+            return zip(self, actual).reduce(true) {
+                if !$0 {
+                    return false
+                }
+
+                guard let selfKey = $1.0.key as? SpryEquatable, let actualKey = $1.1.key as? SpryEquatable else {
+                    fatalError("\(type(of: $1.0.key)) does NOT conform to SpryEquatable")
+                }
+
+                guard let selfValue = $1.0.value as? SpryEquatable, let actualValue = $1.1.value as? SpryEquatable else {
+                    fatalError("\(type(of: $1.0.value)) does NOT conform to SpryEquatable")
+                }
+
+                return selfKey.isEqual(to: actualKey) && selfValue.isEqual(to: actualValue)
+            }
+        }
+
+        return false
+    }
+}
+
 // MARK: - OptionalType
 
 /**
@@ -77,4 +133,6 @@ extension String: SpryEquatable {}
 extension Int: SpryEquatable {}
 extension Double: SpryEquatable {}
 extension Bool: SpryEquatable {}
+extension Array: SpryEquatable {}
+extension Dictionary: SpryEquatable {}
 extension NSObject: SpryEquatable {}

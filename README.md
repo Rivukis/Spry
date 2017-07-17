@@ -341,6 +341,8 @@ expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg", countS
 * Int
 * Double
 * Bool
+* Array
+* Dictionary
 * NSObject
 
 ### Example SpryEquatable Conformance
