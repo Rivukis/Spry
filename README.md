@@ -29,6 +29,8 @@ __Table of Contents__
     * [Defaulted Conformance List](#defaulted-conformance-list)
     * [Example SpryEquatable Conformance](#example-spryEquatable-conformance)
 * [Argument Enum](#argument-enum)
+* [Xcode Template](#xcode-template)
+    * [Template Installation](#template-installation)
 * [Motivation](#motivation)
 * [Installation](#installation)
 * [Contributors](#contributors)
@@ -432,11 +434,11 @@ Use when the exact comparison of an argument using the `Equatable` protocol is n
 * `case nil`
     * Used to indicate that only nil passed in will be sufficient.
 
-## Fake Template
+## Xcode Template
 
-A Templates for creating fakes can be found in this repository in the "Templates" folder.
+A Template for creating fakes can be found in this repository in the "Templates" folder.
 
-### Installation
+### Template Installation
 
 In terminal:
 1. run `cd ~/Library/Developer/Xcode/Templates/File\ Templates/`
@@ -456,8 +458,7 @@ This way you can write tests from the point of view of the class you are testing
 
 ## Installation
 
-Spry is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add it your Podfile.
+Spry and Spry+Nimble are available through [CocoaPods](http://cocoapods.org). To install, simply add them your Podfile.
 
 ```ruby
 platform :ios, '9.0'
