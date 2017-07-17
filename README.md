@@ -432,6 +432,18 @@ Use when the exact comparison of an argument using the `Equatable` protocol is n
 * `case nil`
     * Used to indicate that only nil passed in will be sufficient.
 
+## Fake Template
+
+A Templates for creating fakes can be found in this repository in the "Templates" folder.
+
+### Installation
+
+In terminal:
+1. run `cd ~/Library/Developer/Xcode/Templates/File\ Templates/`
+1. run `svn export https://github.com/Rivukis/Spry/trunk/Templates/Spry`
+
+That's it! Now when you go to create a new file in Xcode, you will notice a new section called "Spry" with a template called "Spry Fake". Simply select the template, click "Next", enter the name of the type or protocol you want to fake (the word "Fake" will be added automatically), select the targets and folder location for the fake, and start testing!
+
 ## Motivation
 
 When writing tests for a class, it is advised to only test that class's behavior and not the other objects it uses. With Swift this can be difficult.
