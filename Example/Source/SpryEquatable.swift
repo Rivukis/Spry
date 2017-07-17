@@ -51,8 +51,7 @@ public extension SpryEquatable where Self: OptionalType {
         let selfMirror = Mirror(reflecting: self)
 
         guard selfMirror.displayStyle == .optional else {
-            assertionFailure("\(type(of: self)) should NOT conform to OptionalType, this is reserved for Optional<Wrapped>")
-            return false
+            fatalError("\(type(of: self)) should NOT conform to OptionalType, this is reserved for Optional<Wrapped>")
         }
 
         let selfsWrappedValue = selfMirror.children.first?.value
@@ -65,8 +64,7 @@ public extension SpryEquatable where Self: OptionalType {
         }
 
         guard let selfsContainedValueAsSE = selfsWrappedValueAsNonOptional as? SpryEquatable else {
-            assertionFailure("\(type(of: selfsWrappedValue)) does NOT conform to SpryEquatable")
-            return false
+            fatalError("\(type(of: selfsWrappedValue)) does NOT conform to SpryEquatable")
         }
 
         return selfsContainedValueAsSE.isEqual(to: actual)
@@ -74,9 +72,9 @@ public extension SpryEquatable where Self: OptionalType {
 }
 
 // MARK: - Default Conformers
-
 extension Optional: SpryEquatable {}
 extension String: SpryEquatable {}
 extension Int: SpryEquatable {}
 extension Double: SpryEquatable {}
+extension Bool: SpryEquatable {}
 extension NSObject: SpryEquatable {}

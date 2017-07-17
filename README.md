@@ -16,6 +16,10 @@ Spry is a framework that allows spying and stubbing in Apple's Swift language. A
 
 Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#Stubbable) and [Spyable](#Spyable) see their respective sections below.
 
+* Easy to implement
+    * Create an object that conforms to `Spryable`
+    * In every function (the ones that should be stubbed and spied) return the result of `spryify()` passing in all arguments (if any)
+
 ### Example making a Spryable version of an object that has a protocol interface
 
 ```swift
@@ -33,7 +37,7 @@ class RealStringService: StringService {
 }
 
 // The Stub Class
-class FakeStringService: StringService, Stubable {
+class FakeStringService: StringService, Spryable {
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString(bool:)"
     }
@@ -46,7 +50,7 @@ class FakeStringService: StringService, Stubable {
 
 ### Example making a Spryable version of an object by subclassing
 
-Can also use inheritance with the subclass overriding all functions and replacing implementation with `return spryify()`. However, this is problematic as it could lead to forgotten functions.
+Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed and spied) and returning the result of `spryify()`. However, this can problematic as it could lead to forgotten functions being overridden.
 
 ```swift
 // The Real Class
@@ -58,7 +62,7 @@ class RealStringService {
 }
 
 // The Stub Class
-class FakeStringService: RealStringService, Stubable {
+class FakeStringService: RealStringService, Spryable {
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString(bool:)"
     }
@@ -69,19 +73,21 @@ class FakeStringService: RealStringService, Stubable {
 }
 ```
 
-## Stubable
+## Stubbable
+
+> Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 
 ### Abilities
 
-* Stub return values for an injected object `andReturn()`
-    * When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
-* Stub implementation for an injected object `andDo()`
-    * When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
-* Specify return values that only get returned if the specified arguments are passed into the stubbed function
-* Rich `fatalError()` messages that include a detailed list of all stubbed functions
+* Stub a function's return value for an injected object using `.andReturn()`
+* Stub a function's implementation for an injected object using `.andDo()`
+* Specify stubs that only get used if the specified arguments are passed into the stubbed function using `.with()`
+* Rich `fatalError()` messages that include a detailed list of all stubbed functions when no stub is found (or the arguments received didn't pass validation)
 * Easy to implement
-    * Create an object that conforms to `Stubable`
-    * In every function (the ones that should be stubbed) return result of the `returnValue()` function passing in all arguments (if any)
+    * Create an object that conforms to `Stubbable`
+    * In every function (the ones that should be stubbed) return the result of `stubbedValue()` passing in all arguments (if any)
+
+> When stubbing a function that doesn't have a return value use `Void()` as the stubbed return value
 
 ### Example Stubbing an object that has a protocol interface
 
@@ -111,7 +117,7 @@ class RealStringService: StringService {
 }
 
 // The Stub Class
-class FakeStringService: StringService, Stubable {
+class FakeStringService: StringService, Stubbable {
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -133,7 +139,7 @@ class FakeStringService: StringService, Stubable {
 
 ### Example Stubbing an object by subclassing
 
-Can also use inheritance with the subclass overriding all functions and replacing implementation with `return stubbedValue()`. However, this is problematic as it could lead to forgotten functions.
+Can also use inheritance where the subclass overrides all functions (the ones that should be stubbed) and returning the result of `stubbedValue()`. However, this can problematic as it could lead to forgotten functions being overridden.
 
 ```swift
 // The Real Class
@@ -154,7 +160,7 @@ class RealStringService {
 }
 
 // The Stub Class
-class FakeStringService: RealStringService, Stubable {
+class FakeStringService: RealStringService, Stubbable {
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -201,7 +207,7 @@ fakeStringService.stub(.iHaveACompletionClosure).with("correct string", Argument
 
 ## Spyable
 
-Conforming to Spryable will conform to Stubbable and Spyable at the same time.
+> Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 
 ### Abilities
 
@@ -209,7 +215,7 @@ Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 - Rich Failure messages that include a detailed list of called functions and arguments
 - Easy to implement
     * Create an object that conforms to `Spyable`
-    * In every function (the ones that should be recorded) call the `recordCall()` function passing in all arguments (if any)
+    * In every function (the ones that should be spied) call `recordCall()` passing in all arguments (if any)
 
 When using a protocol to declare the interface for an object, the compiler will tell you if/when the 'fake' doesn't conform.
 
@@ -256,7 +262,7 @@ class FakeStringService: StringService, Spyable {
 
 ### Example Spying an object by subclassing
 
-Can also use inheritance with the subclass overriding all functions and replacing implementation with `recordCall()`. However, this is problematic as it could lead to forgotten functions.
+Can also use inheritance where the subclass overrides all functions (the ones that should be spied) and calling `recordCall()`. However, this can problematic as it could lead to forgotten functions being overridden.
 
 ```swift
 
@@ -294,7 +300,7 @@ class FakeStringService: RealStringService, Spyable {
 
 ## Have Received Matcher
 
-This matcher is made to be used with [Nimble](https://github.com/Quick/Nimble "Nimble").
+Have Received Matcher is made to be used with [Nimble](https://github.com/Quick/Nimble "Nimble"). This matcher is part of a separate cocoapod called 'Spry+Nimble'. See below for installation.
 
 All Call Matchers can be used with `to()` and `toNot()`
 
@@ -328,6 +334,14 @@ expect(spy).to(haveReceived(.functionName, with: "firstArg", "secondArg", countS
     * Make types conform to `SpryEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
     * To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
     * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
+
+### Spry's Default Conformance List
+* Optional (will `fatalError()` ta runtime if the wrapped type does not conform to SpryEquatable)
+* String
+* Int
+* Double
+* Bool
+* NSObject
 
 ### Example SpryEquatable Conformance
 ```swift
