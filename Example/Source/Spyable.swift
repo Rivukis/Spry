@@ -77,15 +77,6 @@ public protocol Spyable: class {
     func recordCall(_ functionName: String, arguments: Any?..., file: String, line: Int)
 
     /**
-     Used to clear out all recorded function calls.
-     
-     - Important: Do NOT implement function. Use default implementation provided by Spry.
-
-     - Important: The spied object will have NO way of knowing about calls made before this function is called. Use with caution.
-     */
-    func clearRecordedLists()
-
-    /**
      Used to determine if a function has been called with the specified arguments and with the amount of times specified.
      
      - Important: Do NOT implement function. Use default implementation provided by Spry.
@@ -98,6 +89,15 @@ public protocol Spyable: class {
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
     func didCall(_ function: Function, withArguments arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> DidCallResult
+
+    /**
+     Removes all recorded functions/properties.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Important: The spied object will have NO way of knowing about calls made before this function is called. Use with caution.
+     */
+    func resetCalls()
 }
 
 // MARK - Spyable Extension
@@ -128,10 +128,6 @@ public extension Spyable {
         internal_recordCall(function: function, arguments: arguments)
     }
 
-    func clearRecordedLists() {
-        _calls = []
-    }
-    
     func didCall(_ function: Function, withArguments arguments: [SpryEquatable?] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
@@ -142,6 +138,10 @@ public extension Spyable {
 
         let recordedCallsDescription = description(of: _calls)
         return DidCallResult(success: success, recordedCallsDescription: recordedCallsDescription)
+    }
+
+    func resetCalls() {
+        _calls = []
     }
 
     // MARK: - Internal Functions

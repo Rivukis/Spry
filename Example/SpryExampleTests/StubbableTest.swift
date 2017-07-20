@@ -191,6 +191,230 @@ class StubbableSpec: QuickSpec {
                 subject = StubStringService()
             }
 
+            describe("and return") {
+                describe("returning a simple value") {
+                    let expectedString = "expected"
+
+                    beforeEach {
+                        subject.stub(.giveMeAString).andReturn(expectedString)
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.giveMeAString()).to(equal(expectedString))
+                    }
+                }
+
+                describe("returning a tuple") {
+                    beforeEach {
+                        subject.stub(.hereComesATuple).andReturn(("hello", "world"))
+                    }
+
+                    it("should be able to stub a tuple return type") {
+                        let tuple = subject.hereComesATuple()
+                        expect(tuple.0).to(equal("hello"))
+                        expect(tuple.1).to(equal("world"))
+                    }
+                }
+
+                describe("returning a protocol - real object") {
+                    let expectedValue = NumbersOnly(value: 123)
+
+                    beforeEach {
+                        subject.stub(.hereComesAProtocol).andReturn(expectedValue)
+                    }
+
+                    it("should be able to stub a protocol return type") {
+                        let specialString = subject.hereComesAProtocol()
+                        expect(specialString.myStringValue()).to(equal(expectedValue.myStringValue()))
+                    }
+                }
+
+                describe("returning a protocol - stubbed object") {
+                    let expectedValue = "hello there"
+
+                    beforeEach {
+                        let specialString = StubSpecialString()
+                        specialString.stub(.myStringValue).andReturn(expectedValue)
+
+                        subject.stub(.hereComesAProtocol).andReturn(specialString)
+                    }
+
+                    it("should be able to stub a tuple of protocols as a return type") {
+                        let specialString = subject.hereComesAProtocol()
+                        expect(specialString.myStringValue()).to(equal(expectedValue))
+                    }
+                }
+
+                describe("returning a tuple of protocols") {
+                    let expectedFirstHalf = NumbersOnly(value: 1)
+                    let expectedSecondHalf = "two"
+
+                    beforeEach {
+                        let secondHalfSpecialString = StubSpecialString()
+                        secondHalfSpecialString.stub(.myStringValue).andReturn(expectedSecondHalf)
+
+                        subject.stub(.hereComesProtocolsInATuple).andReturn((expectedFirstHalf, secondHalfSpecialString))
+                    }
+
+                    it("should be able to use real and another stubbed object") {
+                        let tuple = subject.hereComesProtocolsInATuple()
+                        expect(tuple.0.myStringValue()).to(equal(expectedFirstHalf.myStringValue()))
+                        expect(tuple.1.myStringValue()).to(equal(expectedSecondHalf))
+                    }
+                }
+
+                describe("returning a protocol with self or associated type requirements") {
+                    let expectedMyClass = MyClass()
+
+                    beforeEach {
+                        subject.stub(.hereComesProtocolWithSelfRequirements).andReturn(expectedMyClass)
+                    }
+
+                    it("should be able to stub a tuple of protocols as a return type") {
+                        let actualMyClass = subject.hereComesProtocolWithSelfRequirements(object: MyClass())
+                        expect(actualMyClass).to(beIdenticalTo(expectedMyClass))
+                    }
+                }
+
+                describe("returning a closure") {
+                    let expectedString = "string from closure"
+
+                    beforeEach {
+                        subject.stub(.hereComesAClosure).andReturn({ expectedString })
+                    }
+
+                    it("should get a closure from the stubbed service") {
+                        let closure = subject.hereComesAClosure()
+                        expect(closure()).to(equal(expectedString))
+                    }
+                }
+
+                describe("returning an optional") {
+                    context("when stubbed with an optional .some") {
+                        let expectedReturn: String? = "i should be returned"
+
+                        beforeEach {
+                            subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
+                        }
+                    }
+
+                    context("when stubbed with a NON-optional") {
+                        let expectedReturn = "i should be returned"
+
+                        beforeEach {
+                            subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
+                        }
+                    }
+
+                    context("when stubbed with nil") {
+                        beforeEach {
+                            subject.stub(.giveMeAnOptional).andReturn(nil as String?)
+                        }
+
+                        it("should return the stubbed value") {
+                            expect(subject.giveMeAnOptional()).to(beNil())
+                        }
+                    }
+                }
+            }
+
+            describe("and do") {
+                context("when there are NO arguments") {
+                    let expectedString = "expected"
+
+                    beforeEach {
+                        subject.stub(.giveMeAString).andDo { _ in
+                            return expectedString
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.giveMeAString()).to(equal(expectedString))
+                    }
+                }
+
+                describe("respecting passed in arguments and the return value") {
+                    beforeEach {
+                        subject.stub(.hereAreTwoStrings).andDo { arguments in
+                            let string1 = arguments[0] as! String
+                            let string2 = arguments[1] as! String
+
+                            return string1 == "one" && string2 == "two"
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.hereAreTwoStrings(string1: "one", string2: "two")).to(beTrue())
+                    }
+                }
+
+                describe("manually manipulating agruments (such as passed in closures)") {
+                    var turnToTrue = false
+
+                    beforeEach {
+                        subject.stub(.callThisCompletion).andDo { arguments in
+                            let completion = arguments[1] as! () -> Void
+                            completion()
+
+                            return Void()
+                        }
+
+                        subject.callThisCompletion(string: "") {
+                            turnToTrue = true
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(turnToTrue).to(beTrue())
+                    }
+                }
+
+                describe("verifying arguments") {
+                    context("when the arguments match") {
+                        var turnToTrue = false
+
+                        beforeEach {
+                            let expectedargument = "expectedargument"
+                            subject.stub(.callThisCompletion).with(expectedargument, Argument.anything).andDo { arguments in
+                                let completion = arguments[1] as! () -> Void
+                                completion()
+
+                                return Void()
+                            }
+
+                            subject.callThisCompletion(string: expectedargument) {
+                                turnToTrue = true
+                            }
+                        }
+
+                        it("should get a string from the stubbed service") {
+                            expect(turnToTrue).to(beTrue())
+                        }
+                    }
+
+                    context("when the arguments do NOT match") {
+                        beforeEach {
+                            subject.stub(.hereAreTwoStrings).with("what is needed", Argument.anything).andDo { _ in
+                                return Void()
+                            }
+                        }
+
+                        it("should fatal error when calling function") {
+                            let expectedFatalErrorClosure = { _ = subject.hereAreTwoStrings(string1: "the wrong value", string2: "") }
+                            expect(expectedFatalErrorClosure()).to(throwAssertion())
+                        }
+                    }
+                }
+            }
+
             describe("stubbing a property") {
                 let expectedString = "expected"
 
@@ -200,139 +424,6 @@ class StubbableSpec: QuickSpec {
 
                 it("should get a string from the stubbed service") {
                     expect(subject.myProperty).to(equal(expectedString))
-                }
-            }
-
-            describe("returning a simple value") {
-                let expectedString = "expected"
-
-                beforeEach {
-                    subject.stub(.giveMeAString).andReturn(expectedString)
-                }
-
-                it("should get a string from the stubbed service") {
-                    expect(subject.giveMeAString()).to(equal(expectedString))
-                }
-            }
-
-            describe("returning a tuple") {
-                beforeEach {
-                    subject.stub(.hereComesATuple).andReturn(("hello", "world"))
-                }
-
-                it("should be able to stub a tuple return type") {
-                    let tuple = subject.hereComesATuple()
-                    expect(tuple.0).to(equal("hello"))
-                    expect(tuple.1).to(equal("world"))
-                }
-            }
-
-            describe("returning a protocol - real object") {
-                let expectedValue = NumbersOnly(value: 123)
-
-                beforeEach {
-                    subject.stub(.hereComesAProtocol).andReturn(expectedValue)
-                }
-
-                it("should be able to stub a protocol return type") {
-                    let specialString = subject.hereComesAProtocol()
-                    expect(specialString.myStringValue()).to(equal(expectedValue.myStringValue()))
-                }
-            }
-
-            describe("returning a protocol - stubbed object") {
-                let expectedValue = "hello there"
-
-                beforeEach {
-                    let specialString = StubSpecialString()
-                    specialString.stub(.myStringValue).andReturn(expectedValue)
-
-                    subject.stub(.hereComesAProtocol).andReturn(specialString)
-                }
-
-                it("should be able to stub a tuple of protocols as a return type") {
-                    let specialString = subject.hereComesAProtocol()
-                    expect(specialString.myStringValue()).to(equal(expectedValue))
-                }
-            }
-
-            describe("returning a tuple of protocols") {
-                let expectedFirstHalf = NumbersOnly(value: 1)
-                let expectedSecondHalf = "two"
-
-                beforeEach {
-                    let secondHalfSpecialString = StubSpecialString()
-                    secondHalfSpecialString.stub(.myStringValue).andReturn(expectedSecondHalf)
-
-                    subject.stub(.hereComesProtocolsInATuple).andReturn((expectedFirstHalf, secondHalfSpecialString))
-                }
-
-                it("should be able to use real and another stubbed object") {
-                    let tuple = subject.hereComesProtocolsInATuple()
-                    expect(tuple.0.myStringValue()).to(equal(expectedFirstHalf.myStringValue()))
-                    expect(tuple.1.myStringValue()).to(equal(expectedSecondHalf))
-                }
-            }
-
-            describe("returning a protocol with self or associated type requirements") {
-                let expectedMyClass = MyClass()
-
-                beforeEach {
-                    subject.stub(.hereComesProtocolWithSelfRequirements).andReturn(expectedMyClass)
-                }
-
-                it("should be able to stub a tuple of protocols as a return type") {
-                    let actualMyClass = subject.hereComesProtocolWithSelfRequirements(object: MyClass())
-                    expect(actualMyClass).to(beIdenticalTo(expectedMyClass))
-                }
-            }
-
-            describe("returning a closure") {
-                let expectedString = "string from closure"
-
-                beforeEach {
-                    subject.stub(.hereComesAClosure).andReturn({ expectedString })
-                }
-
-                it("should get a closure from the stubbed service") {
-                    let closure = subject.hereComesAClosure()
-                    expect(closure()).to(equal(expectedString))
-                }
-            }
-
-            describe("returning an optional") {
-                context("when stubbed with an optional .some") {
-                    let expectedReturn: String? = "i should be returned"
-
-                    beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
-                    }
-
-                    it("should return the stubbed value") {
-                        expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
-                    }
-                }
-
-                context("when stubbed with a NON-optional") {
-                    let expectedReturn = "i should be returned"
-
-                    beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(expectedReturn)
-                    }
-
-                    it("should return the stubbed value") {
-                        expect(subject.giveMeAnOptional()).to(equal(expectedReturn))
-                    }
-                }
-
-                context("when stubbed with nil") {
-                    beforeEach {
-                        subject.stub(.giveMeAnOptional).andReturn(nil as String?)
-                    }
-
-                    it("should return the stubbed value") {
-                        expect(subject.giveMeAnOptional()).to(beNil())
-                    }
                 }
             }
 
@@ -512,7 +603,7 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("improper stubbing") {
+            describe("improper stubbing without a fallback value") {
                 context("when the value is not stubbed") {
                     it("should fatal error") {
                         expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
@@ -530,91 +621,26 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("and do") {
-                context("when there are NO arguments") {
-                    let expectedString = "expected"
-
+            describe("resetting stubs") {
+                context("when the function is stubbed before reseting") {
                     beforeEach {
-                        subject.stub(.giveMeAString).andDo { _ in
-                            return expectedString
-                        }
+                        subject.stub(.giveMeAString).andReturn("")
+                        subject.resetStubs()
                     }
 
-                    it("should get a string from the stubbed service") {
-                        expect(subject.giveMeAString()).to(equal(expectedString))
+                    it("should NOT stub the function") {
+                        expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
                     }
                 }
 
-                describe("respecting passed in arguments and the return value") {
+                context("when the function is stubbed after reseting") {
                     beforeEach {
-                        subject.stub(.hereAreTwoStrings).andDo { arguments in
-                            let string1 = arguments[0] as! String
-                            let string2 = arguments[1] as! String
-
-                            return string1 == "one" && string2 == "two"
-                        }
+                        subject.resetStubs()
+                        subject.stub(.giveMeAString).andReturn("")
                     }
 
-                    it("should get a string from the stubbed service") {
-                        expect(subject.hereAreTwoStrings(string1: "one", string2: "two")).to(beTrue())
-                    }
-                }
-
-                describe("manually manipulating agruments (such as passed in closures)") {
-                    var turnToTrue = false
-
-                    beforeEach {
-                        subject.stub(.callThisCompletion).andDo { arguments in
-                            let completion = arguments[1] as! () -> Void
-                            completion()
-
-                            return Void()
-                        }
-
-                        subject.callThisCompletion(string: "") {
-                            turnToTrue = true
-                        }
-                    }
-
-                    it("should get a string from the stubbed service") {
-                        expect(turnToTrue).to(beTrue())
-                    }
-                }
-
-                describe("verifying arguments") {
-                    context("when the arguments match") {
-                        var turnToTrue = false
-
-                        beforeEach {
-                            let expectedargument = "expectedargument"
-                            subject.stub(.callThisCompletion).with(expectedargument, Argument.anything).andDo { arguments in
-                                let completion = arguments[1] as! () -> Void
-                                completion()
-
-                                return Void()
-                            }
-
-                            subject.callThisCompletion(string: expectedargument) {
-                                turnToTrue = true
-                            }
-                        }
-
-                        it("should get a string from the stubbed service") {
-                            expect(turnToTrue).to(beTrue())
-                        }
-                    }
-
-                    context("when the arguments do NOT match") {
-                        beforeEach {
-                            subject.stub(.hereAreTwoStrings).with("what is needed", Argument.anything).andDo { _ in
-                                return Void()
-                            }
-                        }
-
-                        it("should fatal error when calling function") {
-                            let expectedFatalErrorClosure = { _ = subject.hereAreTwoStrings(string1: "the wrong value", string2: "") }
-                            expect(expectedFatalErrorClosure()).to(throwAssertion())
-                        }
+                    it("should stub the function") {
+                        expect(subject.giveMeAString()).toNot(beNil())
                     }
                 }
             }

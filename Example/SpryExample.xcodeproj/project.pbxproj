@@ -157,14 +157,14 @@
 		7A2BFC731F00D32800BB12C1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				7A736DFE1F1B70B900FBCD98 /* SpryEquatable.swift */,
-				7A736DFF1F1B70B900FBCD98 /* Argument.swift */,
 				7A736E001F1B70B900FBCD98 /* Spryable.swift */,
 				7A736E011F1B70B900FBCD98 /* Spyable.swift */,
 				7A736E021F1B70B900FBCD98 /* SpyableObjects.swift */,
-				7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */,
 				7A736E041F1B70B900FBCD98 /* Stubbable.swift */,
 				7A736E051F1B70B900FBCD98 /* StubbableObjects.swift */,
+				7A736DFF1F1B70B900FBCD98 /* Argument.swift */,
+				7A736DFE1F1B70B900FBCD98 /* SpryEquatable.swift */,
+				7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";

@@ -98,6 +98,15 @@ public protocol Stubbable: class {
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
     func stubbedValue<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
+
+    /**
+     Removes all stubbed functions/properties.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Important: The stubbed object will have NO way of knowing about stubs made before this function is called. Use with caution.
+     */
+    func resetStubs()
 }
 
 public extension Stubbable {
@@ -136,6 +145,10 @@ public extension Stubbable {
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+    }
+
+    func resetStubs() {
+        _stubs = []
     }
 
     // MARK: - Internal Helper Functions

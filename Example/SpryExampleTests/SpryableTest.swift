@@ -54,6 +54,20 @@ class SpryableSpec: QuickSpec {
                     expect(subject.getAString()).to(equal(expectedString))
                 }
             }
+
+            describe("reseting calls and stubs") {
+                beforeEach {
+                    subject.stub(.getAString).andReturn("")
+                    _ = subject.getAString()
+
+                    subject.resetCallsAndStubs()
+                }
+
+                it("should reset the calls and the stubs") {
+                    expect(subject.didCall(.getAString).success).to(beFalse())
+                    expect({ _ = subject.getAString() }()).to(throwAssertion())
+                }
+            }
         }
     }
 }

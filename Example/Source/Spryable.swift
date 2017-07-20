@@ -82,6 +82,15 @@ public protocol Spryable: Spyable, Stubbable {
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
     func spryify<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
+
+    /**
+     Removes all recorded and stubbed functions/properties.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Important: The spryified object will have NO way of knowing about calls or stubs made before this function is called. Use with caution.
+     */
+    func resetCallsAndStubs()
 }
 
 public extension Spryable {
@@ -95,5 +104,10 @@ public extension Spryable {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+    }
+
+    func resetCallsAndStubs() {
+        resetCalls()
+        resetStubs()
     }
 }

@@ -58,22 +58,20 @@ private class TestClass: Spyable {
 
 class SpyableTest: XCTestCase {
 
-    // MARK: - Resetting
+    // MARK: - Resetting Calls
 
-    func testResettingTheRecordedLists() {
+    func testResettingCalls() {
         // given
         let testClass = TestClass()
-        testClass.doStuffWith(string: "foo")
-        testClass.doMoreStuffWith(int1: 1, int2: 2)
+        testClass.doMoreStuffWith(int1: 0, int2: 0)
 
         // when
-        testClass.clearRecordedLists()
-        testClass.doStuffWith(string: "bar")
+        testClass.resetCalls()
+        testClass.doStuffWith(string: "")
 
         // then
-        XCTAssertFalse(testClass.didCall(.doStuffWith, withArguments: ["foo"]).success, "should SUCCEED to call function")
-        XCTAssertFalse(testClass.didCall(.doMoreStuffWith, withArguments: [1, 2]).success, "should SUCCEED to call function")
-        XCTAssertTrue(testClass.didCall(.doStuffWith, withArguments: ["bar"]).success, "should SUCCEED to call function")
+        XCTAssertFalse(testClass.didCall(.doMoreStuffWith).success, "should FAIL to call function")
+        XCTAssertTrue(testClass.didCall(.doStuffWith).success, "should SUCCEED to call function")
     }
 
     // MARK: - Did Call Tests
