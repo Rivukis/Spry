@@ -67,6 +67,22 @@ public protocol Spyable: class {
     associatedtype Function: StringRepresentable
 
     /**
+     This is where the recorded calls information is held.
+
+     Should ONLY read from this property when debugging.
+
+     - Important: Do not modify this property's value.
+
+     - Note: Override this property if the Spyable object cannot be weakly referenced.
+
+     ## Example Overriding ##
+     ```swift
+     var _calls: [RecordedCall] = []
+     ```
+     */
+    var _calls: [RecordedCall] { get set }
+
+    /**
      Used to record a function call. Must call in every function for Spyable to work properly.
      
      - Important: Do NOT implement function. Use default implementation provided by Spry.
@@ -103,14 +119,7 @@ public protocol Spyable: class {
 // MARK - Spyable Extension
 
 public extension Spyable {
-    /**
-     This is where the recorded calls are held.
-
-     Should ONLY read from this property when debugging.
-
-     - Important: Do not modify this property's value.
-     */
-    public var _calls: [RecordedCall] {
+    var _calls: [RecordedCall] {
         set {
             let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
             recordedCallArray.calls = newValue

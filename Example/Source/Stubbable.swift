@@ -67,6 +67,22 @@ public protocol Stubbable: class {
     associatedtype Function: StringRepresentable
 
     /**
+     This is where the stubbed function information is held.
+
+     Should ONLY read from this property when debugging.
+
+     - Important: Do not modify this property's value.
+
+     - Note: Override this property if the Stubbable object cannot be weakly referenced.
+
+     ## Example Overriding ##
+     ```swift
+     var _stubs: [Stub] = []
+     ```
+     */
+    var _stubs: [Stub] { get set }
+
+    /**
      Used to stub a function. All stubs must proved either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
      
      See `Stub` for specifying arguments and return value.
@@ -110,14 +126,7 @@ public protocol Stubbable: class {
 }
 
 public extension Stubbable {
-    /**
-     This is where the stubs are held.
-
-     Should ONLY read from this property when debugging.
-
-     - Important: Do not modify this property's value.
-     */
-    public var _stubs: [Stub] {
+    var _stubs: [Stub] {
         set {
             let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
             stubArray.stubs = newValue
