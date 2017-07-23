@@ -38,6 +38,10 @@ class SpryableSpec: QuickSpec {
                 subject = SpryStringService()
             }
 
+            afterEach {
+                SpryStringService.resetCallsAndStubs()
+            }
+
             describe("recording calls - instance") {
                 beforeEach {
                     subject.stub(.getAString).andReturn("")
