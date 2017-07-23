@@ -438,13 +438,14 @@ Use when the exact comparison of an argument using the `Equatable` protocol is n
 
 A Template for creating fakes can be found in this repository in the "Templates" folder.
 
-### Template Installation
+__Usage__
 
-In terminal:
-1. run `cd ~/Library/Developer/Xcode/Templates/File\ Templates/`
-1. run `svn export https://github.com/Rivukis/Spry/trunk/Templates/Spry`
+When you go to create a new file in Xcode, you will notice a new section called "Spry" with a template called "Spry Fake". Select the template, click "Next", enter the name of the type or protocol you want to fake (the word "Fake" will be added automatically), select the target(s) and folder location for the fake, and start testing!
 
-That's it! Now when you go to create a new file in Xcode, you will notice a new section called "Spry" with a template called "Spry Fake". Simply select the template, click "Next", enter the name of the type or protocol you want to fake (the word "Fake" will be added automatically), select the targets and folder location for the fake, and start testing!
+__Template Installation__
+
+In terminal run:
+`svn export https://github.com/Rivukis/Spry/trunk/Templates/Spry ~/Library/Developer/Xcode/Templates/File\ Templates/Spry`
 
 ## Motivation
 
