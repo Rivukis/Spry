@@ -14,6 +14,10 @@ import SpryExample
 
 class HaveReceivedMatcherTest: XCTestCase {
     class TestClass: Spyable {
+        enum StaticFunction: String, StringRepresentable {
+            case none
+        }
+
         enum Function: String, StringRepresentable {
             case doStuff = "doStuff()"
             case doStuffWith = "doStuffWith(string:)"

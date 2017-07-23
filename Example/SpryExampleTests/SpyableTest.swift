@@ -10,6 +10,19 @@ import XCTest
 import SpryExample
 
 private class TestClass: Spyable {
+    enum StaticFunction: String, StringRepresentable {
+        case doStaticStuff = "doStaticStuff()"
+        case doDifferentStaticStuff = "doDifferentStaticStuff()"
+    }
+
+    static func doStaticStuff() {
+        recordCall()
+    }
+
+    static func doDifferentStaticStuff() {
+        recordCall()
+    }
+
     enum Function: String, StringRepresentable {
         case ivarProperty
         case readOnlyProperty
@@ -72,6 +85,20 @@ class SpyableTest: XCTestCase {
         // then
         XCTAssertFalse(testClass.didCall(.doMoreStuffWith).success, "should FAIL to call function")
         XCTAssertTrue(testClass.didCall(.doStuffWith).success, "should SUCCEED to call function")
+    }
+
+    func testResettingStaticCalls() {
+        // given
+        let testClass = TestClass()
+        TestClass.doStaticStuff()
+
+        // when
+        TestClass.resetCalls()
+        TestClass.doDifferentStaticStuff()
+
+        // then
+        XCTAssertFalse(TestClass.didCall(.doStaticStuff).success, "should FAIL to call function")
+        XCTAssertTrue(TestClass.didCall(.doDifferentStaticStuff).success, "should SUCCEED to call function")
     }
 
     // MARK: - Did Call Tests
@@ -224,6 +251,14 @@ class SpyableTest: XCTestCase {
         XCTAssertTrue(testClass.didCall(.doStuffWith, withArguments: ["hello"], countSpecifier: .atMost(2)).success, "should SUCCEED to call function with arguments at most 2 times")
         XCTAssertTrue(testClass.didCall(.doStuffWith, withArguments: ["hello"], countSpecifier: .atMost(3)).success, "should SUCCEED to call function with arguments at most 3 times")
         XCTAssertFalse(testClass.didCall(.doStuffWith, withArguments: ["hello"], countSpecifier: .atMost(1)).success, "should FAIL to call function with arguments at most 1 time")
+    }
+
+    // MARK: - Did Call Static Tests
+
+    func testDidCallStaticFunction() {
+        TestClass.doStaticStuff()
+
+        XCTAssertTrue(TestClass.didCall(.doStaticStuff).success, "should SUCCEED to call static function")
     }
 
     // MARK: - Argument Enum Tests

@@ -11,6 +11,14 @@ import Nimble
 import SpryExample
 
 private class SpryStringService: Spryable {
+    enum StaticFunction: String, StringRepresentable {
+        case getAStaticString = "getAStaticString()"
+    }
+
+    static func getAStaticString() -> String {
+        return spryify()
+    }
+
     enum Function: String, StringRepresentable {
         case getAString = "getAString()"
     }
@@ -30,7 +38,7 @@ class SpryableSpec: QuickSpec {
                 subject = SpryStringService()
             }
 
-            describe("recording calls") {
+            describe("recording calls - instance") {
                 beforeEach {
                     subject.stub(.getAString).andReturn("")
 
@@ -43,7 +51,20 @@ class SpryableSpec: QuickSpec {
                 }
             }
 
-            describe("stubbing functions") {
+            describe("recording calls - static") {
+                beforeEach {
+                    SpryStringService.stub(.getAStaticString).andReturn("")
+
+                    _ = SpryStringService.getAStaticString()
+                }
+
+                it("should have recorded the call using Spyable") {
+                    let result = SpryStringService.didCall(.getAStaticString)
+                    expect(result.success).to(beTrue())
+                }
+            }
+
+            describe("stubbing functions - instance") {
                 let expectedString = "stubbed string"
 
                 beforeEach {
@@ -52,6 +73,18 @@ class SpryableSpec: QuickSpec {
 
                 it("should return the stubbed value using Stubbable") {
                     expect(subject.getAString()).to(equal(expectedString))
+                }
+            }
+
+            describe("stubbing functions - static") {
+                let expectedString = "stubbed string"
+
+                beforeEach {
+                    SpryStringService.stub(.getAStaticString).andReturn(expectedString)
+                }
+
+                it("should return the stubbed value using Stubbable") {
+                    expect(SpryStringService.getAStaticString()).to(equal(expectedString))
                 }
             }
 
@@ -66,6 +99,20 @@ class SpryableSpec: QuickSpec {
                 it("should reset the calls and the stubs") {
                     expect(subject.didCall(.getAString).success).to(beFalse())
                     expect({ _ = subject.getAString() }()).to(throwAssertion())
+                }
+            }
+
+            describe("reseting calls and stubs") {
+                beforeEach {
+                    SpryStringService.stub(.getAStaticString).andReturn("")
+                    _ = SpryStringService.getAStaticString()
+
+                    SpryStringService.resetCallsAndStubs()
+                }
+
+                it("should reset the calls and the stubs") {
+                    expect(SpryStringService.didCall(.getAStaticString).success).to(beFalse())
+                    expect({ _ = SpryStringService.getAStaticString() }()).to(throwAssertion())
                 }
             }
         }

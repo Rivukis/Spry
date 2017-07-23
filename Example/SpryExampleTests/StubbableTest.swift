@@ -46,6 +46,10 @@ private class NumbersOnly: SpecialString {
 
 // stubbed version
 private final class StubSpecialString: SpecialString, Stubbable {
+    enum StaticFunction: String, StringRepresentable {
+        case none
+    }
+
     enum Function: String, StringRepresentable {
         case myStringValue = "myStringValue()"
     }
@@ -87,11 +91,17 @@ private protocol StringService: class {
     func takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass]) -> String
     func takeADictionaryOfSpryEquatable(dictionary: [String: Int]) -> String
     func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String
+
+    static func staticFunction() -> String
 }
 
 // MARK: - The Stub
 
 private class StubStringService: StringService, Stubbable {
+    enum StaticFunction: String, StringRepresentable {
+        case staticFunction = "staticFunction()"
+    }
+
     enum Function: String, StringRepresentable {
         case myProperty
         case giveMeAString = "giveMeAString()"
@@ -178,6 +188,10 @@ private class StubStringService: StringService, Stubbable {
 
     func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String {
         return stubbedValue(arguments: dictionary)
+    }
+
+    static func staticFunction() -> String {
+        return stubbedValue()
     }
 }
 
@@ -427,6 +441,18 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
+            describe("stubbing a static function") {
+                let expectedString = "expected"
+
+                beforeEach {
+                    StubStringService.stub(.staticFunction).andReturn(expectedString)
+                }
+
+                it("should get a string from the stubbed service") {
+                    expect(StubStringService.staticFunction()).to(equal(expectedString))
+                }
+            }
+
             describe("passing in arguments") {
                 context("when the arguments match what is stubbed") {
                     let expectedArg = "im expected"
@@ -621,7 +647,7 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("resetting stubs") {
+            describe("resetting stubs on an instance") {
                 context("when the function is stubbed before reseting") {
                     beforeEach {
                         subject.stub(.giveMeAString).andReturn("")
@@ -641,6 +667,30 @@ class StubbableSpec: QuickSpec {
 
                     it("should stub the function") {
                         expect(subject.giveMeAString()).toNot(beNil())
+                    }
+                }
+            }
+
+            describe("resetting stubs on a class") {
+                context("when the function is stubbed before reseting") {
+                    beforeEach {
+                        StubStringService.stub(.staticFunction).andReturn("")
+                        StubStringService.resetStubs()
+                    }
+
+                    it("should NOT stub the function") {
+                        expect({ _ = StubStringService.staticFunction() }()).to(throwAssertion())
+                    }
+                }
+
+                context("when the function is stubbed after reseting") {
+                    beforeEach {
+                        StubStringService.resetStubs()
+                        StubStringService.stub(.staticFunction).andReturn("")
+                    }
+
+                    it("should stub the function") {
+                        expect(StubStringService.staticFunction()).toNot(beNil())
                     }
                 }
             }
