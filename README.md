@@ -10,7 +10,9 @@ Spry is a framework that allows spying and stubbing in Apple's Swift language. A
 
 __Table of Contents__
 
+* [Motivation](#motivation)
 * [Spryable](#spryable)
+    * [Abilities](#abilities)
     * [Example Using Protocol](#example-making-a-spryable-version-of-an-object-that-has-a-protocol-interface)
     * [Example Using Inheritance](#example-making-a-spryable-version-of-an-object-by-subclassing)
 * [Stubbable](#stubbable)
@@ -31,18 +33,32 @@ __Table of Contents__
 * [Argument Enum](#argument-enum)
 * [Xcode Template](#xcode-template)
     * [Template Installation](#template-installation)
-* [Motivation](#motivation)
 * [Installation](#installation)
 * [Contributors](#contributors)
 * [License](#license)
+
+## Motivation
+
+When writing tests for a class, it is advised to only test that class's behavior and not the other objects it uses. With Swift this can be difficult.
+
+How do you check if you are calling the correct methods at the appropriate times and passing in the appropriate arguments? Spry allows you to easily make a spy object that records every called function and the passed-in arguments.
+
+How do you ensure that an injected object is going to return the necessary values for a given test? Spry allows you to easily make a stub object that can return a specific value.
+
+This way you can write tests from the point of view of the class you are testing and nothing more.
 
 ## Spryable
 
 Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#stubbable) and [Spyable](#spyable) see their respective sections below.
 
-Easy to implement
-* Create an object that conforms to `Spryable`
-* In every function (the ones that should be stubbed and spied) return the result of `spryify()` passing in all arguments (if any)
+### Abilities
+
+* Conform to `Spyable` and `Stubbable` at the same time.
+* Reset calls and stubs at the same time with `resetCallsAndStubs()`
+* Easy to implement
+    * Create an object that conforms to `Spryable`
+    * In every function (the ones that should be stubbed and spied) return the result of `spryify()` passing in all arguments (if any)
+    * In every property (the ones that should be stubbed and spied) return the result of `stubbedValue()` in the `get {}` and use `recordCall()` in the `set {}`
 
 ### Example making a Spryable version of an object that has a protocol interface
 
@@ -130,10 +146,11 @@ class FakeStringService: RealStringService, Spryable {
 
 ### Abilities
 
-* Stub a function's return value for an injected object using `.andReturn()`
-* Stub a function's implementation for an injected object using `.andDo()`
-* Specify stubs that only get used if the specified arguments are passed into the stubbed function using `.with()`
+* Stub a return value for a function on an instance of a class or the class itself using `.andReturn()`
+* Stub a the implementation for a function on an instance of a class or the class itself using `.andDo()`
+* Specify stubs that only get used if the right arguments are passed in using `.with()` (see [Argument Enum](#argument-enum) for alternate specifications)
 * Rich `fatalError()` messages that include a detailed list of all stubbed functions when no stub is found (or the arguments received didn't pass validation)
+* Reset stubs with `resetStubs()`
 * Easy to implement
     * Create an object that conforms to `Stubbable`
     * In every function (the ones that should be stubbed) return the result of `stubbedValue()` passing in all arguments (if any)
@@ -290,9 +307,11 @@ FakeStringService.stub(.imAStaticFunction).andReturn(Void())
 
 ### Abilities
 
-- Test whether a function was called on an instance of a class
-- Rich Failure messages that include a detailed list of called functions and arguments
-- Easy to implement
+* Test whether a function was called or a property was set on an instance of a class or the class itself
+* Specify the arguments that should have been received along with the call (see [Argument Enum](#argument-enum) for alternate specifications)
+* Rich Failure messages that include a detailed list of called functions and arguments
+* Reset calls with `resetCalls()`
+* Easy to implement
     * Create an object that conforms to `Spyable`
     * In every function (the ones that should be spied) call `recordCall()` passing in all arguments (if any)
 
@@ -421,28 +440,31 @@ __How to Use__
 
 ```swift
 // passes if the function was called
-fake.didCall(.functionName)
+fake.didCall(.functionName).success
 
 // passes if the function was called a number of times
-fake.didCall(.functionName, countSpecifier: .exactly(1))
+fake.didCall(.functionName, countSpecifier: .exactly(1)).success
 
 // passes if the function was called at least a number of times
-fake.didCall(.functionName, countSpecifier: .atLeast(1))
+fake.didCall(.functionName, countSpecifier: .atLeast(1)).success
 
 // passes if the function was called at most a number of times
-fake.didCall(.functionName, countSpecifier: .atMost(1))
+fake.didCall(.functionName, countSpecifier: .atMost(1)).success
 
 // passes if the function was called with equivalent arguments
-fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"])
+fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"]).success
 
 // passes if the function was called with arguments that pass the specified options
-fake.didCall(.functionName, withArguments: [Argument.nonNil, Argument.anything, "thirdArg"])
+fake.didCall(.functionName, withArguments: [Argument.nonNil, Argument.anything, "thirdArg"]).success
 
 // passes if the function was called with equivalent arguments a number of times
-fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"], countSpecifier: .exactly(1))
+fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"], countSpecifier: .exactly(1)).success
+
+// passes if the property was set to the right value
+fake.didCall(.propertyName, with: "value").success
 
 // passes if the static function was called
-Fake.didCall(.functionName)
+Fake.didCall(.functionName).success
 ```
 
 ## Have Received Matcher
@@ -474,8 +496,14 @@ expect(fake).to(haveReceived(.functionName, with: Argument.nonNil, Argument.anyt
 // passes if the function was called with equivalent arguments a number of times
 expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg", countSpecifier: .exactly(1)))
 
-// passes if the static function was was called
+// passes if the property was set to the specified value
+expect(fake).to(haveReceived(.propertyName, with "value"))
+
+// passes if the static function was called
 expect(Fake).to(haveReceived(.functionName))
+
+// passes if the static property was set
+expect(Fake).to(haveReceived(.propertyName))
 ```
 
 ## SpryEquatable
@@ -532,16 +560,6 @@ __Template Installation__
 
 In terminal run:
 `svn export https://github.com/Rivukis/Spry/trunk/Templates/Spry ~/Library/Developer/Xcode/Templates/File\ Templates/Spry`
-
-## Motivation
-
-When writing tests for a class, it is advised to only test that class's behavior and not the other objects it uses. With Swift this can be difficult.
-
-How do you check if you are calling the correct methods at the appropriate times and passing in the appropriate arguments? Spry allows you to easily make a spy object that records every called function and the passed-in arguments.
-
-How do you ensure that an injected object is going to return the necessary values for a given test? Spry allows you to easily make a stub object that can return a specific value.
-
-This way you can write tests from the point of view of the class you are testing and nothing more.
 
 ## Installation
 
