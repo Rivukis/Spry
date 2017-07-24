@@ -12,27 +12,22 @@ __Table of Contents__
 
 * [Motivation](#motivation)
 * [Spryable](#spryable)
-    * [Abilities](#abilities)
     * [Example Using Protocol](#example-making-a-spryable-version-of-an-object-that-has-a-protocol-interface)
     * [Example Using Inheritance](#example-making-a-spryable-version-of-an-object-by-subclassing)
 * [Stubbable](#stubbable)
-    * [Abilities](#abilities)
     * [Example Using Protocol](#example-making-a-stubbable-version-of-an-object-that-has-a-protocol-interface)
     * [Example Using Inheritance](#example-making-a-stubbable-version-of-an-object-by-subclassing)
     * [Example Stubbing](#example-stubbing)
 * [Spyable](#spyable)
-    * [Abilities](#abilities)
     * [Example Using Protocol](#example-making-a-spyable-version-of-an-object-that-has-a-protocol-interface)
     * [Example Using Inheritance](#example-making-a-spyable-version-of-an-object-by-subclassing)
     * [Example Did Call](#example-did-call)
 * [Have Received Matcher](#have-received-matcher)
     * [Example Have Received](#example-have-received)
 * [SpryEquatable](#spryequatable)
-    * [Defaulted Conformance List](#defaulted-conformance-list)
     * [Example SpryEquatable Conformance](#example-spryEquatable-conformance)
 * [Argument Enum](#argument-enum)
 * [Xcode Template](#xcode-template)
-    * [Template Installation](#template-installation)
 * [Installation](#installation)
 * [Contributors](#contributors)
 * [License](#license)
@@ -51,7 +46,7 @@ This way you can write tests from the point of view of the class you are testing
 
 Conform to both Stubbable and Spyable at the same time! For information about [Stubbable](#stubbable) and [Spyable](#spyable) see their respective sections below.
 
-### Abilities
+__Abilities__
 
 * Conform to `Spyable` and `Stubbable` at the same time.
 * Reset calls and stubs at the same time with `resetCallsAndStubs()`
@@ -144,7 +139,7 @@ class FakeStringService: RealStringService, Spryable {
 
 > Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 
-### Abilities
+__Abilities__
 
 * Stub a return value for a function on an instance of a class or the class itself using `.andReturn()`
 * Stub a the implementation for a function on an instance of a class or the class itself using `.andDo()`
@@ -305,7 +300,7 @@ FakeStringService.stub(.imAStaticFunction).andReturn(Void())
 
 > Conforming to Spryable will conform to Stubbable and Spyable at the same time.
 
-### Abilities
+__Abilities__
 
 * Test whether a function was called or a property was set on an instance of a class or the class itself
 * Specify the arguments that should have been received along with the call (see [Argument Enum](#argument-enum) for alternate specifications)
@@ -508,12 +503,14 @@ expect(Fake).to(haveReceived(.propertyName))
 
 ## SpryEquatable
 
-* Spry uses `SpryEquatable` protocol to equate arguments
-    * Make types conform to `SpryEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
-    * To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
-    * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
+Spry uses `SpryEquatable` protocol to equate arguments
 
-### Defaulted Conformance List
+* Make types conform to `SpryEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
+* To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
+* NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
+
+__Defaulted Conformance List__
+
 * Optional (will `fatalError()` at runtime if the wrapped type does not conform to SpryEquatable)
 * String
 * Int
@@ -558,7 +555,8 @@ When you go to create a new file in Xcode, you will notice a new section called 
 
 __Template Installation__
 
-In terminal run:
+In terminal run the following command:
+
 `svn export https://github.com/Rivukis/Spry/trunk/Templates/Spry ~/Library/Developer/Xcode/Templates/File\ Templates/Spry`
 
 ## Installation
