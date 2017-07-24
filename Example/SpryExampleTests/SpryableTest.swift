@@ -10,7 +10,7 @@ import Quick
 import Nimble
 import SpryExample
 
-private class SpryStringService: Spryable {
+private class SpryableTestClass: Spryable {
     enum StaticFunction: String, StringRepresentable {
         case getAStaticString = "getAStaticString()"
     }
@@ -20,11 +20,21 @@ private class SpryStringService: Spryable {
     }
 
     enum Function: String, StringRepresentable {
+        case firstName
         case getAString = "getAString()"
     }
 
-    func getAString() -> String {
-        return spryify()
+    var firstName: String {
+        set {
+            recordCall(arguments: newValue)
+        }
+        get {
+            return stubbedValue()
+        }
+    }
+
+    func getAString(string: String) -> String {
+        return spryify(arguments: string)
     }
 }
 
@@ -32,21 +42,21 @@ class SpryableSpec: QuickSpec {
     override func spec() {
 
         describe("Spryable") {
-            var subject: SpryStringService!
+            var subject: SpryableTestClass!
 
             beforeEach {
-                subject = SpryStringService()
+                subject = SpryableTestClass()
             }
 
             afterEach {
-                SpryStringService.resetCallsAndStubs()
+                SpryableTestClass.resetCallsAndStubs()
             }
 
             describe("recording calls - instance") {
                 beforeEach {
                     subject.stub(.getAString).andReturn("")
 
-                    _ = subject.getAString()
+                    _ = subject.getAString(string: "")
                 }
 
                 it("should have recorded the call using Spyable") {
@@ -57,13 +67,13 @@ class SpryableSpec: QuickSpec {
 
             describe("recording calls - static") {
                 beforeEach {
-                    SpryStringService.stub(.getAStaticString).andReturn("")
+                    SpryableTestClass.stub(.getAStaticString).andReturn("")
 
-                    _ = SpryStringService.getAStaticString()
+                    _ = SpryableTestClass.getAStaticString()
                 }
 
                 it("should have recorded the call using Spyable") {
-                    let result = SpryStringService.didCall(.getAStaticString)
+                    let result = SpryableTestClass.didCall(.getAStaticString)
                     expect(result.success).to(beTrue())
                 }
             }
@@ -76,7 +86,7 @@ class SpryableSpec: QuickSpec {
                 }
 
                 it("should return the stubbed value using Stubbable") {
-                    expect(subject.getAString()).to(equal(expectedString))
+                    expect(subject.getAString(string: "")).to(equal(expectedString))
                 }
             }
 
@@ -84,39 +94,39 @@ class SpryableSpec: QuickSpec {
                 let expectedString = "stubbed string"
 
                 beforeEach {
-                    SpryStringService.stub(.getAStaticString).andReturn(expectedString)
+                    SpryableTestClass.stub(.getAStaticString).andReturn(expectedString)
                 }
 
                 it("should return the stubbed value using Stubbable") {
-                    expect(SpryStringService.getAStaticString()).to(equal(expectedString))
+                    expect(SpryableTestClass.getAStaticString()).to(equal(expectedString))
                 }
             }
 
             describe("reseting calls and stubs") {
                 beforeEach {
                     subject.stub(.getAString).andReturn("")
-                    _ = subject.getAString()
+                    _ = subject.getAString(string: "")
 
                     subject.resetCallsAndStubs()
                 }
 
                 it("should reset the calls and the stubs") {
                     expect(subject.didCall(.getAString).success).to(beFalse())
-                    expect({ _ = subject.getAString() }()).to(throwAssertion())
+                    expect({ _ = subject.getAString(string: "") }()).to(throwAssertion())
                 }
             }
 
             describe("reseting calls and stubs") {
                 beforeEach {
-                    SpryStringService.stub(.getAStaticString).andReturn("")
-                    _ = SpryStringService.getAStaticString()
+                    SpryableTestClass.stub(.getAStaticString).andReturn("")
+                    _ = SpryableTestClass.getAStaticString()
 
-                    SpryStringService.resetCallsAndStubs()
+                    SpryableTestClass.resetCallsAndStubs()
                 }
 
                 it("should reset the calls and the stubs") {
-                    expect(SpryStringService.didCall(.getAStaticString).success).to(beFalse())
-                    expect({ _ = SpryStringService.getAStaticString() }()).to(throwAssertion())
+                    expect(SpryableTestClass.didCall(.getAStaticString).success).to(beFalse())
+                    expect({ _ = SpryableTestClass.getAStaticString() }()).to(throwAssertion())
                 }
             }
         }
