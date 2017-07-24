@@ -334,7 +334,7 @@ class SpyableTest: XCTestCase {
         let result = testClass.didCall(.doStuff)
 
         // then
-        XCTAssertEqual(result.recordedCallsDescription, "<doMoreStuffWith(int1:int2:) with 5, 10>")
+        XCTAssertEqual(result.recordedCallsDescription, "<doMoreStuffWith(int1:int2:)> with <5>, <10>")
     }
 
     func testRecordedCallsDescriptionMultipleCalls() {
@@ -347,6 +347,6 @@ class SpyableTest: XCTestCase {
         let result = testClass.didCall(.doWeirdStuffWith)
 
         // then
-        XCTAssertEqual(result.recordedCallsDescription, "<doStuff()>, <doMoreStuffWith(int1:int2:) with 5, 10>")
+        XCTAssertEqual(result.recordedCallsDescription, "<doStuff()>; <doMoreStuffWith(int1:int2:)> with <5>, <10>")
     }
 }

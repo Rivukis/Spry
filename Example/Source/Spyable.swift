@@ -344,30 +344,27 @@ private func description(of calls: [RecordedCall]) -> String {
         return "<>"
     }
 
-    return calls.reduce("") {
-        var entry = $1.function
+    return calls.map {
+        let functionStringRepresentation = "<" + $0.function + ">"
+        let arguementListStringRepresentation = $0.arguments.map { "<\($0.stringRepresentation())>" }.joined(separator: ", ")
 
-        let arguementListStringRepresentation = $1.arguments.stringRepresentation()
         if !arguementListStringRepresentation.isEmpty {
-            entry += " with " + arguementListStringRepresentation
+            return functionStringRepresentation + " with " + arguementListStringRepresentation
         }
 
-        entry = "<" + entry + ">"
-
-        return $0.isEmpty ? entry : $0 + ", " + entry
-    }
+        return functionStringRepresentation
+    }.joined(separator: "; ")
 }
 
 // MARK: Private Extensions
 
-private extension Array where Element == Optional<Any> {
+private extension Optional {
     func stringRepresentation() -> String {
-        return self.map { element in
-            if let element = element {
-                return "\(element)"
-            } else {
-                return "nil"
-            }
-        }.joined(separator: ", ")
+        switch self {
+        case .some(let wrapped):
+            return String(describing: wrapped)
+        case .none:
+            return "nil"
+        }
     }
 }

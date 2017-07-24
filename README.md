@@ -50,6 +50,7 @@ Easy to implement
 // The Protocol
 protocol StringService: class {
     func giveMeAString(bool: Bool) -> String
+    static func giveMeAString(bool: Bool) -> String
 }
 
 // The Real Class
@@ -58,15 +59,28 @@ class RealStringService: StringService {
         // do real things
         return "string"
     }
+
+    static func giveMeAString(bool: Bool) -> String {
+        // do real things
+        return "string"
+    }
 }
 
-// The Stub Class
+// The Fake Class
 class FakeStringService: StringService, Spryable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString(bool:)"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString(bool:)"
     }
 
     func giveMeAString(bool: Bool) -> String {
+        return spryify(arguments: bool) // <-- **REQUIRED**
+    }
+
+    static func giveMeAString(bool: Bool) -> String {
         return spryify(arguments: bool) // <-- **REQUIRED**
     }
 }
@@ -83,15 +97,28 @@ class RealStringService {
         // do real things
         return "string"
     }
+
+    static func giveMeAString(bool: Bool) -> String {
+        // do real things
+        return "string"
+    }
 }
 
-// The Stub Class
+// The Fake Class
 class FakeStringService: RealStringService, Spryable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case giveMeAString = "giveMeAString(bool:)"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString(bool:)"
     }
 
     override func giveMeAString(bool: Bool) -> String {
+        return spryify(arguments: bool) // <-- **REQUIRED**
+    }
+
+    override static func giveMeAString(bool: Bool) -> String {
         return spryify(arguments: bool) // <-- **REQUIRED**
     }
 }
@@ -121,6 +148,7 @@ protocol StringService: class {
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
     func iHaveACompletionClosure(string: String, completion: () -> Void)
+    static func imAStaticFunction()
 }
 
 // The Real Class
@@ -138,10 +166,18 @@ class RealStringService: StringService {
     func iHaveACompletionClosure(string: String, completion: () -> Void) {
         // do real things
     }
+
+    static func imAStaticFunction() {
+        // do real things
+    }
 }
 
 // The Stub Class
 class FakeStringService: StringService, Stubbable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAStaticFunction = "imAStaticFunction()"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -157,6 +193,10 @@ class FakeStringService: StringService, Stubbable {
 
     func iHaveACompletionClosure(string: String, completion: () -> Void) {
         return stubbedValue(arguments: string, completion) // <-- **REQUIRED**
+    }
+
+    static func imAStaticFunction() {
+        return stubbedValue() // <-- **REQUIRED**
     }
 }
 ```
@@ -181,10 +221,18 @@ class RealStringService {
     func iHaveACompletionClosure(string: String, completion: () -> Void) {
         // do real things
     }
+
+    static func imAStaticFunction() {
+        // do real things
+    }
 }
 
 // The Stub Class
 class FakeStringService: RealStringService, Stubbable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAStaticFunction = "imAStaticFunction()"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -200,6 +248,10 @@ class FakeStringService: RealStringService, Stubbable {
 
     override func iHaveACompletionClosure(string: String, completion: () -> Void) {
         return stubbedValue(arguments: string, completion) // <-- **REQUIRED**
+    }
+
+    override static func imAStaticFunction() {
+        return stubbedValue() // <-- **REQUIRED**
     }
 }
 ```
@@ -227,6 +279,9 @@ fakeStringService.stub(.iHaveACompletionClosure).with("correct string", Argument
     // return an appropriate value
     return Void() // <-- will be returned by the stub
 })
+
+// can stub static functions as well
+FakeStringService.stub(.imAStaticFunction).andReturn(Void())
 ```
 
 ## Spyable
@@ -250,6 +305,7 @@ When using a protocol to declare the interface for an object, the compiler will 
 protocol StringService: class {
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
+    static func imAStaticFunction()
 }
 
 // The Real Class
@@ -263,10 +319,18 @@ class RealStringService: StringService {
         // do real things
         return true
     }
+
+    static func imAStaticFunction() {
+        // do real things
+    }
 }
 
 // The Spy Class
 class FakeStringService: StringService, Spyable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAStaticFunction = "imAStaticFunction()"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -280,6 +344,10 @@ class FakeStringService: StringService, Spyable {
     func hereAreTwoStrings(string1: String, string2: String) -> Bool {
         recordCall(arguments: string1, string2) // <-- **REQUIRED**
         return false
+    }
+
+    static func imAStaticFunction() {
+        recordCall() // <-- **REQUIRED**
     }
 }
 ```
@@ -301,10 +369,18 @@ class RealStringService {
         // do real things
         return true
     }
+
+    static func imAStaticFunction() {
+        // do real things
+    }
 }
 
 // The Spy Class
 class FakeStringService: RealStringService, Spyable {
+    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAStaticFunction = "imAStaticFunction()"
+    }
+
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString()"
         case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
@@ -318,6 +394,10 @@ class FakeStringService: RealStringService, Spyable {
     override func hereAreTwoStrings(string1: String, string2: String) -> Bool {
         recordCall(arguments: string1, string2) // <-- **REQUIRED**
         return false
+    }
+
+    override static func imAStaticFunction() {
+        recordCall() // <-- **REQUIRED**
     }
 }
 ```
@@ -340,26 +420,29 @@ result.recordedCallsDescription
 __How to Use__
 
 ```swift
-// passes if function was called
+// passes if the function was called
 fake.didCall(.functionName)
 
-// passes if function was called a number of times
+// passes if the function was called a number of times
 fake.didCall(.functionName, countSpecifier: .exactly(1))
 
-// passes if function was called at least a number of times
+// passes if the function was called at least a number of times
 fake.didCall(.functionName, countSpecifier: .atLeast(1))
 
-// passes if function was called at most a number of times
+// passes if the function was called at most a number of times
 fake.didCall(.functionName, countSpecifier: .atMost(1))
 
-// passes if function was called with equivalent arguments
+// passes if the function was called with equivalent arguments
 fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"])
 
-// passes if function was called with arguments that pass the specified options
+// passes if the function was called with arguments that pass the specified options
 fake.didCall(.functionName, withArguments: [Argument.nonNil, Argument.anything, "thirdArg"])
 
-// passes if function was called with equivalent arguments a number of times
+// passes if the function was called with equivalent arguments a number of times
 fake.didCall(.functionName, withArguments: ["firstArg", "secondArg"], countSpecifier: .exactly(1))
+
+// passes if the static function was called
+Fake.didCall(.functionName)
 ```
 
 ## Have Received Matcher
@@ -370,26 +453,29 @@ All Call Matchers can be used with `to()` and `toNot()`
 
 ### Example Have Received
 ```swift
-// passes if function was called
+// passes if the function was called
 expect(fake).to(haveReceived(.functionName)
 
-// passes if function was called a number of times
+// passes if the function was called a number of times
 expect(fake).to(haveReceived(.functionName, countSpecifier: .exactly(1)))
 
-// passes if function was called at least a number of times
+// passes if the function was called at least a number of times
 expect(fake).to(haveReceived(.functionName, countSpecifier: .atLeast(2)))
 
-// passes if function was called at most a number of times
+// passes if the function was called at most a number of times
 expect(fake).to(haveReceived(.functionName, countSpecifier: .atMost(1)))
 
-// passes if function was called with equivalent arguments
+// passes if the function was called with equivalent arguments
 expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg"))
 
-// passes if function was called with arguments that pass the specified options
+// passes if the function was called with arguments that pass the specified options
 expect(fake).to(haveReceived(.functionName, with: Argument.nonNil, Argument.anything, "thirdArg")
 
-// passes if function was called with equivalent arguments a number of times
+// passes if the function was called with equivalent arguments a number of times
 expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg", countSpecifier: .exactly(1)))
+
+// passes if the static function was was called
+expect(Fake).to(haveReceived(.functionName))
 ```
 
 ## SpryEquatable
@@ -400,7 +486,7 @@ expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg", count
     * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
 
 ### Defaulted Conformance List
-* Optional (will `fatalError()` ta runtime if the wrapped type does not conform to SpryEquatable)
+* Optional (will `fatalError()` at runtime if the wrapped type does not conform to SpryEquatable)
 * String
 * Int
 * Double
@@ -409,7 +495,7 @@ expect(fake).to(haveReceived(.functionName, with: "firstArg", "secondArg", count
 * Dictionary
 * NSObject
 
-### Example SpryEquatable Conformance
+### Example Conforming to SpryEquatable
 ```swift
 // custom type
 extension Person: Equatable, SpryEquatable {

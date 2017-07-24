@@ -15,7 +15,8 @@ import SpryExample
 class HaveReceivedMatcherTest: XCTestCase {
     class TestClass: Spyable {
         enum StaticFunction: String, StringRepresentable {
-            case none
+            case doStaticStuff = "doStaticStuff()"
+            case notAFunction = "notAFunction()"
         }
 
         enum Function: String, StringRepresentable {
@@ -34,6 +35,10 @@ class HaveReceivedMatcherTest: XCTestCase {
 
         func doThingsWith(string: String, int: Int) {
             self.recordCall(arguments: string, int)
+        }
+
+        static func doStaticStuff() {
+            self.recordCall()
         }
     }
 
@@ -60,10 +65,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff)) }
 
         // THEN
-        let toExpectedMessage = "expected to receive <doStuff()> on <TestClass>, got <doStuffWith(string:) with swift>"
+        let toExpectedMessage = "expected to receive <doStuff()> on <TestClass>, got <doStuffWith(string:)> with <swift>"
         failsWithErrorMessage(toExpectedMessage) { toFailingTest() }
 
-        let toNotExpectedMessage = "expected to not receive <doStuffWith(string:)> on <TestClass>, got <doStuffWith(string:) with swift>"
+        let toNotExpectedMessage = "expected to not receive <doStuffWith(string:)> on <TestClass>, got <doStuffWith(string:)> with <swift>"
         failsWithErrorMessage(toNotExpectedMessage) { toNotFailingTest() }
 
         let nilExpectedMessage = "expected to receive function, got <nil>"
@@ -131,10 +136,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff, countSpecifier: .atLeast(2))) }
 
         // THEN
-        let toExpectedMessage = "expected to receive <doStuff()> on <TestClass> at least 3 times, got <doStuff()>, <doStuff()>"
+        let toExpectedMessage = "expected to receive <doStuff()> on <TestClass> at least 3 times, got <doStuff()>; <doStuff()>"
         failsWithErrorMessage(toExpectedMessage) { toFailingTest() }
 
-        let toNotExpectedMessage = "expected to not receive <doStuff()> on <TestClass> at least 2 times, got <doStuff()>, <doStuff()>"
+        let toNotExpectedMessage = "expected to not receive <doStuff()> on <TestClass> at least 2 times, got <doStuff()>; <doStuff()>"
         failsWithErrorMessage(toNotExpectedMessage) { toNotFailingTest() }
 
         let nilExpectedMessage = "expected to receive function at least 'count' times, got <nil>"
@@ -169,7 +174,7 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuff, countSpecifier: .atMost(1))) }
 
         // THEN
-        let got = "got <doStuff()>, <doStuff()>, <doStuff()>, <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>"
+        let got = "got <doStuff()>; <doStuff()>; <doStuff()>; <doStuffWith(string:)> with <quick>; <doStuffWith(string:)> with <nimble>"
         let toExpectedMessage1 = "expected to receive <doStuffWith(string:)> on <TestClass> at most 1 time, \(got)"
         failsWithErrorMessage(toExpectedMessage1) { toFailingTest1() }
 
@@ -209,10 +214,10 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher")) }
 
         // THEN
-        let toExpectedMessage = "expected to receive <doStuffWith(string:)> on <TestClass> with <quick>, got <doStuffWith(string:) with nimble>"
+        let toExpectedMessage = "expected to receive <doStuffWith(string:)> on <TestClass> with <quick>, got <doStuffWith(string:)> with <nimble>"
         failsWithErrorMessage(toExpectedMessage) { toFailingTest() }
 
-        let toNotExpectedMessage = "expected to not receive <doStuffWith(string:)> on <TestClass> with <nimble>, got <doStuffWith(string:) with nimble>"
+        let toNotExpectedMessage = "expected to not receive <doStuffWith(string:)> on <TestClass> with <nimble>, got <doStuffWith(string:)> with <nimble>"
         failsWithErrorMessage(toNotExpectedMessage) { toNotFailingTest() }
 
         let nilExpectedMessage = "expected to receive function with arguments, got <nil>"
@@ -248,7 +253,7 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher", countSpecifier: .exactly(1))) }
 
         // THEN
-        let got = "got <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>"
+        let got = "got <doStuffWith(string:)> with <quick>; <doStuffWith(string:)> with <nimble>"
 
         let toExpectedMessage1 = "expected to receive <doStuff()> on <TestClass> with <swift> exactly 1 time, \(got)"
         failsWithErrorMessage(toExpectedMessage1) { toFailingTest1() }
@@ -289,7 +294,7 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "call matcher", countSpecifier: .atLeast(2))) }
 
         // THEN
-        let got = "got <doStuffWith(string:) with quick>, <doStuffWith(string:) with nimble>, <doStuffWith(string:) with nimble>"
+        let got = "got <doStuffWith(string:)> with <quick>; <doStuffWith(string:)> with <nimble>; <doStuffWith(string:)> with <nimble>"
 
         let toExpectedMessage = "expected to receive <doStuff()> on <TestClass> with <quick> at least 2 times, \(got)"
         failsWithErrorMessage(toExpectedMessage) { toFailingTest() }
@@ -330,7 +335,7 @@ class HaveReceivedMatcherTest: XCTestCase {
         let nilFailingTest = { expect(nil as TestClass?).to(haveReceived(.doStuffWith, with: "swift", countSpecifier: .atMost(1))) }
 
         // THEN
-        let got = "got <doThingsWith(string:int:) with call matcher, 5>, <doThingsWith(string:int:) with call matcher, 5>, <doStuffWith(string:) with swift>, <doStuffWith(string:) with swift>, <doStuffWith(string:) with swift>"
+        let got = "got <doThingsWith(string:int:)> with <call matcher>, <5>; <doThingsWith(string:int:)> with <call matcher>, <5>; <doStuffWith(string:)> with <swift>; <doStuffWith(string:)> with <swift>; <doStuffWith(string:)> with <swift>"
 
         let toExpectedMessage1 = "expected to receive <doThingsWith(string:int:)> on <TestClass> with <call matcher>, <5> at most 1 time, \(got)"
         failsWithErrorMessage(toExpectedMessage1) { toFailingTest1() }
@@ -343,5 +348,13 @@ class HaveReceivedMatcherTest: XCTestCase {
 
         let nilExpectedMessage = "expected to receive function with arguments at most 'count' times, got <nil>"
         failsWithErrorMessageForNil(nilExpectedMessage) { nilFailingTest() }
+    }
+
+    func testCallStaticFunction() {
+        // WHEN
+        TestClass.doStaticStuff()
+
+        // THEN
+        expect(TestClass.self).to(haveReceived(.doStaticStuff))
     }
 }

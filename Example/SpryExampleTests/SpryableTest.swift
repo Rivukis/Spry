@@ -21,7 +21,7 @@ private class SpryableTestClass: Spryable {
 
     enum Function: String, StringRepresentable {
         case firstName
-        case getAString = "getAString()"
+        case getAString = "getAString(string:)"
     }
 
     var firstName: String {
