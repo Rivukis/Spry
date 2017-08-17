@@ -12,10 +12,10 @@ class Fake___VARIABLE_spryClass:identifier___: ___VARIABLE_spryClass:identifier_
         case <#someFunction#> = <#"someFunction()"#>
     }
 
-    // MARK: - Overrides
+    // MARK: - ___VARIABLE_spryClass:identifier___ Protocol
 
     /*
-     Override methods here.
+     Implement methods here.
      Within each, use `recordCall()` to spy, `stubbedValue()` to stub, or `spryify()` to do both.
      Create a corresponding stringified case in the Function enum above.
 
