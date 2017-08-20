@@ -505,9 +505,12 @@ expect(Fake).to(haveReceived(.propertyName))
 
 Spry uses `SpryEquatable` protocol to equate arguments
 
-* Make types conform to `SpryEquatable` using only a single line to declare conformance and by conforming to swift's `Equatable` Protocol
-* To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
-* NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
+* Make types conform to `SpryEquatable` using only a single line to declare conformance and one of the following
+    * Be AnyObject (all `class`s are `AnyObject`. `enum`s and `struct`s are NOT `AnyObject`)
+    * Conform to swift's `Equatable` Protocol
+        * To make custom types conform to `Equatable`, see Apple's Documentation: [Equatable](https://developer.apple.com/reference/swift/equatable "Swift's Equatable")
+        * NOTE: If you forget to conform to `Equatable`, the compiler will only tell you that you are not conforming to `SpryEquatable` (You should never implement methods declared in `SpryEquatable`)
+* NOTE: Object's that are `AnyObject` and conform to `Equatable` will use pointer comparision and not the `==(lhs:rhs:)` function.
 
 __Defaulted Conformance List__
 
