@@ -36,6 +36,30 @@ public extension SpryEquatable where Self: Equatable {
     }
 }
 
+// MARK: - SpryEquatable where Self: AnyObject
+
+public extension SpryEquatable where Self: AnyObject {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        if let actual = actual as? Self {
+            return self === actual
+        }
+
+        return false
+    }
+}
+
+// MARK: - SpryEquatable where Self: AnyObject & Equatable
+
+public extension SpryEquatable where Self: AnyObject & Equatable {
+    func isEqual(to actual: SpryEquatable?) -> Bool {
+        if let actual = actual as? Self {
+            return self === actual
+        }
+
+        return false
+    }
+}
+
 // MARK: - SpryEquatable for Arrays
 
 public extension Array {

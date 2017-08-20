@@ -10,9 +10,31 @@ import Quick
 import Nimble
 import SpryExample
 
-// MARK: - Test Helper Protocols
-
 private class MyNonSpryEquatableClass {}
+
+private class MyAnyObject: SpryEquatable {}
+
+private struct MyEquatable: Equatable, SpryEquatable {
+    let string: String
+
+    public static func == (lhs: MyEquatable, rhs: MyEquatable) -> Bool {
+        return lhs.string == rhs.string
+    }
+}
+
+private class MyAnyObjectEquatable: Equatable, SpryEquatable {
+    let string: String
+
+    init(string: String) {
+        self.string = string
+    }
+
+    public static func == (lhs: MyAnyObjectEquatable, rhs: MyAnyObjectEquatable) -> Bool {
+        return lhs.string == rhs.string
+    }
+}
+
+// MARK: - Test Helper Protocols
 
 private protocol SpecialString {
     func myStringValue() -> String
@@ -91,6 +113,9 @@ private protocol StringService: class {
     func takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass]) -> String
     func takeADictionaryOfSpryEquatable(dictionary: [String: Int]) -> String
     func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String
+    func takeAnEquatable(anEquatable: MyEquatable) -> String
+    func takeAnAnyObject(anAnyObject: MyAnyObject) -> String
+    func takeAnAnyObjectAndEquatable(anAnyObjectAndEquatable: MyAnyObjectEquatable) -> String
 
     static func staticFunction() -> String
 }
@@ -120,6 +145,9 @@ private class StubStringService: StringService, Stubbable {
         case takeAnArrayOfNonSpryEquatable = "takeAnArrayOfNonSpryEquatable(array:)"
         case takeADictionaryOfSpryEquatable = "takeADictionaryOfSpryEquatable(dictionary:)"
         case takeADictionaryOfNonSpryEquatable = "takeADictionaryOfNonSpryEquatable(dictionary:)"
+        case takeAnEquatable = "takeAnEquatable(anEquatable:)"
+        case takeAnAnyObject = "takeAnAnyObject(anAnyObject:)"
+        case takeAnAnyObjectAndEquatable = "takeAnAnyObjectAndEquatable(anAnyObjectAndEquatable:)"
     }
 
     var myProperty: String {
@@ -188,6 +216,18 @@ private class StubStringService: StringService, Stubbable {
 
     func takeADictionaryOfNonSpryEquatable(dictionary: [String: MyNonSpryEquatableClass]) -> String {
         return stubbedValue(arguments: dictionary)
+    }
+
+    func takeAnEquatable(anEquatable: MyEquatable) -> String {
+        return stubbedValue(arguments: anEquatable)
+    }
+
+    func takeAnAnyObject(anAnyObject: MyAnyObject) -> String {
+        return stubbedValue(arguments: anAnyObject)
+    }
+
+    func takeAnAnyObjectAndEquatable(anAnyObjectAndEquatable: MyAnyObjectEquatable) -> String {
+        return stubbedValue(arguments: anAnyObjectAndEquatable)
     }
 
     static func staticFunction() -> String {
@@ -498,6 +538,51 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is Equatable and is NOT AnyObject") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeAnEquatable).andReturn("I shouldn't win")
+                        let argument = MyEquatable(string: "hello")
+                        subject.stub(.takeAnEquatable).with(argument).andReturn(expectedReturn)
+                    }
+
+                    it("should NOT use the Equatable comparison for AnyObject") {
+                        let argument = MyEquatable(string: "hello")
+                        expect(subject.takeAnEquatable(anEquatable: argument)).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is NOT Equatable and is AnyObject") {
+                    let expectedReturn = "i should be returned"
+                    let argument = MyAnyObject()
+
+                    beforeEach {
+                        subject.stub(.takeAnAnyObject).andReturn("I shouldn't win")
+                        subject.stub(.takeAnAnyObject).with(argument).andReturn(expectedReturn)
+                    }
+
+                    it("should NOT use the Equatable comparison for AnyObject") {
+                        expect(subject.takeAnAnyObject(anAnyObject: argument)).to(equal(expectedReturn))
+                    }
+                }
+
+                context("when the argument is Equatable and is AnyObject") {
+                    let expectedReturn = "i should be returned"
+
+                    beforeEach {
+                        subject.stub(.takeAnAnyObjectAndEquatable).andReturn(expectedReturn)
+
+                        let argument = MyAnyObjectEquatable(string: "hello")
+                        subject.stub(.takeAnAnyObjectAndEquatable).with(argument).andReturn("I shouldn't win")
+                    }
+
+                    it("should NOT use the Equatable comparison for AnyObject") {
+                        let argument = MyAnyObjectEquatable(string: "hello")
+                        expect(subject.takeAnAnyObjectAndEquatable(anAnyObjectAndEquatable: argument)).to(equal(expectedReturn))
                     }
                 }
 
