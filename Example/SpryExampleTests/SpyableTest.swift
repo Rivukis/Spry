@@ -89,7 +89,6 @@ class SpyableTest: XCTestCase {
 
     func testResettingStaticCalls() {
         // given
-        let testClass = TestClass()
         TestClass.doStaticStuff()
 
         // when
