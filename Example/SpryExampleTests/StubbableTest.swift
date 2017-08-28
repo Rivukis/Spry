@@ -682,6 +682,25 @@ class StubbableSpec: QuickSpec {
                         }
                     }
                 }
+
+                describe("Argument Capture") {
+                    var argumentCapture: ArgumentCapture!
+                    let firstArg = "first arg"
+                    let secondArg = "second arg"
+
+                    beforeEach {
+                        argumentCapture = Argument.capture()
+                        subject.stub(.giveMeAString_string).with(argumentCapture).andReturn("")
+
+                        _ = subject.giveMeAString(string: firstArg)
+                        _ = subject.giveMeAString(string: secondArg)
+                    }
+
+                    it("should be able to retreive each argument in order") {
+                        expect(argumentCapture.getValue(as: String.self)).to(equal(firstArg))
+                        expect(argumentCapture.getValue(at: 1, as: String.self)).to(equal(secondArg))
+                    }
+                }
             }
 
             describe("fallback value") {

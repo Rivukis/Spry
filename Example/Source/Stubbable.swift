@@ -316,6 +316,8 @@ public extension Stubbable {
 
         for stub in stubsWithArgs {
             if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue(for: arguments) as? T {
+
+                captureArguments(stub: stub, actualArgs: arguments)
                 return value
             }
         }
@@ -350,6 +352,8 @@ public extension Stubbable {
 
         for stub in stubsWithArgs {
             if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue(for: arguments) as? T {
+
+                captureArguments(stub: stub, actualArgs: arguments)
                 return value
             }
         }
@@ -392,6 +396,14 @@ public extension Stubbable {
             fatalError("No return value found for <\(type(of: self)).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
         case .fallback(let value):
             return value
+        }
+    }
+}
+
+private func captureArguments(stub: Stub, actualArgs: [Any?]) {
+    zip(stub.arguments, actualArgs).forEach { (specifiedArg, actual) in
+        if let specifiedArg = specifiedArg as? ArgumentCapture {
+            specifiedArg.capture(actual)
         }
     }
 }
