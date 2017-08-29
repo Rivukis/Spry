@@ -402,7 +402,7 @@ public extension Stubbable {
 
 private func captureArguments(stub: Stub, actualArgs: [Any?]) {
     zip(stub.arguments, actualArgs).forEach { (specifiedArg, actual) in
-        if let specifiedArg = specifiedArg as? ArgumentCapture {
+        if let specifiedArg = specifiedArg as? ArgumentCaptor {
             specifiedArg.capture(actual)
         }
     }

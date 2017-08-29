@@ -684,19 +684,23 @@ class StubbableSpec: QuickSpec {
                 }
 
                 describe("Argument Capture") {
-                    var argumentCapture: ArgumentCapture!
+                    var argumentCapture: ArgumentCaptor!
                     let firstArg = "first arg"
                     let secondArg = "second arg"
 
                     beforeEach {
-                        argumentCapture = Argument.capture()
-                        subject.stub(.giveMeAString_string).with(argumentCapture).andReturn("")
+                        let correctSecondString = "correct second string"
 
-                        _ = subject.giveMeAString(string: firstArg)
-                        _ = subject.giveMeAString(string: secondArg)
+                        argumentCapture = Argument.captor()
+                        subject.stub(.hereAreTwoStrings).with(argumentCapture, correctSecondString).andReturn(true)
+                        subject.stub(.hereAreTwoStrings).andReturn(true)
+
+                        _ = subject.hereAreTwoStrings(string1: firstArg, string2: correctSecondString)
+                        _ = subject.hereAreTwoStrings(string1: "shouldn't capture me", string2: "wrong argument")
+                        _ = subject.hereAreTwoStrings(string1: secondArg, string2: correctSecondString)
                     }
 
-                    it("should be able to retreive each argument in order") {
+                    it("should capture each argument when the stub passes validation (in order)") {
                         expect(argumentCapture.getValue(as: String.self)).to(equal(firstArg))
                         expect(argumentCapture.getValue(at: 1, as: String.self)).to(equal(secondArg))
                     }

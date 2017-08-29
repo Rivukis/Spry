@@ -9,7 +9,7 @@
 /**
  Used to capture an argument for more detailed testing on an argument.
  */
-class ArgumentCapture: SpryEquatable {
+class ArgumentCaptor: SpryEquatable {
     private var capturedArguments: [Any?] = []
 
     /**
@@ -84,8 +84,8 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
 
      - Returns: A new ArgumentCapture.
      */
-    static func capture() -> ArgumentCapture {
-        return ArgumentCapture()
+    static func captor() -> ArgumentCaptor {
+        return ArgumentCaptor()
     }
 }
 
@@ -118,7 +118,7 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
         }
     }
 
-    if specifiedArg is ArgumentCapture {
+    if specifiedArg is ArgumentCaptor {
         return true
     }
 
