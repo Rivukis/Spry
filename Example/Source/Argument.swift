@@ -84,11 +84,11 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
     }
 
     /**
-     Convenience function to get an `ArgumentCapture`. Used when stubbing to capture the actual arguments. Used for more detailed testing on arguments being passed into a `Stubbable`
+     Convenience function to get an `ArgumentCaptor`. Used when stubbing to capture the actual arguments. Used for more detailed testing on arguments being passed into a `Stubbable`
 
-     - SeeAlso: `ArgumentCapture`
+     - SeeAlso: `ArgumentCaptor`
 
-     - Returns: A new ArgumentCapture.
+     - Returns: A new ArgumentCaptor.
      */
     static func captor() -> ArgumentCaptor {
         return ArgumentCaptor()
