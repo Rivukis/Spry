@@ -9,7 +9,7 @@
 /**
  Used to capture an argument for more detailed testing on an argument.
  */
-class ArgumentCaptor: SpryEquatable {
+public class ArgumentCaptor: SpryEquatable {
     private var capturedArguments: [Any?] = []
 
     /**
@@ -20,7 +20,7 @@ class ArgumentCaptor: SpryEquatable {
 
      - Returns: The captured argument or fatal error if there was an issue.
      */
-    func getValue<T>(at index: Int = 0, as: T.Type = T.self) -> T {
+    public func getValue<T>(at index: Int = 0, as: T.Type = T.self) -> T {
         guard index >= 0 && capturedArguments.count > index else {
             fatalError("index <\(index)> is out of bounds for captured arguments count of <\(capturedArguments.count)>")
         }
@@ -33,7 +33,7 @@ class ArgumentCaptor: SpryEquatable {
         return captured
     }
 
-    func capture(_ argument: Any?) {
+    internal func capture(_ argument: Any?) {
         capturedArguments.append(argument)
     }
 }
