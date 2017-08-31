@@ -50,15 +50,18 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
     case anything
     case nonNil
     case `nil`
+    case pass((Any?) -> Bool)
 
     public var description: String {
         switch self {
         case .anything:
-            return "Argument.Anything"
+            return "Argument.anything"
         case .nonNil:
-            return "Argument.NonNil"
+            return "Argument.nonNil"
         case .nil:
-            return "Argument.Nil"
+            return "Argument.nil"
+        case .pass(_):
+            return "Argument.pass"
         }
     }
 
@@ -70,10 +73,13 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
             return true
         case (.nil, .nil):
             return true
+        case (.pass(_), .pass(_)):
+            return true
 
         case (.anything, _): return false
         case (.nonNil, _): return false
         case (.nil, _): return false
+        case (.pass(_), _): return false
         }
     }
 
@@ -115,6 +121,8 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
             return !isNil(actualArg)
         case .nil:
             return isNil(actualArg)
+        case .pass(let validator):
+            return validator(actualArg)
         }
     }
 

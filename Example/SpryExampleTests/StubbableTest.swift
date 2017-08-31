@@ -681,6 +681,48 @@ class StubbableSpec: QuickSpec {
                             expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
                         }
                     }
+
+                    context("when the specifier is .pass; passing validation") {
+                        let actualArgument = "I'm the actual argument"
+                        let expectedReturn = "i should be returned"
+
+                        beforeEach {
+                            let argumentValidation = Argument.pass({ actualArgument -> Bool in
+                                let actualArgument = actualArgument as! String
+                                expect(actualArgument).to(equal(actualArgument))
+
+                                return true
+                            })
+
+                            subject.stub(.takeAnOptionalString).with(argumentValidation).andReturn(expectedReturn)
+                            subject.stub(.takeAnOptionalString).andReturn("fallback")
+                        }
+
+                        it("should return the correct value for passing argument validation") {
+                            expect(subject.takeAnOptionalString(string: actualArgument)).to(equal(expectedReturn))
+                        }
+                    }
+
+                    context("when the specifier is .pass; passing validation") {
+                        let actualArgument = "I'm the actual argument"
+                        let expectedReturn = "i should be returned"
+
+                        beforeEach {
+                            let argumentValidation = Argument.pass({ actualArgument -> Bool in
+                                let actualArgument = actualArgument as! String
+                                expect(actualArgument).to(equal(actualArgument))
+
+                                return false
+                            })
+
+                            subject.stub(.takeAnOptionalString).with(argumentValidation).andReturn("specific return value")
+                            subject.stub(.takeAnOptionalString).andReturn(expectedReturn)
+                        }
+
+                        it("should return the correct value for failing argument validation") {
+                            expect(subject.takeAnOptionalString(string: actualArgument)).to(equal(expectedReturn))
+                        }
+                    }
                 }
 
                 describe("Argument Capture") {

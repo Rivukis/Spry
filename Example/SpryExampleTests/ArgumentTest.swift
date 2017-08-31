@@ -15,10 +15,12 @@ class ArgumentTest: XCTestCase {
         let anything = Argument.anything
         let nonNil = Argument.nonNil
         let nilly = Argument.nil
+        let pass = Argument.pass({ _ in return true })
 
         // then
-        XCTAssertEqual("\(anything)", "Argument.Anything")
-        XCTAssertEqual("\(nonNil)", "Argument.NonNil")
-        XCTAssertEqual("\(nilly)", "Argument.Nil")
+        XCTAssertEqual("\(anything)", "Argument.anything")
+        XCTAssertEqual("\(nonNil)", "Argument.nonNil")
+        XCTAssertEqual("\(nilly)", "Argument.nil")
+        XCTAssertEqual("\(pass)", "Argument.pass")
     }
 }
