@@ -27,13 +27,14 @@ internal func fatalErrorOrFunction<T: StringRepresentable>(functionName: String,
     guard let function = T(rawValue: functionName) else {
         let startingMessage = "function <\(functionName)> in file <\(file)> on line <\(line)> could not be turned into <\(T.self)>."
 
-        if let probableCase = remove(originalString: functionName, startingCharacterToRemove: "(") {
-
-            let probableMessage = "  [|] Possible Fix: case \(probableCase) = \"\(functionName)\""
+        if let probableFunctionCase = remove(originalString: functionName, startingCharacterToRemove: "(") {
+            let probableMessage = "  [|] Possible Fix: case \(probableFunctionCase) = \"\(functionName)\""
             fatalError(startingMessage + "\n" + probableMessage + "\n")
         }
 
-        fatalError(startingMessage)
+        let probableMessage = "  [|] Possible Fix: case \(functionName) = \"\(functionName)\""
+
+        fatalError(startingMessage + "\n" + probableMessage)
     }
 
     return function
