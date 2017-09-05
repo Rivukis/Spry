@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Spry+Nimble'
-  s.version          = '2.1.1'
+  s.version          = '2.2.2'
   s.summary          = 'Nimble matcher for test expectations on Spyable objects.'
 
   s.description      = <<-DESC
@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
 
   s.framework = 'XCTest'
   s.dependency 'Nimble', '> 7.0.0'
-  s.dependency 'Spry', '> 2.1'
+  s.dependency 'Spry', '> 2.2.2'
 end
