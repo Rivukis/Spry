@@ -108,6 +108,7 @@ private protocol StringService: class {
     func giveMeAStringWithFallbackValue() -> String
     func giveMeAnOptional() -> String?
     func giveMeAString(string: String) -> String
+    func giveMeAVoid()
     func callThisCompletion(string: String, closure: () -> Void)
     func takeAnArrayOfSpryEquatable(array: [Int]) -> String
     func takeAnArrayOfNonSpryEquatable(array: [MyNonSpryEquatableClass]) -> String
@@ -139,6 +140,7 @@ private class StubStringService: StringService, Stubbable {
         case giveMeAStringWithFallbackValue = "giveMeAStringWithFallbackValue()"
         case giveMeAnOptional = "giveMeAnOptional()"
         case giveMeAString_string = "giveMeAString(string:)"
+        case giveMeAVoid = "giveMeAVoid()"
         case takeAnOptionalString = "takeAnOptionalString(string:)"
         case callThisCompletion = "callThisCompletion(string:closure:)"
         case takeAnArrayOfSpryEquatable = "takeAnArrayOfSpryEquatable(array:)"
@@ -194,6 +196,10 @@ private class StubStringService: StringService, Stubbable {
         return stubbedValue(arguments: string)
     }
 
+    func giveMeAVoid() {
+        return stubbedValue()
+    }
+
     func takeAnOptionalString(string: String?) -> String {
         return stubbedValue(arguments: string)
     }
@@ -246,6 +252,16 @@ class StubbableSpec: QuickSpec {
             }
 
             describe("and return") {
+                describe("returning a Void") {
+                    beforeEach {
+                        subject.stub(.giveMeAVoid).andReturn(())
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.giveMeAVoid()).to(beVoid())
+                    }
+                }
+
                 describe("returning a simple value") {
                     let expectedString = "expected"
 
