@@ -107,7 +107,7 @@ public class Stub: CustomStringConvertible {
 
     internal func returnValue(for args: [Any?]) -> Any? {
         guard let stubType = stubType else {
-            fatalError("Must add `andReturn` or `andDo` to properly stub an object")
+            Constant.FatalError.noReturnValueSourceFound()
         }
 
         switch stubType {

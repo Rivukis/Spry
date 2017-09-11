@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
 
   s.framework = 'XCTest'
   s.dependency 'Nimble', '> 7.0.0'
-  s.dependency 'Spry', '> 2.2.2'
+  s.dependency 'Spry', '2.2.2'
 end

@@ -22,12 +22,12 @@ public class ArgumentCaptor: SpryEquatable {
      */
     public func getValue<T>(at index: Int = 0, as: T.Type = T.self) -> T {
         guard index >= 0 && capturedArguments.count > index else {
-            fatalError("index <\(index)> is out of bounds for captured arguments count of <\(capturedArguments.count)>")
+            Constant.FatalError.capturedArgumentsOutOfBounds(index: index, count: capturedArguments.count)
         }
 
         let capturedAsUnknownType = capturedArguments[index]
         guard let captured = capturedAsUnknownType as? T else {
-            fatalError("Could not cast captured argument <\(String(describing: capturedAsUnknownType))> to type <\(T.self)>")
+            Constant.FatalError.argumentCaptorCouldNotReturnSpecifiedType(value: capturedAsUnknownType, type: T.self)
         }
 
         return captured
@@ -135,7 +135,7 @@ private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool 
     }
 
     guard let actualArgRealAsSE = actualArgReal as? SpryEquatable else {
-        fatalError("\(type(of: actualArgReal)) must conform to Spry Equatable")
+        Constant.FatalError.doesNotConformToSpryEquatable(actualArgReal)
     }
 
     return specifiedArgReal.isEqual(to: actualArgRealAsSE)

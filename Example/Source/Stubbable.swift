@@ -382,8 +382,7 @@ public extension Stubbable {
     private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: Function, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
-            let argumentsDescription = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
-            fatalError("No return value found for <\(type(of: self)).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
+            Constant.FatalError.noReturnValueFoundForInstanceFunction(stubbable: self, function: function, arguments: arguments, returnType: T.self)
         case .fallback(let value):
             return value
         }
@@ -392,8 +391,7 @@ public extension Stubbable {
     private static func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: StaticFunction, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
-            let argumentsDescription = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
-            fatalError("No return value found for <\(type(of: self)).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(T.self)>. Current stubs: <\(stubs)>.")
+            Constant.FatalError.noReturnValueFoundForStaticFunction(stubbableType: self, function: function, arguments: arguments, returnType: T.self)
         case .fallback(let value):
             return value
         }

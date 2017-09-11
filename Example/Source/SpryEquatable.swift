@@ -20,7 +20,7 @@ public protocol SpryEquatable {
 
 public extension SpryEquatable {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        fatalError("\(type(of: self)) does NOT conform to Equatable. Conforming to Equatable is required for SpryEquatable.")
+        Constant.FatalError.doesNotConformToEquatable(self)
     }
 }
 
@@ -28,11 +28,11 @@ public extension SpryEquatable {
 
 public extension SpryEquatable where Self: Equatable {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        if let actual = actual as? Self {
-            return self == actual
+        guard let castedActual = actual as? Self else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
 
-        return false
+        return self == castedActual
     }
 }
 
@@ -40,11 +40,11 @@ public extension SpryEquatable where Self: Equatable {
 
 public extension SpryEquatable where Self: AnyObject {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        if let actual = actual as? Self {
-            return self === actual
+        guard let castedActual = actual as? Self else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
 
-        return false
+        return self === castedActual
     }
 }
 
@@ -52,11 +52,11 @@ public extension SpryEquatable where Self: AnyObject {
 
 public extension SpryEquatable where Self: AnyObject & Equatable {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        if let actual = actual as? Self {
-            return self === actual
+        guard let castedActual = actual as? Self else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
 
-        return false
+        return self === castedActual
     }
 }
 
@@ -64,55 +64,55 @@ public extension SpryEquatable where Self: AnyObject & Equatable {
 
 public extension Array {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        if let actual = actual as? Array<Element> {
-            if self.count != actual.count {
+        guard let castedActual = actual as? Array<Element> else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
+        }
+
+        if self.count != castedActual.count {
+            return false
+        }
+
+        return zip(self, castedActual).reduce(true) { result, zippedElements in
+            if !result {
                 return false
             }
 
-            return zip(self, actual).reduce(true) {
-                if !$0 {
-                    return false
-                }
-
-                if let selfElement = $1.0 as? SpryEquatable, let actualElement = $1.1 as? SpryEquatable {
-                    return selfElement.isEqual(to: actualElement)
-                }
-
-                fatalError("\(type(of: $1.0)) does NOT conform to SpryEquatable")
+            if let selfElement = zippedElements.0 as? SpryEquatable, let actualElement = zippedElements.1 as? SpryEquatable {
+                return selfElement.isEqual(to: actualElement)
             }
-        }
 
-        return false
+            Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0)
+        }
     }
 }
 
-// MARK: - SpryEquatable for Dictionarys
+// MARK: - SpryEquatable for Dictionaries
 
 public extension Dictionary {
     func isEqual(to actual: SpryEquatable?) -> Bool {
-        if let actual = actual as? Dictionary<Key, Value> {
-            if self.count != actual.count {
+        guard let castedActual = actual as? Dictionary<Key, Value> else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
+        }
+
+        if self.count != castedActual.count {
+            return false
+        }
+
+        return zip(self, castedActual).reduce(true) { result, zippedElements in
+            if !result {
                 return false
             }
 
-            return zip(self, actual).reduce(true) {
-                if !$0 {
-                    return false
-                }
-
-                guard let selfKey = $1.0.key as? SpryEquatable, let actualKey = $1.1.key as? SpryEquatable else {
-                    fatalError("\(type(of: $1.0.key)) does NOT conform to SpryEquatable")
-                }
-
-                guard let selfValue = $1.0.value as? SpryEquatable, let actualValue = $1.1.value as? SpryEquatable else {
-                    fatalError("\(type(of: $1.0.value)) does NOT conform to SpryEquatable")
-                }
-
-                return selfKey.isEqual(to: actualKey) && selfValue.isEqual(to: actualValue)
+            guard let selfKey = zippedElements.0.key as? SpryEquatable, let actualKey = zippedElements.1.key as? SpryEquatable else {
+                Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0.key)
             }
-        }
 
-        return false
+            guard let selfValue = zippedElements.0.value as? SpryEquatable, let actualValue = zippedElements.1.value as? SpryEquatable else {
+                Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0.value)
+            }
+
+            return selfKey.isEqual(to: actualKey) && selfValue.isEqual(to: actualValue)
+        }
     }
 }
 
@@ -131,7 +131,11 @@ public extension SpryEquatable where Self: OptionalType {
         let selfMirror = Mirror(reflecting: self)
 
         guard selfMirror.displayStyle == .optional else {
-            fatalError("\(type(of: self)) should NOT conform to OptionalType, this is reserved for Optional<Wrapped>")
+            Constant.FatalError.shouldNotConformToOptionalType(self)
+        }
+
+        guard type(of: self) == type(of: actual) else {
+            Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
 
         let selfsWrappedValue = selfMirror.children.first?.value
@@ -144,7 +148,7 @@ public extension SpryEquatable where Self: OptionalType {
         }
 
         guard let selfsContainedValueAsSE = selfsWrappedValueAsNonOptional as? SpryEquatable else {
-            fatalError("\(type(of: selfsWrappedValue)) does NOT conform to SpryEquatable")
+            Constant.FatalError.doesNotConformToSpryEquatable(selfsWrappedValue!)
         }
 
         return selfsContainedValueAsSE.isEqual(to: actual)

@@ -28,6 +28,7 @@
 		7A736E151F1B70BE00FBCD98 /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E051F1B70B900FBCD98 /* StubbableObjects.swift */; };
 		7A736E181F1B70E000FBCD98 /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E161F1B70CF00FBCD98 /* HaveReceivedMatcher.swift */; };
 		7A8654F41F00F62200D425B6 /* ArgumentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8654F31F00F62200D425B6 /* ArgumentTest.swift */; };
+		7A9774D41F66147C00DCA5CE /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A140E9E1F66134300F65E35 /* Constant.swift */; };
 		A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpryExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E8701AC756C09395104A62 /* Pods-SpryExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.debug.xcconfig"; sourceTree = "<group>"; };
+		7A140E9E1F66134300F65E35 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = Source/Constant.swift; sourceTree = SOURCE_ROOT; };
 		7A27A6191F09C130001D956D /* SpryableTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryableTest.swift; sourceTree = "<group>"; };
 		7A2BFC501F00D27E00BB12C1 /* SpryExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpryExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				7A736DFF1F1B70B900FBCD98 /* Argument.swift */,
 				7A736DFE1F1B70B900FBCD98 /* SpryEquatable.swift */,
 				7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */,
+				7A140E9E1F66134300F65E35 /* Constant.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				7A2BFC7A1F00D36700BB12C1 /* SpyableTest.swift in Sources */,
 				7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */,
 				7A736E111F1B70BE00FBCD98 /* Spyable.swift in Sources */,
+				7A9774D41F66147C00DCA5CE /* Constant.swift in Sources */,
 				7A736E151F1B70BE00FBCD98 /* StubbableObjects.swift in Sources */,
 				7A736E141F1B70BE00FBCD98 /* Stubbable.swift in Sources */,
 				7A736E131F1B70BE00FBCD98 /* StringRepresentable.swift in Sources */,
