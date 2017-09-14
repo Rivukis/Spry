@@ -15,11 +15,11 @@ import Foundation
  - Note: If a compiler error says you do NOT conform to `SpryEquatable` then conform to `Equatable`. This will remove the error.
  */
 public protocol SpryEquatable {
-    func isEqual(to actual: SpryEquatable?) -> Bool
+    func _isEqual(to actual: SpryEquatable?) -> Bool
 }
 
 public extension SpryEquatable {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         Constant.FatalError.doesNotConformToEquatable(self)
     }
 }
@@ -27,7 +27,7 @@ public extension SpryEquatable {
 // MARK: - SpryEquatable where Self: Equatable
 
 public extension SpryEquatable where Self: Equatable {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
             Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
@@ -39,7 +39,7 @@ public extension SpryEquatable where Self: Equatable {
 // MARK: - SpryEquatable where Self: AnyObject
 
 public extension SpryEquatable where Self: AnyObject {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
             Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
@@ -51,7 +51,7 @@ public extension SpryEquatable where Self: AnyObject {
 // MARK: - SpryEquatable where Self: AnyObject & Equatable
 
 public extension SpryEquatable where Self: AnyObject & Equatable {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
             Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
@@ -63,7 +63,7 @@ public extension SpryEquatable where Self: AnyObject & Equatable {
 // MARK: - SpryEquatable for Arrays
 
 public extension Array {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Array<Element> else {
             Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
@@ -78,7 +78,7 @@ public extension Array {
             }
 
             if let selfElement = zippedElements.0 as? SpryEquatable, let actualElement = zippedElements.1 as? SpryEquatable {
-                return selfElement.isEqual(to: actualElement)
+                return selfElement._isEqual(to: actualElement)
             }
 
             Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0)
@@ -89,7 +89,7 @@ public extension Array {
 // MARK: - SpryEquatable for Dictionaries
 
 public extension Dictionary {
-    func isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Dictionary<Key, Value> else {
             Constant.FatalError.wrongTypesBeingCompared(actual, self)
         }
@@ -111,7 +111,7 @@ public extension Dictionary {
                 Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0.value)
             }
 
-            return selfKey.isEqual(to: actualKey) && selfValue.isEqual(to: actualValue)
+            return selfKey._isEqual(to: actualKey) && selfValue._isEqual(to: actualValue)
         }
     }
 }
@@ -127,7 +127,7 @@ extension Optional: OptionalType {}
 // MARK: - SpryEquatable where Self: OptionalType
 
 public extension SpryEquatable where Self: OptionalType {
-    public func isEqual(to actual: SpryEquatable?) -> Bool {
+    public func _isEqual(to actual: SpryEquatable?) -> Bool {
         let selfMirror = Mirror(reflecting: self)
 
         guard selfMirror.displayStyle == .optional else {
@@ -151,7 +151,7 @@ public extension SpryEquatable where Self: OptionalType {
             Constant.FatalError.doesNotConformToSpryEquatable(selfsWrappedValue!)
         }
 
-        return selfsContainedValueAsSE.isEqual(to: actual)
+        return selfsContainedValueAsSE._isEqual(to: actual)
     }
 }
 
