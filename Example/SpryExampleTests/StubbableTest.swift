@@ -68,7 +68,7 @@ private class NumbersOnly: SpecialString {
 
 // stubbed version
 private final class StubSpecialString: SpecialString, Stubbable {
-    enum StaticFunction: String, StringRepresentable {
+    enum ClassFunction: String, StringRepresentable {
         case none
     }
 
@@ -118,14 +118,14 @@ private protocol StringService: class {
     func takeAnAnyObject(anAnyObject: MyAnyObject) -> String
     func takeAnAnyObjectAndEquatable(anAnyObjectAndEquatable: MyAnyObjectEquatable) -> String
 
-    static func staticFunction() -> String
+    static func classFunction() -> String
 }
 
 // MARK: - The Stub
 
 private class StubStringService: StringService, Stubbable {
-    enum StaticFunction: String, StringRepresentable {
-        case staticFunction = "staticFunction()"
+    enum ClassFunction: String, StringRepresentable {
+        case classFunction = "classFunction()"
     }
 
     enum Function: String, StringRepresentable {
@@ -236,7 +236,7 @@ private class StubStringService: StringService, Stubbable {
         return stubbedValue(arguments: anAnyObjectAndEquatable)
     }
 
-    static func staticFunction() -> String {
+    static func classFunction() -> String {
         return stubbedValue()
     }
 }
@@ -501,11 +501,11 @@ class StubbableSpec: QuickSpec {
                 let expectedString = "expected"
 
                 beforeEach {
-                    StubStringService.stub(.staticFunction).andReturn(expectedString)
+                    StubStringService.stub(.classFunction).andReturn(expectedString)
                 }
 
                 it("should get a string from the stubbed service") {
-                    expect(StubStringService.staticFunction()).to(equal(expectedString))
+                    expect(StubStringService.classFunction()).to(equal(expectedString))
                 }
             }
 
@@ -840,23 +840,23 @@ class StubbableSpec: QuickSpec {
             describe("resetting stubs on a class") {
                 context("when the function is stubbed before reseting") {
                     beforeEach {
-                        StubStringService.stub(.staticFunction).andReturn("")
+                        StubStringService.stub(.classFunction).andReturn("")
                         StubStringService.resetStubs()
                     }
 
                     it("should NOT stub the function") {
-                        expect({ _ = StubStringService.staticFunction() }()).to(throwAssertion())
+                        expect({ _ = StubStringService.classFunction() }()).to(throwAssertion())
                     }
                 }
 
                 context("when the function is stubbed after reseting") {
                     beforeEach {
                         StubStringService.resetStubs()
-                        StubStringService.stub(.staticFunction).andReturn("")
+                        StubStringService.stub(.classFunction).andReturn("")
                     }
 
                     it("should stub the function") {
-                        expect(StubStringService.staticFunction()).toNot(beNil())
+                        expect(StubStringService.classFunction()).toNot(beNil())
                     }
                 }
             }

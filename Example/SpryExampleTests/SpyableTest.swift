@@ -10,7 +10,7 @@ import XCTest
 import SpryExample
 
 private class TestClass: Spyable {
-    enum StaticFunction: String, StringRepresentable {
+    enum ClassFunction: String, StringRepresentable {
         case doStaticStuff = "doStaticStuff()"
         case doDifferentStaticStuff = "doDifferentStaticStuff()"
     }
@@ -204,7 +204,7 @@ class SpyableTest: XCTestCase {
         // then
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Int?]).success, "should SUCCEED to call correct function with correct Optional values")
         XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello", Optional<Int>.none]).success, "should SUCCEED to call correct function with correct but Non-Optional values")
-        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as Any?]).success, "should SUCCEED to call correct function with incorrect Optional value type but correct 'nil'ness")
+        XCTAssertTrue(testClass.didCall(.doWeirdStuffWith, withArguments: ["hello" as String?, nil as String?]).success, "should SUCCEED to call correct function with incorrect Optional value type but correct 'nil'ness")
     }
 
     func testDidCallFunctionWithArgumentsANumberOfTimes() {
@@ -254,7 +254,7 @@ class SpyableTest: XCTestCase {
 
     // MARK: - Did Call Static Tests
 
-    func testDidCallStaticFunction() {
+    func testDidCallClassFunction() {
         TestClass.doStaticStuff()
 
         XCTAssertTrue(TestClass.didCall(.doStaticStuff).success, "should SUCCEED to call static function")

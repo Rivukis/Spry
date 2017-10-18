@@ -14,7 +14,7 @@ import SpryExample
 
 class HaveReceivedMatcherTest: XCTestCase {
     class TestClass: Spyable {
-        enum StaticFunction: String, StringRepresentable {
+        enum ClassFunction: String, StringRepresentable {
             case doStaticStuff = "doStaticStuff()"
             case notAFunction = "notAFunction()"
         }
@@ -350,7 +350,7 @@ class HaveReceivedMatcherTest: XCTestCase {
         failsWithErrorMessageForNil(nilExpectedMessage) { nilFailingTest() }
     }
 
-    func testCallStaticFunction() {
+    func testCallClassFunction() {
         // WHEN
         TestClass.doStaticStuff()
 

@@ -141,7 +141,7 @@ public protocol Stubbable: class {
 
      ## Example ##
      ```swift
-     enum StaticFunction: String, StringRepresentable {
+     enum ClassFunction: String, StringRepresentable {
          // property signatures are just the property name
          case myProperty = "myProperty"
 
@@ -169,7 +169,7 @@ public protocol Stubbable: class {
      }
      ```
      */
-    associatedtype StaticFunction: StringRepresentable
+    associatedtype ClassFunction: StringRepresentable
 
     /**
      This is where the stubbed information for static functions and properties is held. Defaults to using NSMapTable.
@@ -192,10 +192,10 @@ public protocol Stubbable: class {
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
-     - Parameter function: The `StaticFunction` to be stubbed.
+     - Parameter function: The `ClassFunction` to be stubbed.
      - Returns: A `Stub` object. See `Stub` to find out how to specifying arguments and a return value.
      */
-    static func stub(_ function: StaticFunction) -> Stub
+    static func stub(_ function: ClassFunction) -> Stub
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
@@ -282,7 +282,7 @@ public extension Stubbable {
         }
     }
 
-    static func stub(_ function: StaticFunction) -> Stub {
+    static func stub(_ function: ClassFunction) -> Stub {
         let stub = Stub(functionName: function.rawValue)
         _stubs.append(stub)
 
@@ -290,12 +290,12 @@ public extension Stubbable {
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: StaticFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: StaticFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
@@ -341,7 +341,7 @@ public extension Stubbable {
         return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
     }
 
-    internal static func internal_stubbedValue<T>(_ function: StaticFunction, arguments: [Any?], fallback: Fallback<T>) -> T {
+    internal static func internal_stubbedValue<T>(_ function: ClassFunction, arguments: [Any?], fallback: Fallback<T>) -> T {
         let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
 
         if stubsForFunctionName.isEmpty {
@@ -388,10 +388,10 @@ public extension Stubbable {
         }
     }
 
-    private static func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: StaticFunction, arguments: [Any?]) -> T {
+    private static func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: ClassFunction, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
-            Constant.FatalError.noReturnValueFoundForStaticFunction(stubbableType: self, function: function, arguments: arguments, returnType: T.self)
+            Constant.FatalError.noReturnValueFoundForClassFunction(stubbableType: self, function: function, arguments: arguments, returnType: T.self)
         case .fallback(let value):
             return value
         }

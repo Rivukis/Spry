@@ -31,7 +31,7 @@ internal enum Constant {
             fatalError("No return value found for <\(S.self).\(function.rawValue)> on instance <\(stubbable)> with received arguments <\(argumentsDescription)> returning <\(R.self)>. Current stubs: <\(stubbable._stubs)>.")
         }
 
-        static func noReturnValueFoundForStaticFunction<S: Stubbable, R>(stubbableType _: S.Type, function: S.StaticFunction, arguments: [Any?], returnType: R.Type) -> Never {
+        static func noReturnValueFoundForClassFunction<S: Stubbable, R>(stubbableType _: S.Type, function: S.ClassFunction, arguments: [Any?], returnType: R.Type) -> Never {
             let argumentsDescription = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
             fatalError("No return value found for <\(S.self).\(function.rawValue)> on instance <\(self)> with received arguments <\(argumentsDescription)> returning <\(R.self)>. Current stubs: <\(S._stubs)>.")
         }

@@ -138,7 +138,7 @@ public protocol Spryable: Spyable, Stubbable {
      }
      ```
      */
-    associatedtype StaticFunction: StringRepresentable
+    associatedtype ClassFunction: StringRepresentable
 
     /**
      Convenience function to record a call and return the stubbed value.
@@ -200,13 +200,13 @@ public extension Spryable {
     // MARK: - Static
 
     static func spryify<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: StaticFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     static func spryify<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: StaticFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }

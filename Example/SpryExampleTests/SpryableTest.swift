@@ -11,7 +11,7 @@ import Nimble
 import SpryExample
 
 private class SpryableTestClass: Spryable {
-    enum StaticFunction: String, StringRepresentable {
+    enum ClassFunction: String, StringRepresentable {
         case getAStaticString = "getAStaticString()"
     }
 

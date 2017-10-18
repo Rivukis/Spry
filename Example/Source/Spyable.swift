@@ -133,7 +133,7 @@ public protocol Spyable: class {
 
      ## Example ##
      ```swift
-     enum StaticFunction: String, StringRepresentable {
+     enum ClassFunction: String, StringRepresentable {
          // property signatures are just the property name
          case myProperty = "myProperty"
 
@@ -161,7 +161,7 @@ public protocol Spyable: class {
      }
      ```
      */
-    associatedtype StaticFunction: StringRepresentable
+    associatedtype ClassFunction: StringRepresentable
 
     /**
      This is where the recorded calls information for static functions and properties is held. Defaults to using NSMapTable.
@@ -201,7 +201,7 @@ public protocol Spyable: class {
 
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
-    static func didCall(_ function: StaticFunction, withArguments arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> DidCallResult
+    static func didCall(_ function: ClassFunction, withArguments arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> DidCallResult
 
     /**
      Removes all recorded calls.
@@ -269,11 +269,11 @@ public extension Spyable {
     }
 
     static func recordCall(_ functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
-        let function: StaticFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
-    static func didCall(_ function: StaticFunction, withArguments arguments: [SpryEquatable?] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
+    static func didCall(_ function: ClassFunction, withArguments arguments: [SpryEquatable?] = [], countSpecifier: CountSpecifier = .atLeast(1)) -> DidCallResult {
         let success: Bool
         switch countSpecifier {
         case .exactly(let count): success = timesCalled(function, arguments: arguments) == count
@@ -298,7 +298,7 @@ public extension Spyable {
     }
 
     /// This is for `Spryable` to act as a pass-through to record a call.
-    internal static func internal_recordCall(function: StaticFunction, arguments: [Any?]) {
+    internal static func internal_recordCall(function: ClassFunction, arguments: [Any?]) {
         let call = RecordedCall(function: function.rawValue, arguments: arguments)
         _calls.append(call)
     }
@@ -310,7 +310,7 @@ public extension Spyable {
         return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
     }
 
-    private static func timesCalled(_ function: StaticFunction, arguments: [SpryEquatable?]) -> Int {
+    private static func timesCalled(_ function: ClassFunction, arguments: [SpryEquatable?]) -> Int {
         return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
     }
 }

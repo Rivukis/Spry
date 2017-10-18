@@ -67,7 +67,7 @@ public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: Spr
  - Parameter arguments: Expected arguments. Will fail if the actual arguments don't equate to what is passed in here. Passing in no arguments is equivalent to passing in `Argument.anything` for every expected argument.
  - Parameter countSpecifier: Used to be more strict about the number of times this function should have been called with the passed in arguments. Defaults to .atLeast(1).
  */
-public func haveReceived<T: Spyable>(_ function: T.StaticFunction, with arguments: SpryEquatable?..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T.Type> {
+public func haveReceived<T: Spyable>(_ function: T.ClassFunction, with arguments: SpryEquatable?..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T.Type> {
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
