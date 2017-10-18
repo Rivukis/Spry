@@ -642,8 +642,10 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1, "two": 2])).to(equal(expectedReturn))
-                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1, "two": 2, "three": 3])).toNot(equal(expectedReturn))
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["two": 2, "one": 1])).to(equal(expectedReturn))
+
                         expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1])).toNot(equal(expectedReturn))
+                        expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 1, "two": 2, "three": 3])).toNot(equal(expectedReturn))
                         expect(subject.takeADictionaryOfSpryEquatable(dictionary: ["one": 2, "two": 1])).toNot(equal(expectedReturn))
                     }
                 }

@@ -98,21 +98,21 @@ public extension Dictionary {
             return false
         }
 
-        return zip(self, castedActual).reduce(true) { result, zippedElements in
-            if !result {
+        for (key, value) in self {
+            guard castedActual.has(key: key), let actualValue = castedActual[key] else {
                 return false
             }
 
-            guard let selfKey = zippedElements.0.key as? SpryEquatable, let actualKey = zippedElements.1.key as? SpryEquatable else {
-                Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0.key)
+            guard let castedValue = value as? SpryEquatable, let castedActualValue = actualValue as? SpryEquatable else {
+                Constant.FatalError.doesNotConformToSpryEquatable(value)
             }
 
-            guard let selfValue = zippedElements.0.value as? SpryEquatable, let actualValue = zippedElements.1.value as? SpryEquatable else {
-                Constant.FatalError.doesNotConformToSpryEquatable(zippedElements.0.value)
+            if !castedValue._isEqual(to: castedActualValue) {
+                return false
             }
-
-            return selfKey._isEqual(to: actualKey) && selfValue._isEqual(to: actualValue)
         }
+
+        return true
     }
 }
 
@@ -156,6 +156,7 @@ public extension SpryEquatable where Self: OptionalType {
 }
 
 // MARK: - Default Conformers
+
 extension Optional: SpryEquatable {}
 extension String: SpryEquatable {}
 extension Int: SpryEquatable {}
@@ -164,3 +165,11 @@ extension Bool: SpryEquatable {}
 extension Array: SpryEquatable {}
 extension Dictionary: SpryEquatable {}
 extension NSObject: SpryEquatable {}
+
+// MARK: - Private Extensions
+
+private extension Dictionary {
+    func has(key: Key) -> Bool {
+        return self.contains { $0.key == key }
+    }
+}
