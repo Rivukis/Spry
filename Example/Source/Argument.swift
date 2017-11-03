@@ -96,8 +96,8 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
 }
 
 internal func isEqualArgsLists(specifiedArgs: [SpryEquatable?], actualArgs: [Any?]) -> Bool {
-    if specifiedArgs.count != actualArgs.count {
-        return false
+    guard specifiedArgs.count == actualArgs.count else {
+        Constant.FatalError.wrongNumberOfArgsBeingCompared(expectedCount: specifiedArgs.count, actualCount: actualArgs.count)
     }
 
     for index in 0..<actualArgs.count {

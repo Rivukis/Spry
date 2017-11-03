@@ -252,7 +252,7 @@ class SpyableTest: XCTestCase {
         XCTAssertFalse(testClass.didCall(.doStuffWith, withArguments: ["hello"], countSpecifier: .atMost(1)).success, "should FAIL to call function with arguments at most 1 time")
     }
 
-    // MARK: - Did Call Static Tests
+    // MARK: - Did Call Class Tests
 
     func testDidCallClassFunction() {
         TestClass.doStaticStuff()

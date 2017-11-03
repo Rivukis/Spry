@@ -6,6 +6,10 @@ internal enum Constant {
             fatalError("Unable to equate type \(type(of: actual)) to \(type(of: me)).")
         }
 
+        static func wrongNumberOfArgsBeingCompared(expectedCount: Int, actualCount: Int) -> Never {
+            fatalError("Expected to compare \(expectedCount) arguments, got \(actualCount) arguments.")
+        }
+
         static func doesNotConformToEquatable(_ value: SpryEquatable) -> Never {
             fatalError("\(type(of: value)) does NOT conform to Equatable. Conforming to Equatable is required for SpryEquatable.")
         }
