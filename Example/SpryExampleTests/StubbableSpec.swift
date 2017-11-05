@@ -10,183 +10,18 @@ import Quick
 import Nimble
 import SpryExample
 
-// MARK: - Test Helper Protocols
-
-private protocol SpecialString {
-    func myStringValue() -> String
-}
-
-// final class
-private final class AlwaysLowerCase: SpecialString {
-    let value: String
-
-    init(value: String) {
-        self.value = value
-    }
-
-    func myStringValue() -> String {
-        return value.lowercased()
-    }
-}
-
-// Non-final class
-private class NumbersOnly: SpecialString {
-    let value: Int
-
-    required init(value: Int) {
-        self.value = value
-    }
-
-    func myStringValue() -> String {
-        return String(value)
-    }
-}
-
-// stubbed version
-private final class StubSpecialString: SpecialString, Stubbable {
-    enum ClassFunction: String, StringRepresentable {
-        case none
-    }
-
-    enum Function: String, StringRepresentable {
-        case myStringValue = "myStringValue()"
-    }
-
-    func myStringValue() -> String {
-        return stubbedValue()
-    }
-}
-
-// protocol with self or associated type requirements
-private protocol ProtocolWithSelfRequirement {
-    func me() -> Self
-}
-
-private final class MyClass: ProtocolWithSelfRequirement {
-    func me() -> MyClass {
-        return self
-    }
-}
-
-// ********** the service to be stubbed **********
-
-// MARK: - The Protocol
-private protocol StringService: class {
-    var myProperty: String { get }
-
-    func giveMeAString() -> String
-    func hereAreTwoStrings(string1: String, string2: String) -> Bool
-    func hereComesATuple() -> (String, String)
-    func hereComesAProtocol() -> SpecialString
-    func hereComesProtocolsInATuple() -> (SpecialString, SpecialString)
-    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T
-    func hereComesAClosure() -> () -> String
-    func giveMeAStringWithFallbackValue() -> String
-    func giveMeAnOptional() -> String?
-    func giveMeAString(string: String) -> String
-    func giveMeAVoid()
-    func callThisCompletion(string: String, closure: () -> Void)
-
-    static func classFunction() -> String
-}
-
-// MARK: - The Stub
-
-private class StubStringService: StringService, Stubbable {
-    enum ClassFunction: String, StringRepresentable {
-        case classFunction = "classFunction()"
-    }
-
-    enum Function: String, StringRepresentable {
-        case myProperty
-        case giveMeAString = "giveMeAString()"
-        case hereAreTwoStrings = "hereAreTwoStrings(string1:string2:)"
-        case hereComesATuple = "hereComesATuple()"
-        case hereComesAProtocol = "hereComesAProtocol()"
-        case hereComesProtocolsInATuple = "hereComesProtocolsInATuple()"
-        case hereComesProtocolWithSelfRequirements = "hereComesProtocolWithSelfRequirements(object:)"
-        case hereComesAClosure = "hereComesAClosure()"
-        case giveMeAStringWithFallbackValue = "giveMeAStringWithFallbackValue()"
-        case giveMeAnOptional = "giveMeAnOptional()"
-        case giveMeAString_string = "giveMeAString(string:)"
-        case giveMeAVoid = "giveMeAVoid()"
-        case takeAnOptionalString = "takeAnOptionalString(string:)"
-        case callThisCompletion = "callThisCompletion(string:closure:)"
-    }
-
-    var myProperty: String {
-        return stubbedValue()
-    }
-
-    func giveMeAString() -> String {
-        return stubbedValue()
-    }
-
-    func hereAreTwoStrings(string1: String, string2: String) -> Bool {
-        return stubbedValue(arguments: string1, string2)
-    }
-
-    func hereComesATuple() -> (String, String) {
-        return stubbedValue()
-    }
-
-    func hereComesAProtocol() -> SpecialString {
-        return stubbedValue()
-    }
-
-    func hereComesProtocolsInATuple() -> (SpecialString, SpecialString) {
-        return stubbedValue()
-    }
-
-    func hereComesProtocolWithSelfRequirements<T: ProtocolWithSelfRequirement>(object: T) -> T {
-        return stubbedValue()
-    }
-
-    func hereComesAClosure() -> () -> String {
-        return stubbedValue()
-    }
-
-    func giveMeAStringWithFallbackValue() -> String {
-        return stubbedValue(fallbackValue: "fallback value")
-    }
-
-    func giveMeAnOptional() -> String? {
-        return stubbedValue()
-    }
-
-    func giveMeAString(string: String) -> String {
-        return stubbedValue(arguments: string)
-    }
-
-    func giveMeAVoid() {
-        return stubbedValue()
-    }
-
-    func takeAnOptionalString(string: String?) -> String {
-        return stubbedValue(arguments: string)
-    }
-
-    func callThisCompletion(string: String, closure: () -> Void) {
-        return stubbedValue(arguments: string, closure)
-    }
-
-    static func classFunction() -> String {
-        return stubbedValue()
-    }
-}
-
 class StubbableSpec: QuickSpec {
     override func spec() {
 
         describe("Stubbable") {
-            var subject: StubStringService!
+            var subject: StubbableTestHelper!
 
             beforeEach {
-                subject = StubStringService()
+                subject = StubbableTestHelper()
             }
 
             describe("and return") {
-                describe("returning a Void") {
+                describe("returning Void") {
                     beforeEach {
                         subject.stub(.giveMeAVoid).andReturn(())
                     }
@@ -268,14 +103,14 @@ class StubbableSpec: QuickSpec {
                 }
 
                 describe("returning a protocol with self or associated type requirements") {
-                    let expectedMyClass = MyClass()
+                    let expectedMyClass = ProtocolWithSelfRequirementImplemented()
 
                     beforeEach {
                         subject.stub(.hereComesProtocolWithSelfRequirements).andReturn(expectedMyClass)
                     }
 
                     it("should be able to stub a tuple of protocols as a return type") {
-                        let actualMyClass = subject.hereComesProtocolWithSelfRequirements(object: MyClass())
+                        let actualMyClass = subject.hereComesProtocolWithSelfRequirements(object: ProtocolWithSelfRequirementImplemented())
                         expect(actualMyClass).to(beIdenticalTo(expectedMyClass))
                     }
                 }
@@ -380,43 +215,6 @@ class StubbableSpec: QuickSpec {
                         expect(turnToTrue).to(beTrue())
                     }
                 }
-
-                describe("verifying arguments") {
-                    context("when the arguments match") {
-                        var turnToTrue = false
-
-                        beforeEach {
-                            let expectedargument = "expectedargument"
-                            subject.stub(.callThisCompletion).with(expectedargument, Argument.anything).andDo { arguments in
-                                let completion = arguments[1] as! () -> Void
-                                completion()
-
-                                return Void()
-                            }
-
-                            subject.callThisCompletion(string: expectedargument) {
-                                turnToTrue = true
-                            }
-                        }
-
-                        it("should get a string from the stubbed service") {
-                            expect(turnToTrue).to(beTrue())
-                        }
-                    }
-
-                    context("when the arguments do NOT match") {
-                        beforeEach {
-                            subject.stub(.hereAreTwoStrings).with("what is needed", Argument.anything).andDo { _ in
-                                return Void()
-                            }
-                        }
-
-                        it("should fatal error when calling function") {
-                            let expectedFatalErrorClosure = { _ = subject.hereAreTwoStrings(string1: "the wrong value", string2: "") }
-                            expect(expectedFatalErrorClosure()).to(throwAssertion())
-                        }
-                    }
-                }
             }
 
             describe("stubbing a property") {
@@ -435,11 +233,11 @@ class StubbableSpec: QuickSpec {
                 let expectedString = "expected"
 
                 beforeEach {
-                    StubStringService.stub(.classFunction).andReturn(expectedString)
+                    StubbableTestHelper.stub(.classFunction).andReturn(expectedString)
                 }
 
                 it("should get a string from the stubbed service") {
-                    expect(StubStringService.classFunction()).to(equal(expectedString))
+                    expect(StubbableTestHelper.classFunction()).to(equal(expectedString))
                 }
             }
 
@@ -476,98 +274,6 @@ class StubbableSpec: QuickSpec {
 
                     it("should return the stubbed value") {
                         expect(subject.giveMeAString(string: "doesn't matter")).to(equal(expectedReturn))
-                    }
-                }
-
-                context("when the argument is Optional.none") {
-                    let expectedReturn = "i should be returned"
-
-                    beforeEach {
-                        subject.stub(.takeAnOptionalString).with(nil as Any?).andReturn(expectedReturn)
-                    }
-
-                    it("should return the stubbed value") {
-                        expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
-                    }
-                }
-
-                describe("Argument specifiers") {
-                    context("when the specifier is .anything") {
-                        let expectedReturn = "i should be returned"
-
-                        beforeEach {
-                            subject.stub(.giveMeAString_string).with(Argument.anything).andReturn(expectedReturn)
-                        }
-
-                        it("should return the stubbed value") {
-                            expect(subject.giveMeAString(string: "any string should work")).to(equal(expectedReturn))
-                        }
-                    }
-
-                    context("when the specifier is .nonNil") {
-                        let expectedReturn = "i should be returned"
-
-                        beforeEach {
-                            subject.stub(.giveMeAString_string).with(Argument.nonNil).andReturn(expectedReturn)
-                        }
-
-                        it("should return the stubbed value") {
-                            expect(subject.giveMeAString(string: "any string should work")).to(equal(expectedReturn))
-                        }
-                    }
-
-                    context("when the specifier is .nil") {
-                        let expectedReturn = "i should be returned"
-
-                        beforeEach {
-                            subject.stub(.takeAnOptionalString).with(Argument.nil).andReturn(expectedReturn)
-                        }
-
-                        it("should return the stubbed value") {
-                            expect(subject.takeAnOptionalString(string: nil)).to(equal(expectedReturn))
-                        }
-                    }
-
-                    context("when the specifier is .pass; passing validation") {
-                        let actualArgument = "I'm the actual argument"
-                        let expectedReturn = "i should be returned"
-
-                        beforeEach {
-                            let argumentValidation = Argument.pass({ actualArgument -> Bool in
-                                let actualArgument = actualArgument as! String
-                                expect(actualArgument).to(equal(actualArgument))
-
-                                return true
-                            })
-
-                            subject.stub(.takeAnOptionalString).with(argumentValidation).andReturn(expectedReturn)
-                            subject.stub(.takeAnOptionalString).andReturn("fallback")
-                        }
-
-                        it("should return the correct value for passing argument validation") {
-                            expect(subject.takeAnOptionalString(string: actualArgument)).to(equal(expectedReturn))
-                        }
-                    }
-
-                    context("when the specifier is .pass; passing validation") {
-                        let actualArgument = "I'm the actual argument"
-                        let expectedReturn = "i should be returned"
-
-                        beforeEach {
-                            let argumentValidation = Argument.pass({ actualArgument -> Bool in
-                                let actualArgument = actualArgument as! String
-                                expect(actualArgument).to(equal(actualArgument))
-
-                                return false
-                            })
-
-                            subject.stub(.takeAnOptionalString).with(argumentValidation).andReturn("specific return value")
-                            subject.stub(.takeAnOptionalString).andReturn(expectedReturn)
-                        }
-
-                        it("should return the correct value for failing argument validation") {
-                            expect(subject.takeAnOptionalString(string: actualArgument)).to(equal(expectedReturn))
-                        }
                     }
                 }
 
@@ -670,23 +376,23 @@ class StubbableSpec: QuickSpec {
             describe("resetting stubs on a class") {
                 context("when the function is stubbed before reseting") {
                     beforeEach {
-                        StubStringService.stub(.classFunction).andReturn("")
-                        StubStringService.resetStubs()
+                        StubbableTestHelper.stub(.classFunction).andReturn("")
+                        StubbableTestHelper.resetStubs()
                     }
 
                     it("should NOT stub the function") {
-                        expect({ _ = StubStringService.classFunction() }()).to(throwAssertion())
+                        expect({ _ = StubbableTestHelper.classFunction() }()).to(throwAssertion())
                     }
                 }
 
                 context("when the function is stubbed after reseting") {
                     beforeEach {
-                        StubStringService.resetStubs()
-                        StubStringService.stub(.classFunction).andReturn("")
+                        StubbableTestHelper.resetStubs()
+                        StubbableTestHelper.stub(.classFunction).andReturn("")
                     }
 
                     it("should stub the function") {
-                        expect(StubStringService.classFunction()).toNot(beNil())
+                        expect(StubbableTestHelper.classFunction()).toNot(beNil())
                     }
                 }
             }
