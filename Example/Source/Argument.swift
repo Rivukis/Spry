@@ -84,7 +84,7 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
     }
 
     /**
-     Convenience function to get an `ArgumentCaptor`. Used when stubbing to capture the actual arguments. Used for more detailed testing on arguments being passed into a `Stubbable`
+     Convenience function to get an `ArgumentCaptor`. Used during stubbing to capture the actual arguments. Allows for more detailed testing on an argument being passed into a `Stubbable`
 
      - SeeAlso: `ArgumentCaptor`
 
@@ -113,8 +113,8 @@ internal func isEqualArgsLists(specifiedArgs: [SpryEquatable?], actualArgs: [Any
 }
 
 private func isEqualArgs(specifiedArg: SpryEquatable?, actualArg: Any?) -> Bool {
-    if let passedArgAsArgumentEnum = specifiedArg as? Argument {
-        switch passedArgAsArgumentEnum {
+    if let specifiedArgAsArgumentEnum = specifiedArg as? Argument {
+        switch specifiedArgAsArgumentEnum {
         case .anything:
             return true
         case .nonNil:

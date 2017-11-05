@@ -12,35 +12,14 @@ import Quick
 import Nimble
 import SpryExample
 
-private class MyNonSpryEquatableClass {}
-
-private class MyAnyObjectEquatable: Equatable, SpryEquatable {
-    let string: String
-
-    init(string: String) {
-        self.string = string
-    }
-
-    public static func == (lhs: MyAnyObjectEquatable, rhs: MyAnyObjectEquatable) -> Bool {
-        return lhs.string == rhs.string
-    }
-}
-
-private class MyAnyObject: SpryEquatable {
-    let string: String
-
-    init(string: String) {
-        self.string = string
-    }
-}
-
 class SpryEquatableSpec: QuickSpec {
     override func spec() {
-        fdescribe("SpryEquatable") {
+
+        describe("SpryEquatable") {
             describe("Any Objects vs Equatable") {
                 context("when it is NOT Equatable and is AnyObject") {
-                    let myObject1 = MyAnyObject(string: "string")
-                    let myObject2 = MyAnyObject(string: "string")
+                    let myObject1 = AnyObjectOnly()
+                    let myObject2 = AnyObjectOnly()
 
                     it("should use pointer comparison") {
                         expect(myObject1._isEqual(to: myObject1)).to(beTrue())
@@ -49,8 +28,8 @@ class SpryEquatableSpec: QuickSpec {
                 }
 
                 context("when it is Equatable and is AnyObject") {
-                    let myObject1 = MyAnyObjectEquatable(string: "string")
-                    let myObject2 = MyAnyObjectEquatable(string: "string")
+                    let myObject1 = AnyObjectAndEquatable()
+                    let myObject2 = AnyObjectAndEquatable()
 
                     it("should use pointer comparison") {
                         expect(myObject1._isEqual(to: myObject1)).to(beTrue())
@@ -76,8 +55,8 @@ class SpryEquatableSpec: QuickSpec {
                 context("when Element does NOT conforms to SpryEquatable") {
                     it("should fatal error") {
                         expect {
-                            let myNonSpryEquatableClass = MyNonSpryEquatableClass()
-                            _ = [myNonSpryEquatableClass]._isEqual(to: [myNonSpryEquatableClass] as SpryEquatable)
+                            let notSpryEquatable = NotSpryEquatable()
+                            _ = [notSpryEquatable]._isEqual(to: [notSpryEquatable] as SpryEquatable)
 
                             return Void()
                         }.to(throwAssertion())
@@ -103,8 +82,8 @@ class SpryEquatableSpec: QuickSpec {
                 context("when Value does NOT conforms to SpryEquatable") {
                     it("should fatal error") {
                         expect {
-                            let myNonSpryEquatableClass = MyNonSpryEquatableClass()
-                            _ = [1: myNonSpryEquatableClass]._isEqual(to: [1: myNonSpryEquatableClass] as SpryEquatable)
+                            let notSpryEquatable = NotSpryEquatable()
+                            _ = [1: notSpryEquatable]._isEqual(to: [1: notSpryEquatable] as SpryEquatable)
 
                             return Void()
                             }.to(throwAssertion())
@@ -146,5 +125,6 @@ class SpryEquatableSpec: QuickSpec {
                 }
             }
         }
+
     }
 }
