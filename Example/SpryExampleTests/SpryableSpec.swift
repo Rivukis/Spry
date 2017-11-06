@@ -10,34 +10,6 @@ import Quick
 import Nimble
 import SpryExample
 
-private class SpryableTestClass: Spryable {
-    enum ClassFunction: String, StringRepresentable {
-        case getAStaticString = "getAStaticString()"
-    }
-
-    static func getAStaticString() -> String {
-        return spryify()
-    }
-
-    enum Function: String, StringRepresentable {
-        case firstName
-        case getAString = "getAString(string:)"
-    }
-
-    var firstName: String {
-        set {
-            recordCall(arguments: newValue)
-        }
-        get {
-            return stubbedValue()
-        }
-    }
-
-    func getAString(string: String) -> String {
-        return spryify(arguments: string)
-    }
-}
-
 class SpryableSpec: QuickSpec {
     override func spec() {
 
@@ -65,7 +37,7 @@ class SpryableSpec: QuickSpec {
                 }
             }
 
-            describe("recording calls - static") {
+            describe("recording calls - class") {
                 beforeEach {
                     SpryableTestClass.stub(.getAStaticString).andReturn("")
 
@@ -90,7 +62,7 @@ class SpryableSpec: QuickSpec {
                 }
             }
 
-            describe("stubbing functions - static") {
+            describe("stubbing functions - class") {
                 let expectedString = "stubbed string"
 
                 beforeEach {
@@ -102,7 +74,7 @@ class SpryableSpec: QuickSpec {
                 }
             }
 
-            describe("reseting calls and stubs") {
+            describe("reseting calls and stubs - instance") {
                 beforeEach {
                     subject.stub(.getAString).andReturn("")
                     _ = subject.getAString(string: "")
@@ -116,7 +88,7 @@ class SpryableSpec: QuickSpec {
                 }
             }
 
-            describe("reseting calls and stubs") {
+            describe("reseting calls and stubs - class") {
                 beforeEach {
                     SpryableTestClass.stub(.getAStaticString).andReturn("")
                     _ = SpryableTestClass.getAStaticString()

@@ -229,7 +229,7 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("stubbing a static function") {
+            describe("stubbing a class function") {
                 let expectedString = "expected"
 
                 beforeEach {

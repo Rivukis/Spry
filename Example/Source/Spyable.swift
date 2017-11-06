@@ -93,7 +93,7 @@ public protocol Spyable: class {
      - Parameter function: The function signature to be recorded. Defaults to #function.
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Spyable to work properly.
      */
-    func recordCall(_ functionName: String, arguments: Any?..., file: String, line: Int)
+    func recordCall(functionName: String, arguments: Any?..., file: String, line: Int)
 
     /**
      Used to determine if a function has been called with the specified arguments and the amount of times specified.
@@ -144,19 +144,19 @@ public protocol Spyable: class {
          case paramWithNoPublicName = "paramWithNoPublicName(privateName:)"
      }
 
-     static func noParameters() -> Bool {
+     class func noParameters() -> Bool {
          // ...
      }
 
-     static func hereAreTwoParameters(string1: String, string2: String) -> Bool {
+     class func hereAreTwoParameters(string1: String, string2: String) -> Bool {
          // ...
      }
 
-     static func paramWithDifferentNames(publicName privateName: String) -> String {
+     class func paramWithDifferentNames(publicName privateName: String) -> String {
          // ...
      }
 
-     static func paramWithNoPublicName(_ privateName: String) -> String {
+     class func paramWithNoPublicName(_ privateName: String) -> String {
          // ...
      }
      ```
@@ -164,7 +164,7 @@ public protocol Spyable: class {
     associatedtype ClassFunction: StringRepresentable
 
     /**
-     This is where the recorded calls information for static functions and properties is held. Defaults to using NSMapTable.
+     This is where the recorded calls information for class functions and properties is held. Defaults to using NSMapTable.
 
      Should ONLY read from this property when debugging.
 
@@ -187,7 +187,7 @@ public protocol Spyable: class {
      - Parameter function: The function signature to be recorded. Defaults to #function.
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Spyable to work properly.
      */
-    static func recordCall(_ functionName: String, arguments: Any?..., file: String, line: Int)
+    static func recordCall(functionName: String, arguments: Any?..., file: String, line: Int)
 
     /**
      Used to determine if a function has been called with the specified arguments and the amount of times specified.
@@ -232,7 +232,7 @@ public extension Spyable {
         }
     }
 
-    func recordCall(_ functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
+    func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
@@ -268,7 +268,7 @@ public extension Spyable {
         }
     }
 
-    static func recordCall(_ functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
+    static func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
         let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
@@ -325,9 +325,10 @@ private func numberOfMatchingCalls(function: String, arguments: [SpryEquatable?]
         return matchingFunctions.count
     }
 
-    return matchingFunctions.reduce(0) { isEqualArgsLists(specifiedArgs: arguments, actualArgs: $1.arguments) ? $0 + 1 : $0 }
+    return matchingFunctions.reduce(0) {
+        return $0 + isEqualArgsLists(specifiedArgs: arguments, actualArgs: $1.arguments).toInt()
+    }
 }
-
 
 private func matchingIndexesFor(functionName: String, functionList: [String]) -> [Int] {
     return functionList.enumerated().map { $1 == functionName ? $0 : -1 }.filter { $0 != -1 }
@@ -366,5 +367,11 @@ private extension Optional {
         case .none:
             return "nil"
         }
+    }
+}
+
+private extension Bool {
+    func toInt() -> Int {
+        return self ? 1 : 0
     }
 }

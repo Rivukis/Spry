@@ -129,7 +129,7 @@ public protocol Stubbable: class {
     // MARK: - Static
 
     /**
-     The type that represents static function and property names when stubbing.
+     The type that represents class function and property names when stubbing.
 
      Ideal to use an enum with raw type of `String`. An enum with raw type of `String` also automatically satisfies StringRepresentable protocol.
 
@@ -152,19 +152,19 @@ public protocol Stubbable: class {
          case paramWithNoPublicName = "paramWithNoPublicName(privateName:)"
      }
 
-     static func noParameters() -> Bool {
+     class func noParameters() -> Bool {
          // ...
      }
 
-     static func hereAreTwoParameters(string1: String, string2: String) -> Bool {
+     class func hereAreTwoParameters(string1: String, string2: String) -> Bool {
          // ...
      }
 
-     static func paramWithDifferentNames(publicName privateName: String) -> String {
+     class func paramWithDifferentNames(publicName privateName: String) -> String {
          // ...
      }
 
-     static func paramWithNoPublicName(_ privateName: String) -> String {
+     class func paramWithNoPublicName(_ privateName: String) -> String {
          // ...
      }
      ```
@@ -172,7 +172,7 @@ public protocol Stubbable: class {
     associatedtype ClassFunction: StringRepresentable
 
     /**
-     This is where the stubbed information for static functions and properties is held. Defaults to using NSMapTable.
+     This is where the stubbed information for class functions and properties is held. Defaults to using NSMapTable.
 
      Should ONLY read from this property when debugging.
 

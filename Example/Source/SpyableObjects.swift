@@ -25,7 +25,8 @@ public class RecordedCall: CustomStringConvertible {
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
-        return "RecordedCall(function: <\(function)>, arguments: <\(arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")))>"
+        let argumentsString = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
+        return "RecordedCall(function: <\(function)>, arguments: <\(argumentsString)>)"
     }
 }
 
