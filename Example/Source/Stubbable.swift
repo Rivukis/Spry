@@ -96,8 +96,8 @@ public protocol Stubbable: class {
     func stub(_ function: Function) -> Stub
 
     /**
-     Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
-     
+     Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
      - Parameter function: The function signature used to find a stub. Defaults to #function.
@@ -107,15 +107,37 @@ public protocol Stubbable: class {
     func stubbedValue<T>(_ functionName: String, arguments: Any?..., asType _: T.Type, file: String, line: Int) -> T
 
     /**
-     Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
-     
+     Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
      - Parameter function: The function signature used to find a stub. Defaults to #function.
      - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
-     - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
+     - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution. Defaults to .noFallback
      */
     func stubbedValue<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
+
+    /**
+     Used to return the stubbed value of a function that can throw. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The function signature used to find a stub. Defaults to #function.
+     - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
+     - Parameter asType: The type to be returned. Defaults to using type inference. Only specify if needed or for performance.
+     */
+    func stubbedValueThrows<T>(_ functionName: String, arguments: Any?..., asType _: T.Type, file: String, line: Int) throws -> T
+
+    /**
+     Used to return the stubbed value of a function that can throw. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The function signature used to find a stub. Defaults to #function.
+     - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
+     - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution. Defaults to .noFallback
+     */
+    func stubbedValueThrows<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) throws -> T
 
     /**
      Removes all stubs.
@@ -198,7 +220,7 @@ public protocol Stubbable: class {
     static func stub(_ function: ClassFunction) -> Stub
 
     /**
-     Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
+     Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
@@ -209,7 +231,7 @@ public protocol Stubbable: class {
     static func stubbedValue<T>(_ functionName: String, arguments: Any?..., asType _: T.Type, file: String, line: Int) -> T
 
     /**
-     Used to return the stubbed value. Must return the result of a `stubbedValue()` in every function for Stubbable to work properly.
+     Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
@@ -218,6 +240,28 @@ public protocol Stubbable: class {
      - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
      */
     static func stubbedValue<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) -> T
+
+    /**
+     Used to return the stubbed value of a function that can throw. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The function signature used to find a stub. Defaults to #function.
+     - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
+     - Parameter asType: The type to be returned. Defaults to using type inference. Only specify if needed or for performance.
+     */
+    static func stubbedValueThrows<T>(_ functionName: String, arguments: Any?..., asType _: T.Type, file: String, line: Int) throws -> T
+
+    /**
+     Used to return the stubbed value of a function that can throw. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The function signature used to find a stub. Defaults to #function.
+     - Parameter arguments: The function arguments being passed in. Must include all arguments in the proper order for Stubbable to work properly.
+     - Parameter fallbackValue: The fallback value to be used if no stub is found for the given function signature and arguments. Can give false positives when testing. Use with caution.
+     */
+    static func stubbedValueThrows<T>(_ functionName: String, arguments: Any?..., fallbackValue: T, file: String, line: Int) throws -> T
 
     /**
      Removes all stubs.
@@ -255,12 +299,30 @@ public extension Stubbable {
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
-        return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+        do {
+            return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+        } catch {
+            Constant.FatalError.andThrowOnNonThrowingInstanceFunction(stubbable: self, function: function)
+        }
     }
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
         let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
-        return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+        do {
+            return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+        } catch {
+            Constant.FatalError.andThrowOnNonThrowingInstanceFunction(stubbable: self, function: function)
+        }
+    }
+
+    func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+    }
+
+    func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
+        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
     func resetStubs() {
@@ -291,12 +353,30 @@ public extension Stubbable {
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
         let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
-        return internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+        do {
+            return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+        } catch {
+            Constant.FatalError.andThrowOnNonThrowingClassFunction(stubbable: self, function: function)
+        }
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
         let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
-        return internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+        do {
+            return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
+        } catch {
+            Constant.FatalError.andThrowOnNonThrowingClassFunction(stubbable: self, function: function)
+        }
+    }
+
+    static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
+    }
+
+    static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
+        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
     static func resetStubs() {
@@ -305,7 +385,7 @@ public extension Stubbable {
 
     // MARK: - Internal Helper Functions
 
-    internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any?], fallback: Fallback<T>) -> T {
+    internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any?], fallback: Fallback<T>) throws -> T {
         let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
 
         if stubsForFunctionName.isEmpty {
@@ -315,7 +395,7 @@ public extension Stubbable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue(for: arguments) as? T {
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = try stub.returnValue(for: arguments) as? T {
 
                 captureArguments(stub: stub, actualArgs: arguments)
                 return value
@@ -323,7 +403,7 @@ public extension Stubbable {
         }
 
         for stub in stubsWithoutArgs {
-            let rawValue = stub.returnValue(for: arguments)
+            let rawValue = try stub.returnValue(for: arguments)
 
             if isNil(rawValue) {
                 // nils won't cast to T even when T is Optional unless cast to Any first
@@ -341,7 +421,7 @@ public extension Stubbable {
         return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
     }
 
-    internal static func internal_stubbedValue<T>(_ function: ClassFunction, arguments: [Any?], fallback: Fallback<T>) -> T {
+    internal static func internal_stubbedValue<T>(_ function: ClassFunction, arguments: [Any?], fallback: Fallback<T>) throws -> T {
         let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
 
         if stubsForFunctionName.isEmpty {
@@ -351,7 +431,7 @@ public extension Stubbable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = stub.returnValue(for: arguments) as? T {
+            if isEqualArgsLists(specifiedArgs: stub.arguments, actualArgs: arguments), let value = try stub.returnValue(for: arguments) as? T {
 
                 captureArguments(stub: stub, actualArgs: arguments)
                 return value
@@ -359,7 +439,7 @@ public extension Stubbable {
         }
 
         for stub in stubsWithoutArgs {
-            let rawValue = stub.returnValue(for: arguments)
+            let rawValue = try stub.returnValue(for: arguments)
 
             if isNil(rawValue) {
                 // nils won't cast to T even when T is Optional unless cast to Any first

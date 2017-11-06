@@ -217,6 +217,34 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
+            describe("and throw") {
+                describe("functions that can throw") {
+                    let stubbedError = StubbableError(id: "my error")
+
+                    beforeEach {
+                        subject.stub(.throwingFunction).andThrow(stubbedError)
+                    }
+
+                    it("should throw the specified error") {
+                        expect{
+                            try subject.throwingFunction()
+                        }.to(throwError(stubbedError))
+                    }
+                }
+
+                describe("functions that can't throw") {
+                    beforeEach {
+                        subject.stub(.giveMeAString).andThrow(StubbableError(id: ""))
+                    }
+
+                    it("should fatal error") {
+                        expect{
+                            _ = subject.giveMeAString()
+                        }.to(throwAssertion())
+                    }
+                }
+            }
+
             describe("stubbing a property") {
                 let expectedString = "expected"
 
@@ -349,50 +377,52 @@ class StubbableSpec: QuickSpec {
                 }
             }
 
-            describe("resetting stubs on an instance") {
-                context("when the function is stubbed before reseting") {
-                    beforeEach {
-                        subject.stub(.giveMeAString).andReturn("")
-                        subject.resetStubs()
+            describe("resetting stubs") {
+                describe("on an instance") {
+                    context("when the function is stubbed before reseting") {
+                        beforeEach {
+                            subject.stub(.giveMeAString).andReturn("")
+                            subject.resetStubs()
+                        }
+
+                        it("should NOT stub the function") {
+                            expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
+                        }
                     }
 
-                    it("should NOT stub the function") {
-                        expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
-                    }
-                }
+                    context("when the function is stubbed after reseting") {
+                        beforeEach {
+                            subject.resetStubs()
+                            subject.stub(.giveMeAString).andReturn("")
+                        }
 
-                context("when the function is stubbed after reseting") {
-                    beforeEach {
-                        subject.resetStubs()
-                        subject.stub(.giveMeAString).andReturn("")
-                    }
-
-                    it("should stub the function") {
-                        expect(subject.giveMeAString()).toNot(beNil())
-                    }
-                }
-            }
-
-            describe("resetting stubs on a class") {
-                context("when the function is stubbed before reseting") {
-                    beforeEach {
-                        StubbableTestHelper.stub(.classFunction).andReturn("")
-                        StubbableTestHelper.resetStubs()
-                    }
-
-                    it("should NOT stub the function") {
-                        expect({ _ = StubbableTestHelper.classFunction() }()).to(throwAssertion())
+                        it("should stub the function") {
+                            expect(subject.giveMeAString()).toNot(beNil())
+                        }
                     }
                 }
 
-                context("when the function is stubbed after reseting") {
-                    beforeEach {
-                        StubbableTestHelper.resetStubs()
-                        StubbableTestHelper.stub(.classFunction).andReturn("")
+                describe("on a class") {
+                    context("when the function is stubbed before reseting") {
+                        beforeEach {
+                            StubbableTestHelper.stub(.classFunction).andReturn("")
+                            StubbableTestHelper.resetStubs()
+                        }
+
+                        it("should NOT stub the function") {
+                            expect({ _ = StubbableTestHelper.classFunction() }()).to(throwAssertion())
+                        }
                     }
 
-                    it("should stub the function") {
-                        expect(StubbableTestHelper.classFunction()).toNot(beNil())
+                    context("when the function is stubbed after reseting") {
+                        beforeEach {
+                            StubbableTestHelper.resetStubs()
+                            StubbableTestHelper.stub(.classFunction).andReturn("")
+                        }
+
+                        it("should stub the function") {
+                            expect(StubbableTestHelper.classFunction()).toNot(beNil())
+                        }
                     }
                 }
             }

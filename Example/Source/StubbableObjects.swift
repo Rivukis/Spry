@@ -16,6 +16,7 @@ public class Stub: CustomStringConvertible {
     enum StubType {
         case andReturn(Any?)
         case andDo(([Any?]) -> Any?)
+        case andThrow(Error)
     }
 
     private var stubType: StubType?
@@ -103,9 +104,13 @@ public class Stub: CustomStringConvertible {
         stubType = .andDo(closure)
     }
 
+    public func andThrow(_ error: Error) {
+        stubType = .andThrow(error)
+    }
+
     // MARK: - Internal Functions
 
-    internal func returnValue(for args: [Any?]) -> Any? {
+    internal func returnValue(for args: [Any?]) throws -> Any? {
         guard let stubType = stubType else {
             Constant.FatalError.noReturnValueSourceFound()
         }
@@ -115,6 +120,8 @@ public class Stub: CustomStringConvertible {
             return value
         case .andDo(let closure):
             return closure(args)
+        case .andThrow(let error):
+            throw error
         }
     }
 }

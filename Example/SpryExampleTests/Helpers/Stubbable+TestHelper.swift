@@ -8,6 +8,14 @@
 
 import Foundation
 
+struct StubbableError: Error, Equatable {
+    let id: String
+
+    public static func == (lhs: StubbableError, rhs: StubbableError) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 // basic protocol
 protocol SpecialString {
     func myStringValue() -> String
@@ -86,6 +94,7 @@ class StubbableTestHelper: Stubbable {
         case giveMeAVoid = "giveMeAVoid()"
         case takeAnOptionalString = "takeAnOptionalString(string:)"
         case callThisCompletion = "callThisCompletion(string:closure:)"
+        case throwingFunction = "throwingFunction()"
     }
 
     var myProperty: String {
@@ -142,6 +151,10 @@ class StubbableTestHelper: Stubbable {
 
     func callThisCompletion(string: String, closure: () -> Void) {
         return stubbedValue(arguments: string, closure)
+    }
+
+    func throwingFunction() throws {
+        return try stubbedValueThrows()
     }
 
     static func classFunction() -> String {

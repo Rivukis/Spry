@@ -43,5 +43,13 @@ internal enum Constant {
         static func noReturnValueSourceFound() -> Never {
             fatalError("Must add `andReturn` or `andDo` to properly stub an object")
         }
+
+        static func andThrowOnNonThrowingInstanceFunction<S: Stubbable>(stubbable: S, function: S.Function) -> Never {
+            fatalError("Not allowed to use '.andThrow' on non-throwing function \(function.rawValue) on \(S.self)")
+        }
+
+        static func andThrowOnNonThrowingClassFunction<S: Stubbable>(stubbable: S.Type, function: S.ClassFunction) -> Never {
+            fatalError("Not allowed to use '.andThrow' on non-throwing function \(function.rawValue) on \(S.self)")
+        }
     }
 }
