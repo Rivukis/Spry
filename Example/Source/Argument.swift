@@ -22,7 +22,7 @@ public class ArgumentCaptor: SpryEquatable {
      */
     public func getValue<T>(at index: Int = 0, as: T.Type = T.self) -> T {
         guard index >= 0 && capturedArguments.count > index else {
-            Constant.FatalError.capturedArgumentsOutOfBounds(index: index, count: capturedArguments.count)
+            Constant.FatalError.capturedArgumentsOutOfBounds(index: index, capturedArguments: capturedArguments)
         }
 
         let capturedAsUnknownType = capturedArguments[index]
@@ -97,7 +97,7 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
 
 internal func isEqualArgsLists(specifiedArgs: [SpryEquatable?], actualArgs: [Any?]) -> Bool {
     guard specifiedArgs.count == actualArgs.count else {
-        Constant.FatalError.wrongNumberOfArgsBeingCompared(expectedCount: specifiedArgs.count, actualCount: actualArgs.count)
+        Constant.FatalError.wrongNumberOfArgsBeingCompared(specifiedArguments: specifiedArgs, actualArguments: actualArgs)
     }
 
     for index in 0..<actualArgs.count {

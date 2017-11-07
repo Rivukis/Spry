@@ -112,7 +112,7 @@ public class Stub: CustomStringConvertible {
 
     internal func returnValue(for args: [Any?]) throws -> Any? {
         guard let stubType = stubType else {
-            Constant.FatalError.noReturnValueSourceFound()
+            Constant.FatalError.noReturnValueSourceFound(functionName: functionName)
         }
 
         switch stubType {
@@ -127,10 +127,28 @@ public class Stub: CustomStringConvertible {
 }
 
 /**
- This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
+ This exists because a dictionary is needed as a class. Instances of this type are put into an NSMapTable.
  */
-internal class StubArray {
-    var stubs: [Stub] = []
+public class StubsDictionary: CustomStringConvertible {
+    private var stubDict: [String: [Stub]] = [:]
+
+    func addStub(stub: Stub) {
+        var stubs = stubDict[stub.functionName] ?? []
+        stubs.append(stub)
+        stubDict[stub.functionName] = stubs
+    }
+
+    func getStubs(for functionName: String) -> [Stub] {
+        return stubDict[functionName] ?? []
+    }
+
+    func clearAllStubs() {
+        stubDict = [:]
+    }
+
+    public var description: String {
+        return String(describing: stubDict)
+    }
 }
 
 /**

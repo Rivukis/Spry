@@ -13,7 +13,7 @@ import SpryExample
 class HaveReceivedMatcherSpec: QuickSpec {
     override func spec() {
 
-        fdescribe("HaveReceivedMatcher") {
+        describe("HaveReceivedMatcher") {
             var subject: SpyableTestHelper!
 
             beforeEach {

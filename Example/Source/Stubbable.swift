@@ -13,7 +13,7 @@ import Foundation
 
  - Important: Do NOT use this object.
  */
-private var stubsMapTable: NSMapTable<AnyObject, StubArray> = NSMapTable.weakToStrongObjects()
+private var stubsMapTable: NSMapTable<AnyObject, StubsDictionary> = NSMapTable.weakToStrongObjects()
 
 /**
  A protocol used to stub an object's functions. A small amount of boilerplate is requried.
@@ -80,10 +80,10 @@ public protocol Stubbable: class {
 
      ## Example Overriding ##
      ```swift
-     var _stubs: [Stub] = []
+     var _stubsDictionary: StubsDictionary = StubsDictionary()
      ```
      */
-    var _stubs: [Stub] { get set }
+    var _stubsDictionary: StubsDictionary { get }
 
     /**
      Used to stub a function. All stubs must be provided either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
@@ -204,10 +204,10 @@ public protocol Stubbable: class {
 
      ## Example Overriding ##
      ```swift
-     var _stubs: [Stub] = []
+     var _stubsDictionary: StubsDictionary = StubsDictionary()
      ```
      */
-    static var _stubs: [Stub] { get set }
+    static var _stubsDictionary: StubsDictionary { get }
 
     /**
      Used to stub a function. All stubs must be provided either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
@@ -277,22 +277,21 @@ public extension Stubbable {
 
     // MARK: - Instance
 
-    var _stubs: [Stub] {
-        set {
-            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
-            stubArray.stubs = newValue
-            stubsMapTable.setObject(stubArray, forKey: self)
-        }
+    var _stubsDictionary: StubsDictionary {
         get {
-            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
-            stubsMapTable.setObject(stubArray, forKey: self)
-            return stubArray.stubs
+            if let stubDict = stubsMapTable.object(forKey: self) {
+                return stubDict
+            }
+
+            let stubDict = StubsDictionary()
+            stubsMapTable.setObject(stubDict, forKey: self)
+            return stubDict
         }
     }
 
     func stub(_ function: Function) -> Stub {
         let stub = Stub(functionName: function.rawValue)
-        _stubs.append(stub)
+        _stubsDictionary.addStub(stub: stub)
 
         return stub
     }
@@ -326,27 +325,26 @@ public extension Stubbable {
     }
 
     func resetStubs() {
-        _stubs = []
+        _stubsDictionary.clearAllStubs()
     }
 
     // MARK: - Static
 
-    static var _stubs: [Stub] {
-        set {
-            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
-            stubArray.stubs = newValue
-            stubsMapTable.setObject(stubArray, forKey: self)
-        }
+    static var _stubsDictionary: StubsDictionary {
         get {
-            let stubArray = stubsMapTable.object(forKey: self) ?? StubArray()
-            stubsMapTable.setObject(stubArray, forKey: self)
-            return stubArray.stubs
+            if let stubDict = stubsMapTable.object(forKey: self) {
+                return stubDict
+            }
+
+            let stubDict = StubsDictionary()
+            stubsMapTable.setObject(stubDict, forKey: self)
+            return stubDict
         }
     }
 
     static func stub(_ function: ClassFunction) -> Stub {
         let stub = Stub(functionName: function.rawValue)
-        _stubs.append(stub)
+        _stubsDictionary.addStub(stub: stub)
 
         return stub
     }
@@ -380,16 +378,16 @@ public extension Stubbable {
     }
 
     static func resetStubs() {
-        _stubs = []
+        _stubsDictionary.clearAllStubs()
     }
 
     // MARK: - Internal Helper Functions
 
     internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any?], fallback: Fallback<T>) throws -> T {
-        let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
+        let stubsForFunctionName = _stubsDictionary.getStubs(for: function.rawValue)
 
         if stubsForFunctionName.isEmpty {
-            return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
+            return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
         }
 
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
@@ -418,14 +416,14 @@ public extension Stubbable {
             }
         }
 
-        return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
+        return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
     }
 
     internal static func internal_stubbedValue<T>(_ function: ClassFunction, arguments: [Any?], fallback: Fallback<T>) throws -> T {
-        let stubsForFunctionName = _stubs.filter{ $0.functionName == function.rawValue }
+        let stubsForFunctionName = _stubsDictionary.getStubs(for: function.rawValue)
 
         if stubsForFunctionName.isEmpty {
-            return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
+            return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
         }
 
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
@@ -454,12 +452,12 @@ public extension Stubbable {
             }
         }
 
-        return fatalErrorOrReturnFallback(fallback: fallback, stubs: _stubs, function: function, arguments: arguments)
+        return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
     }
 
     // MARK: - Private Helper Functions
 
-    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: Function, arguments: [Any?]) -> T {
+    private func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, function: Function, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
             Constant.FatalError.noReturnValueFoundForInstanceFunction(stubbable: self, function: function, arguments: arguments, returnType: T.self)
@@ -468,7 +466,7 @@ public extension Stubbable {
         }
     }
 
-    private static func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, stubs: [Stub], function: ClassFunction, arguments: [Any?]) -> T {
+    private static func fatalErrorOrReturnFallback<T>(fallback: Fallback<T>, function: ClassFunction, arguments: [Any?]) -> T {
         switch fallback {
         case .noFallback:
             Constant.FatalError.noReturnValueFoundForClassFunction(stubbableType: self, function: function, arguments: arguments, returnType: T.self)
