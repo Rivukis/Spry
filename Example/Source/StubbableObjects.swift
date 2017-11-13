@@ -19,13 +19,26 @@ public class Stub: CustomStringConvertible {
         case andThrow(Error)
     }
 
-    private var stubType: StubType?
-
     internal let functionName: String
     internal private(set) var arguments: [SpryEquatable] = []
+    internal let referenceID = UUID()
 
-    internal init(functionName: String) {
+    internal var isComplete: Bool {
+        return stubType != nil
+    }
+
+    private var stubType: StubType? {
+        didSet {
+            if stubType != nil {
+                stubCompleteHandler(self)
+            }
+        }
+    }
+    private var stubCompleteHandler: (Stub) -> Void
+
+    internal init(functionName: String, stubCompleteHandler: @escaping (Stub) -> Void) {
         self.functionName = functionName
+        self.stubCompleteHandler = stubCompleteHandler
     }
 
     // MARK: - Public Functions
@@ -61,15 +74,15 @@ public class Stub: CustomStringConvertible {
 
      - Important: This allows `Any` object to be passed in but the stub will ONLY work if the correct type is passed in.
 
-     - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
+     - Note: ONLY the last `andReturn()`, `andDo()`, or `andThrow()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
 
      ## Example ##
      ```swift
      // arguments do NOT matter
-     service.stub("functionSignature()").andReturn("stubbed value")
+     service.stub(.functionSignature).andReturn("stubbed value")
 
      // arguments matter
-     service.stub("functionSignature()").with("expected argument").andReturn("stubbed value")
+     service.stub(.functionSignature).with("expected argument").andReturn("stubbed value")
      ```
 
      - Parameter value: The value to be returned by the stubbed function.
@@ -81,18 +94,18 @@ public class Stub: CustomStringConvertible {
     /**
      Used to specify a closure to be executed in place of the stubbed function.
 
-     - Note: ONLY the last `andReturn()` or `andDo()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
+     - Note: ONLY the last `andReturn()`, `andDo()`, or `andThrow()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
 
      ## Example ##
      ```swift
      // arguments do NOT matter (closure will be called if `functionSignature()` is called)
-     service.stub("functionSignature()").andDo { arguments in
+     service.stub(.functionSignature).andDo { arguments in
          // do test specific things (like call a completion block)
          return "stubbed value"
      }
 
      // arguments matter (closure will NOT be called unless the arguments match what is passed in the `with()` function)
-     service.stub("functionSignature()").with("expected argument").andDo { arguments in
+     service.stub(.functionSignature).with("expected argument").andDo { arguments in
          // do test specific things (like call a completion block)
          return "stubbed value"
      }
@@ -104,6 +117,24 @@ public class Stub: CustomStringConvertible {
         stubType = .andDo(closure)
     }
 
+    /**
+     Used to throw a Swift `Error` for the stubbed function.
+
+     - Important: Only use this on functions that can throw an Error. Must return `SpryifyThrows()` or `StubbedValueThrows()` in throwing functions when making a fake object.
+
+     - Note: ONLY the last `andReturn()`, `andDo()`, or `andThrow()` will be used. If multiple stubs are required (for instance with different argument specifiers) then a different stub object is required (i.e. call the `stub()` function again).
+
+     ## Example ##
+     ```swift
+     // arguments do NOT matter
+     service.stub(.functionSignatureOfThrowingFunction).andThrow(CustomSwiftError())
+
+     // arguments matter
+     service.stub(.functionSignatureOfThrowingFunction).with("expected argument").andReturn(CustomSwiftError())
+     ```
+
+     - Parameter error: The error to be thrown by the stubbed function.
+     */
     public func andThrow(_ error: Error) {
         stubType = .andThrow(error)
     }
@@ -124,6 +155,11 @@ public class Stub: CustomStringConvertible {
             throw error
         }
     }
+
+    internal func hasEqualBase(as stub: Stub) -> Bool {
+        return self.functionName == stub.functionName
+            && self.arguments._isEqual(to: stub.arguments as SpryEquatable)
+    }
 }
 
 /**
@@ -134,12 +170,41 @@ public class StubsDictionary: CustomStringConvertible {
 
     func addStub(stub: Stub) {
         var stubs = stubDict[stub.functionName] ?? []
-        stubs.append(stub)
+
+        stubs.insert(stub, at: 0)
         stubDict[stub.functionName] = stubs
+    }
+
+    func completedDuplicates(of stub: Stub) -> [Stub] {
+        var duplicates: [Stub] = []
+
+        stubDict[stub.functionName]?.forEach {
+            guard $0.referenceID != stub.referenceID && stub.isComplete else {
+                return
+            }
+
+            if $0.hasEqualBase(as: stub) {
+                duplicates.append($0)
+            }
+        }
+
+        return duplicates
     }
 
     func getStubs(for functionName: String) -> [Stub] {
         return stubDict[functionName] ?? []
+    }
+
+    func remove(stubs removingStubs: [Stub], forFunctionName functionName: String) {
+        var currentStubs = stubDict[functionName] ?? []
+
+        removingStubs.forEach { removedStub in
+            currentStubs.removeFirst { currentStub in
+                currentStub.referenceID == removedStub.referenceID
+            }
+        }
+
+        stubDict[functionName] = currentStubs
     }
 
     func clearAllStubs() {

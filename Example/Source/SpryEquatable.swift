@@ -165,11 +165,3 @@ extension Bool: SpryEquatable {}
 extension Array: SpryEquatable {}
 extension Dictionary: SpryEquatable {}
 extension NSObject: SpryEquatable {}
-
-// MARK: - Private Extensions
-
-private extension Dictionary {
-    func has(key: Key) -> Bool {
-        return self.contains { $0.key == key }
-    }
-}

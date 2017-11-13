@@ -1,8 +1,9 @@
 import Foundation
 
 private func fatalError(title: String, entries: [String]) -> Never {
-    let entriesString = entries.map { "\n  " + $0 }.joined() + "\n"
-    fatalError(title + entriesString)
+    let titleString = "\n --- FATAL ERROR: \(title) ---"
+    let entriesString = entries.map { "\n  ￫ " + $0 }.joined() + "\n"
+    fatalError(titleString + entriesString)
 }
 
 internal enum Constant {
@@ -97,6 +98,34 @@ internal enum Constant {
 
         static func andThrowOnNonThrowingClassFunction<S: Stubbable>(stubbable: S.Type, function: S.ClassFunction) -> Never {
             andThrowOnNonThrowingFunction(type: S.self, functionName: function.rawValue)
+        }
+
+        static func noFunctionFound<T: StringRepresentable>(functionType: T.Type, functionName: String, file: String, line: Int) -> Never {
+            let caseName = functionName.removeAfter(startingCharacter: "(") ?? functionName
+            let probableMessage = "case \(caseName) = \"\(functionName)\""
+
+            let title = "Unable to find function"
+            let entries = [
+                "On type <\(functionType)>",
+                "With function signature <\(functionName)>",
+                "Error occured in file <\(file)> on line <\(line)>",
+                "Possible Fix:",
+                probableMessage,
+            ]
+
+            fatalError(title: title, entries: entries)
+        }
+
+        static func stubbingSameFunctionWithSameArguments(stub: Stub) -> Never {
+            let title = "Stubbing the same function with the same arguments"
+            let entries = [
+                "Function <\(stub.functionName)>",
+                "Arguments <\(descriptionOfArguments(stub.arguments))>",
+                "In most cases, stubbing the same function with the same arguments is a \"code smell\"",
+                "However, if this on purpose then use `.stubAgain()`"
+            ]
+
+            fatalError(title: title, entries: entries)
         }
 
         // MARK: - Private

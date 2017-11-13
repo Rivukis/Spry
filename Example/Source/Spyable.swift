@@ -233,7 +233,7 @@ public extension Spyable {
     }
 
     func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
@@ -269,7 +269,7 @@ public extension Spyable {
     }
 
     static func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
@@ -355,23 +355,4 @@ private func description(of calls: [RecordedCall]) -> String {
 
         return functionStringRepresentation
     }.joined(separator: "; ")
-}
-
-// MARK: Private Extensions
-
-private extension Optional {
-    func stringRepresentation() -> String {
-        switch self {
-        case .some(let wrapped):
-            return String(describing: wrapped)
-        case .none:
-            return "nil"
-        }
-    }
-}
-
-private extension Bool {
-    func toInt() -> Int {
-        return self ? 1 : 0
-    }
 }

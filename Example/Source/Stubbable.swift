@@ -86,7 +86,9 @@ public protocol Stubbable: class {
     var _stubsDictionary: StubsDictionary { get }
 
     /**
-     Used to stub a function. All stubs must be provided either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
+     Used to stub a function. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
+
+     - Note: If the same function is stubbed with the same argument specifications, then this function will fatal error. Stubbing the same thing again is usually a code smell. If this necessary then use `.stubAgain`.
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
@@ -94,6 +96,18 @@ public protocol Stubbable: class {
      - Returns: A `Stub` object. See `Stub` to find out how to specifying arguments and a return value.
      */
     func stub(_ function: Function) -> Stub
+
+    /**
+     Used to stub a function *AGAIN*. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
+
+     - Note: Stubbing the same thing again is usually a code smell. If this is necessary, then use this function otherwise use `.stub()`.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The `Function` to be stubbed.
+     - Returns: A `Stub` object. See `Stub` to find out how to specifying arguments and a return value.
+     */
+    func stubAgain(_ function: Function) -> Stub
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
@@ -210,7 +224,7 @@ public protocol Stubbable: class {
     static var _stubsDictionary: StubsDictionary { get }
 
     /**
-     Used to stub a function. All stubs must be provided either `andReturn()` or `andDo()` to work properly. May also specify arguments using `with()`.
+     Used to stub a function. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
 
      - Important: Do NOT implement function. Use default implementation provided by Spry.
 
@@ -218,6 +232,18 @@ public protocol Stubbable: class {
      - Returns: A `Stub` object. See `Stub` to find out how to specifying arguments and a return value.
      */
     static func stub(_ function: ClassFunction) -> Stub
+
+    /**
+     Used to stub a function *AGAIN*. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
+
+     - Note: Stubbing the same thing again is usually a code smell. If this is necessary, then use this function otherwise use `.stub()`.
+
+     - Important: Do NOT implement function. Use default implementation provided by Spry.
+
+     - Parameter function: The `Function` to be stubbed.
+     - Returns: A `Stub` object. See `Stub` to find out how to specifying arguments and a return value.
+     */
+    static func stubAgain(_ function: ClassFunction) -> Stub
 
     /**
      Used to return the stubbed value. Must return the result of a `stubbedValue()` or `stubbedValueThrows` in every function for Stubbable to work properly.
@@ -290,14 +316,33 @@ public extension Stubbable {
     }
 
     func stub(_ function: Function) -> Stub {
-        let stub = Stub(functionName: function.rawValue)
+        let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { [weak self] stub in
+            guard let welf = self else {
+                return
+            }
+
+            handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: false)
+        })
+        _stubsDictionary.addStub(stub: stub)
+
+        return stub
+    }
+
+    func stubAgain(_ function: Function) -> Stub {
+        let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { [weak self] stub in
+            guard let welf = self else {
+                return
+            }
+
+            handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: true)
+        })
         _stubsDictionary.addStub(stub: stub)
 
         return stub
     }
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
         } catch {
@@ -306,7 +351,7 @@ public extension Stubbable {
     }
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
         } catch {
@@ -315,12 +360,12 @@ public extension Stubbable {
     }
 
     func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
@@ -343,14 +388,25 @@ public extension Stubbable {
     }
 
     static func stub(_ function: ClassFunction) -> Stub {
-        let stub = Stub(functionName: function.rawValue)
+        let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
+            handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: false)
+        })
+        _stubsDictionary.addStub(stub: stub)
+
+        return stub
+    }
+
+    static func stubAgain(_ function: ClassFunction) -> Stub {
+        let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
+            handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: true)
+        })
         _stubsDictionary.addStub(stub: stub)
 
         return stub
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
         } catch {
@@ -359,7 +415,7 @@ public extension Stubbable {
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
         } catch {
@@ -368,12 +424,12 @@ public extension Stubbable {
     }
 
     static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
@@ -476,26 +532,25 @@ public extension Stubbable {
     }
 }
 
+private func handleDuplicates(stubsDictionary: StubsDictionary, stub: Stub, again: Bool) {
+    let duplicates = stubsDictionary.completedDuplicates(of: stub)
+
+    if duplicates.isEmpty {
+        return
+    }
+
+    if again {
+        stubsDictionary.remove(stubs: duplicates, forFunctionName: stub.functionName)
+    }
+    else {
+        Constant.FatalError.stubbingSameFunctionWithSameArguments(stub: stub)
+    }
+}
+
 private func captureArguments(stub: Stub, actualArgs: [Any?]) {
     zip(stub.arguments, actualArgs).forEach { (specifiedArg, actual) in
         if let specifiedArg = specifiedArg as? ArgumentCaptor {
             specifiedArg.capture(actual)
         }
-    }
-}
-
-// MARK: Private Extensions
-
-extension Array {
-    /**
-     Splits the array into two separate arrays.
-
-     - Parameter closure: The closure to determine which array each element will be put into. Return `true` to put item in first array and `false` to put it into the second array.
-     */
-    func bisect(_ closure: (Element) -> Bool) -> ([Element], [Element]) {
-        var arrays = ([Element](), [Element]())
-        self.forEach { closure($0) ? arrays.0.append($0) : arrays.1.append($0) }
-
-        return arrays
     }
 }

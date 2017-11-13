@@ -20,6 +20,10 @@ class StubbableSpec: QuickSpec {
                 subject = StubbableTestHelper()
             }
 
+            afterEach {
+                StubbableTestHelper.resetStubs()
+            }
+
             describe("and return") {
                 describe("returning Void") {
                     beforeEach {
@@ -422,6 +426,70 @@ class StubbableSpec: QuickSpec {
 
                         it("should stub the function") {
                             expect(StubbableTestHelper.classFunction()).toNot(beNil())
+                        }
+                    }
+                }
+            }
+
+            describe("stubbing again") {
+                describe("using .with()") {
+                    let originalString = "original string"
+
+                    beforeEach {
+                        subject.stub(.giveMeAString_string).with(originalString).andReturn("original return value")
+                    }
+
+                    context("when same function; different parameters") {
+                        it("should NOT fatal error") {
+                            expect {
+                                subject.stub(.giveMeAString_string).with("different string").andReturn("")
+                            }.toNot(throwAssertion())
+                        }
+                    }
+
+                    context("when same function; same parameters; using .stub") {
+                        it("should fatal error") {
+                            expect {
+                                subject.stub(.giveMeAString_string).with(originalString).andReturn("")
+                            }.to(throwAssertion())
+                        }
+                    }
+
+                    context("when same function; same parameters; using .stubAgain") {
+                        let newReturnValue = "new return value"
+
+                        beforeEach {
+                            subject.stubAgain(.giveMeAString_string).with(originalString).andReturn(newReturnValue)
+                        }
+
+                        it("should return the new return value") {
+                            expect(subject.giveMeAString(string: originalString)).to(equal(newReturnValue))
+                        }
+                    }
+                }
+
+                describe("without .with()") {
+                    beforeEach {
+                        subject.stub(.giveMeAString_string).andReturn("original return value")
+                    }
+
+                    context("when same function; using .stub") {
+                        it("should fatal error") {
+                            expect {
+                                subject.stub(.giveMeAString_string).andReturn("")
+                            }.to(throwAssertion())
+                        }
+                    }
+
+                    context("when same function; using .stubAgain") {
+                        let newReturnValue = "new return value"
+
+                        beforeEach {
+                            subject.stubAgain(.giveMeAString_string).andReturn(newReturnValue)
+                        }
+
+                        it("should return the new return value") {
+                            expect(subject.giveMeAString(string: "blah")).to(equal(newReturnValue))
                         }
                     }
                 }

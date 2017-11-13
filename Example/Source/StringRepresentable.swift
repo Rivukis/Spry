@@ -21,30 +21,15 @@
 public protocol StringRepresentable: RawRepresentable {
     var rawValue: String { get }
     init?(rawValue: String)
+    init(functionName: String, file: String, line: Int)
 }
 
-internal func fatalErrorOrFunction<T: StringRepresentable>(functionName: String, file: String, line: Int) -> T {
-    guard let function = T(rawValue: functionName) else {
-        let startingMessage = "function <\(functionName)> in file <\(file)> on line <\(line)> could not be turned into <\(T.self)>."
-
-        if let probableFunctionCase = remove(originalString: functionName, startingCharacterToRemove: "(") {
-            let probableMessage = "  [|] Possible Fix: case \(probableFunctionCase) = \"\(functionName)\""
-            fatalError(startingMessage + "\n" + probableMessage + "\n")
+extension StringRepresentable {
+    init(functionName: String, file: String, line: Int) {
+        guard let function = Self(rawValue: functionName) else {
+            Constant.FatalError.noFunctionFound(functionType: Self.self, functionName: functionName, file: file, line: line)
         }
 
-        let probableMessage = "  [|] Possible Fix: case \(functionName) = \"\(functionName)\""
-
-        fatalError(startingMessage + "\n" + probableMessage)
+        self = function
     }
-
-    return function
-}
-
-private func remove(originalString: String, startingCharacterToRemove character: String) -> String? {
-    let range = originalString.range(of: character)
-    if let lowerBound = range?.lowerBound {
-        return originalString.substring(to: lowerBound)
-    }
-
-    return nil
 }

@@ -147,7 +147,7 @@ public extension Spryable {
     // MARK: - Instance
 
     func spryify<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
@@ -157,13 +157,13 @@ public extension Spryable {
     }
 
     func spryifyThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     func spryify<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
@@ -173,7 +173,7 @@ public extension Spryable {
     }
 
     func spryifyThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function: Function = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
@@ -186,7 +186,7 @@ public extension Spryable {
     // MARK: - Static
 
     static func spryify<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
@@ -196,7 +196,7 @@ public extension Spryable {
     }
 
     static func spryify<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
@@ -206,13 +206,13 @@ public extension Spryable {
     }
 
     static func spryifyThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     static func spryifyThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function: ClassFunction = fatalErrorOrFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
