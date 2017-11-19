@@ -303,7 +303,6 @@ public extension Spyable {
         _calls.append(call)
     }
 
-
     // MARK: - Private Functions
     
     private func timesCalled(_ function: Function, arguments: [SpryEquatable?]) -> Int {

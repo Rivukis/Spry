@@ -493,6 +493,32 @@ class StubbableSpec: QuickSpec {
                         }
                     }
                 }
+
+                describe("class version spot check") {
+                    beforeEach {
+                        StubbableTestHelper.stub(.classFunction).andReturn("original return value")
+                    }
+
+                    context("when same function; using .stub") {
+                        it("should fatal error") {
+                            expect {
+                                StubbableTestHelper.stub(.classFunction).andReturn("")
+                            }.to(throwAssertion())
+                        }
+                    }
+
+                    context("when same function; using .stubAgain") {
+                        let newReturnValue = "new return value"
+
+                        beforeEach {
+                            StubbableTestHelper.stubAgain(.classFunction).andReturn(newReturnValue)
+                        }
+
+                        it("should return the new return value") {
+                            expect(StubbableTestHelper.classFunction()).to(equal(newReturnValue))
+                        }
+                    }
+                }
             }
         }
 
