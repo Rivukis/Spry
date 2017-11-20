@@ -166,19 +166,19 @@ public class Stub: CustomStringConvertible {
  This exists because a dictionary is needed as a class. Instances of this type are put into an NSMapTable.
  */
 public class StubsDictionary: CustomStringConvertible {
-    private var stubDict: [String: [Stub]] = [:]
+    private var stubsDict: [String: [Stub]] = [:]
 
-    func addStub(stub: Stub) {
-        var stubs = stubDict[stub.functionName] ?? []
+    func add(stub: Stub) {
+        var stubs = stubsDict[stub.functionName] ?? []
 
         stubs.insert(stub, at: 0)
-        stubDict[stub.functionName] = stubs
+        stubsDict[stub.functionName] = stubs
     }
 
     func completedDuplicates(of stub: Stub) -> [Stub] {
         var duplicates: [Stub] = []
 
-        stubDict[stub.functionName]?.forEach {
+        stubsDict[stub.functionName]?.forEach {
             guard $0.referenceID != stub.referenceID && stub.isComplete else {
                 return
             }
@@ -192,11 +192,11 @@ public class StubsDictionary: CustomStringConvertible {
     }
 
     func getStubs(for functionName: String) -> [Stub] {
-        return stubDict[functionName] ?? []
+        return stubsDict[functionName] ?? []
     }
 
     func remove(stubs removingStubs: [Stub], forFunctionName functionName: String) {
-        var currentStubs = stubDict[functionName] ?? []
+        var currentStubs = stubsDict[functionName] ?? []
 
         removingStubs.forEach { removedStub in
             currentStubs.removeFirst { currentStub in
@@ -204,15 +204,15 @@ public class StubsDictionary: CustomStringConvertible {
             }
         }
 
-        stubDict[functionName] = currentStubs
+        stubsDict[functionName] = currentStubs
     }
 
     func clearAllStubs() {
-        stubDict = [:]
+        stubsDict = [:]
     }
 
     public var description: String {
-        return String(describing: stubDict)
+        return String(describing: stubsDict)
     }
 }
 

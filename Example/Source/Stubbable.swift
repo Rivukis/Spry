@@ -305,13 +305,13 @@ public extension Stubbable {
 
     var _stubsDictionary: StubsDictionary {
         get {
-            if let stubDict = stubsMapTable.object(forKey: self) {
+            guard let stubsDict = stubsMapTable.object(forKey: self) else {
+                let stubDict = StubsDictionary()
+                stubsMapTable.setObject(stubDict, forKey: self)
                 return stubDict
             }
 
-            let stubDict = StubsDictionary()
-            stubsMapTable.setObject(stubDict, forKey: self)
-            return stubDict
+            return stubsDict
         }
     }
 
@@ -323,7 +323,7 @@ public extension Stubbable {
 
             handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: false)
         })
-        _stubsDictionary.addStub(stub: stub)
+        _stubsDictionary.add(stub: stub)
 
         return stub
     }
@@ -336,7 +336,7 @@ public extension Stubbable {
 
             handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: true)
         })
-        _stubsDictionary.addStub(stub: stub)
+        _stubsDictionary.add(stub: stub)
 
         return stub
     }
@@ -377,12 +377,12 @@ public extension Stubbable {
 
     static var _stubsDictionary: StubsDictionary {
         get {
-            if let stubDict = stubsMapTable.object(forKey: self) {
+            guard let stubDict = stubsMapTable.object(forKey: self) else {
+                let stubDict = StubsDictionary()
+                stubsMapTable.setObject(stubDict, forKey: self)
                 return stubDict
             }
 
-            let stubDict = StubsDictionary()
-            stubsMapTable.setObject(stubDict, forKey: self)
             return stubDict
         }
     }
@@ -391,7 +391,7 @@ public extension Stubbable {
         let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
             handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: false)
         })
-        _stubsDictionary.addStub(stub: stub)
+        _stubsDictionary.add(stub: stub)
 
         return stub
     }
@@ -400,7 +400,7 @@ public extension Stubbable {
         let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
             handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: true)
         })
-        _stubsDictionary.addStub(stub: stub)
+        _stubsDictionary.add(stub: stub)
 
         return stub
     }

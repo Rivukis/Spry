@@ -15,26 +15,79 @@ import Foundation
  * arguments: [Any] - The arguments passed in when the function was recorded.
  */
 public class RecordedCall: CustomStringConvertible {
-    let function: String
+    let functionName: String
     let arguments: [Any?]
+    var chronologicalIndex = -1
 
-    internal init(function: String, arguments: [Any?]) {
-        self.function = function
+    internal init(functionName: String, arguments: [Any?]) {
+        self.functionName = functionName
         self.arguments = arguments
     }
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
         let argumentsString = arguments.map{"<\($0 as Any)>"}.joined(separator: ", ")
-        return "RecordedCall(function: <\(function)>, arguments: <\(argumentsString)>)"
+        return "RecordedCall(function: <\(functionName)>, arguments: <\(argumentsString)>)"
+    }
+
+    /// A beautified description. Used for logging.
+    public var friendlyDescription: String {
+        let functionStringRepresentation = "<" + functionName + ">"
+        let arguementListStringRepresentation = arguments
+            .map { "<\($0.stringRepresentation())>" }
+            .joined(separator: ", ")
+
+        if !arguementListStringRepresentation.isEmpty {
+            return functionStringRepresentation + " with " + arguementListStringRepresentation
+        }
+
+        return functionStringRepresentation
     }
 }
 
 /**
- This exists because an array is needed as a class. Instances of this type are put into an NSMapTable.
+ This exists because a dictionary is needed as a class. Instances of this type are put into an NSMapTable.
  */
-internal class RecordedCallArray {
-    var calls: [RecordedCall] = []
+public class RecordedCallsDictionary: CustomStringConvertible {
+    private var callsDict: [String: [RecordedCall]] = [:]
+    private var recordedCount = 0
+
+    func add(call: RecordedCall) {
+        var calls = callsDict[call.functionName] ?? []
+
+        call.chronologicalIndex = recordedCount
+        recordedCount += 1
+        calls.insert(call, at: 0)
+        callsDict[call.functionName] = calls
+    }
+
+    func getCalls(for functionName: String) -> [RecordedCall] {
+        return callsDict[functionName] ?? []
+    }
+
+    func clearAllCalls() {
+        recordedCount = 0
+        callsDict = [:]
+    }
+
+    public var description: String {
+        return String(describing: callsDict)
+    }
+
+    public var friendlyDescription: String {
+        guard !callsDict.isEmpty else {
+            return "<>"
+        }
+
+        let callsInChronologicalOrder = callsDict
+            .values
+            .flatMap { $0 }
+            .sorted { $0.chronologicalIndex < $1.chronologicalIndex}
+
+        return callsInChronologicalOrder
+            .map { $0.friendlyDescription }
+            .joined(separator: "; ")
+    }
 }
 
 /**

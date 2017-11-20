@@ -13,7 +13,7 @@ import Foundation
  
  - Important: Do NOT use this object.
  */
-private var callsMapTable: NSMapTable<AnyObject, RecordedCallArray> = NSMapTable.weakToStrongObjects()
+private var callsMapTable: NSMapTable<AnyObject, RecordedCallsDictionary> = NSMapTable.weakToStrongObjects()
 
 /**
  A protocol used to spy on an object's function calls. A small amount of boilerplate is requried.
@@ -80,10 +80,10 @@ public protocol Spyable: class {
 
      ## Example Overriding ##
      ```swift
-     var _calls: [RecordedCall] = []
+     var _callsDictionary: RecordedCallsDictionary = RecordedCallsDictionary()
      ```
      */
-    var _calls: [RecordedCall] { get set }
+    var _callsDictionary: RecordedCallsDictionary { get }
 
     /**
      Used to record a function call. Must call in every function for Spyable to work properly.
@@ -174,10 +174,10 @@ public protocol Spyable: class {
 
      ## Example Overriding ##
      ```swift
-     var _calls: [RecordedCall] = []
+     var _callsDictionary: RecordedCallsDictionary = RecordedCallsDictionary()
      ```
      */
-    static var _calls: [RecordedCall] { get set }
+    static var _callsDictionary: RecordedCallsDictionary { get }
 
     /**
      Used to record a function call. Must call in every function for Spyable to work properly.
@@ -219,16 +219,15 @@ public extension Spyable {
 
     // MARK: Instance
 
-    var _calls: [RecordedCall] {
-        set {
-            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
-            recordedCallArray.calls = newValue
-            callsMapTable.setObject(recordedCallArray, forKey: self)
-        }
+    var _callsDictionary: RecordedCallsDictionary {
         get {
-            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
-            callsMapTable.setObject(recordedCallArray, forKey: self)
-            return recordedCallArray.calls
+            guard let callsDict = callsMapTable.object(forKey: self) else {
+                let callsDict = RecordedCallsDictionary()
+                callsMapTable.setObject(callsDict, forKey: self)
+                return callsDict
+            }
+
+            return callsDict
         }
     }
 
@@ -245,26 +244,25 @@ public extension Spyable {
         case .atMost(let count): success = timesCalled(function, arguments: arguments) <= count
         }
 
-        let recordedCallsDescription = description(of: _calls)
+        let recordedCallsDescription = _callsDictionary.friendlyDescription
         return DidCallResult(success: success, recordedCallsDescription: recordedCallsDescription)
     }
 
     func resetCalls() {
-        _calls = []
+        _callsDictionary.clearAllCalls()
     }
 
     // MARK: Static
 
-    static var _calls: [RecordedCall] {
-        set {
-            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
-            recordedCallArray.calls = newValue
-            callsMapTable.setObject(recordedCallArray, forKey: self)
-        }
+    static var _callsDictionary: RecordedCallsDictionary {
         get {
-            let recordedCallArray = callsMapTable.object(forKey: self) ?? RecordedCallArray()
-            callsMapTable.setObject(recordedCallArray, forKey: self)
-            return recordedCallArray.calls
+            guard let callsDict = callsMapTable.object(forKey: self) else {
+                let callsDict = RecordedCallsDictionary()
+                callsMapTable.setObject(callsDict, forKey: self)
+                return callsDict
+            }
+
+            return callsDict
         }
     }
 
@@ -281,43 +279,43 @@ public extension Spyable {
         case .atMost(let count): success = timesCalled(function, arguments: arguments) <= count
         }
 
-        let recordedCallsDescription = description(of: _calls)
+        let recordedCallsDescription = _callsDictionary.friendlyDescription
         return DidCallResult(success: success, recordedCallsDescription: recordedCallsDescription)
     }
 
     static func resetCalls() {
-        _calls = []
+        _callsDictionary.clearAllCalls()
     }
 
     // MARK: - Internal Functions
 
     /// This is for `Spryable` to act as a pass-through to record a call.
     internal func internal_recordCall(function: Function, arguments: [Any?]) {
-        let call = RecordedCall(function: function.rawValue, arguments: arguments)
-        _calls.append(call)
+        let call = RecordedCall(functionName: function.rawValue, arguments: arguments)
+        _callsDictionary.add(call: call)
     }
 
     /// This is for `Spryable` to act as a pass-through to record a call.
     internal static func internal_recordCall(function: ClassFunction, arguments: [Any?]) {
-        let call = RecordedCall(function: function.rawValue, arguments: arguments)
-        _calls.append(call)
+        let call = RecordedCall(functionName: function.rawValue, arguments: arguments)
+        _callsDictionary.add(call: call)
     }
 
     // MARK: - Private Functions
     
     private func timesCalled(_ function: Function, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
+        return numberOfMatchingCalls(functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
     }
 
     private static func timesCalled(_ function: ClassFunction, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(function: function.rawValue, arguments: arguments, calls: _calls)
+        return numberOfMatchingCalls(functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
     }
 }
 
 // MARK: Private Functions
 
-private func numberOfMatchingCalls(function: String, arguments: [SpryEquatable?], calls: [RecordedCall]) -> Int {
-    let matchingFunctions = calls.filter{ $0.function == function }
+private func numberOfMatchingCalls(functionName: String, arguments: [SpryEquatable?], callsDictionary: RecordedCallsDictionary) -> Int {
+    let matchingFunctions = callsDictionary.getCalls(for: functionName)
 
     // if no args passed in then only check if function was called (allows user to not care about args being passed in)
     if arguments.isEmpty {
@@ -337,21 +335,4 @@ private func isOptional(_ value: Any) -> Bool {
     let mirror = Mirror(reflecting: value)
     
     return mirror.displayStyle == .optional
-}
-
-private func description(of calls: [RecordedCall]) -> String {
-    guard !calls.isEmpty else {
-        return "<>"
-    }
-
-    return calls.map {
-        let functionStringRepresentation = "<" + $0.function + ">"
-        let arguementListStringRepresentation = $0.arguments.map { "<\($0.stringRepresentation())>" }.joined(separator: ", ")
-
-        if !arguementListStringRepresentation.isEmpty {
-            return functionStringRepresentation + " with " + arguementListStringRepresentation
-        }
-
-        return functionStringRepresentation
-    }.joined(separator: "; ")
 }
