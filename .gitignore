@@ -32,3 +32,6 @@ DerivedData
 Pods/
 #*.xcworkspace
 #!default.xcworkspace
+#
+# Custom
+UsingSpry/
