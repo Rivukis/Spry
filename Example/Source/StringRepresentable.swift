@@ -24,8 +24,8 @@ public protocol StringRepresentable: RawRepresentable {
     init(functionName: String, file: String, line: Int)
 }
 
-extension StringRepresentable {
-    init(functionName: String, file: String, line: Int) {
+public extension StringRepresentable {
+    public init(functionName: String, file: String, line: Int) {
         guard let function = Self(rawValue: functionName) else {
             Constant.FatalError.noFunctionFound(functionType: Self.self, functionName: functionName, file: file, line: line)
         }
