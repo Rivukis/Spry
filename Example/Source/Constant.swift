@@ -8,10 +8,10 @@ private func fatalError(title: String, entries: [String]) -> Never {
 
 internal enum Constant {
     enum FatalError {
-        static func wrongTypesBeingCompared(_ actual: SpryEquatable?, _ me: SpryEquatable) -> Never {
+        static func wrongTypesBeingCompared(self me: SpryEquatable, actual: SpryEquatable) -> Never {
             let title = "Wrong types being equated"
             let entries = [
-                "<\(type(of: actual))> could NOT be cast as <\(type(of: me))>"
+                "<\(actual)> could NOT be cast as <\(type(of: me))>"
             ]
 
             fatalError(title: title, entries: entries)
