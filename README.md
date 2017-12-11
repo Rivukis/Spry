@@ -87,7 +87,7 @@ class StringService {
 
 // The Fake Class (If the fake is from a class then `override` will be required for each function and property)
 class FakeStringService: StringService, Spryable {
-    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
+    enum ClassFunction: String, StringRepresentable { // <-- **REQUIRED**
         case giveMeAString = "giveMeAString(arg1:arg2:)"
     }
 
@@ -147,7 +147,7 @@ protocol StringService: class {
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
     func iHaveACompletionClosure(string: String, completion: () -> Void)
-    static func imAStaticFunction()
+    static func imAClassFunction()
 }
 
 // The Real Thing can be a class
@@ -172,15 +172,15 @@ class StringService {
         // do real things
     }
 
-    static func imAStaticFunction() {
+    static func imAClassFunction() {
         // do real things
     }
 }
 
 // The Stub Class (If the fake is from a class then `override` will be required for each function and property)
 class FakeStringService: StringService, Stubbable {
-    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
-        case imAStaticFunction = "imAStaticFunction()"
+    enum ClassFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAClassFunction = "imAClassFunction()"
     }
 
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
@@ -212,7 +212,7 @@ class FakeStringService: StringService, Stubbable {
         return stubbedValue(arguments: string, completion) // <-- **REQUIRED**
     }
 
-    static func imAStaticFunction() {
+    static func imAClassFunction() {
         return stubbedValue() // <-- **REQUIRED**
     }
 }
@@ -256,7 +256,7 @@ fakeStringService.stub(.iHaveACompletionClosure).with("correct string", Argument
 })
 
 // can stub static functions as well
-FakeStringService.stub(.imAStaticFunction).andReturn(Void())
+FakeStringService.stub(.imAClassFunction).andReturn(Void())
 ```
 
 ## Spyable
@@ -284,7 +284,7 @@ protocol StringService: class {
     var readwriteProperty: String { set get }
     func giveMeAString() -> String
     func hereAreTwoStrings(string1: String, string2: String) -> Bool
-    static func imAStaticFunction()
+    static func imAClassFunction()
 }
 
 // The Real Thing can be a class
@@ -305,15 +305,15 @@ class RealStringService: StringService {
         return true
     }
 
-    static func imAStaticFunction() {
+    static func imAClassFunction() {
         // do real things
     }
 }
 
 // The Spy Class (If the fake is from a class then `override` will be required for each function and property)
 class FakeStringService: StringService, Spyable {
-    enum StaticFunction: String, StringRepresentable { // <-- **REQUIRED**
-        case imAStaticFunction = "imAStaticFunction()"
+    enum ClassFunction: String, StringRepresentable { // <-- **REQUIRED**
+        case imAClassFunction = "imAClassFunction()"
     }
 
     enum Function: String, StringRepresentable { // <-- **REQUIRED**
@@ -345,7 +345,7 @@ class FakeStringService: StringService, Spyable {
         return false
     }
 
-    static func imAStaticFunction() {
+    static func imAClassFunction() {
         recordCall() // <-- **REQUIRED**
     }
 }
