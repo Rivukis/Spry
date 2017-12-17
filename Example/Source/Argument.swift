@@ -90,7 +90,7 @@ public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
 
      - Returns: A new ArgumentCaptor.
      */
-    static func captor() -> ArgumentCaptor {
+    static public func captor() -> ArgumentCaptor {
         return ArgumentCaptor()
     }
 }
