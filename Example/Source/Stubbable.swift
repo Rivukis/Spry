@@ -342,7 +342,7 @@ public extension Stubbable {
     }
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function = Function(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, type: Self.self, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
         } catch {
@@ -351,7 +351,7 @@ public extension Stubbable {
     }
 
     func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function = Function(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, type: Self.self, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
         } catch {
@@ -360,12 +360,12 @@ public extension Stubbable {
     }
 
     func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function = Function(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, type: Self.self, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function = Function(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, type: Self.self, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 
@@ -406,7 +406,7 @@ public extension Stubbable {
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) -> T {
-        let function = ClassFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, type: self, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
         } catch {
@@ -415,7 +415,7 @@ public extension Stubbable {
     }
 
     static func stubbedValue<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) -> T {
-        let function = ClassFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, type: self, file: file, line: line)
         do {
             return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
         } catch {
@@ -424,12 +424,12 @@ public extension Stubbable {
     }
 
     static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., asType _: T.Type = T.self, file: String = #file, line: Int = #line) throws -> T {
-        let function = ClassFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, type: self, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .noFallback)
     }
 
     static func stubbedValueThrows<T>(_ functionName: String = #function, arguments: Any?..., fallbackValue: T, file: String = #file, line: Int = #line) throws -> T {
-        let function = ClassFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, type: self, file: file, line: line)
         return try internal_stubbedValue(function, arguments: arguments, fallback: .fallback(fallbackValue))
     }
 

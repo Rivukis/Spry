@@ -21,13 +21,13 @@
 public protocol StringRepresentable: RawRepresentable {
     var rawValue: String { get }
     init?(rawValue: String)
-    init(functionName: String, file: String, line: Int)
+    init<T>(functionName: String, type: T.Type, file: String, line: Int)
 }
 
 public extension StringRepresentable {
-    public init(functionName: String, file: String, line: Int) {
+    public init<T>(functionName: String, type: T.Type, file: String, line: Int) {
         guard let function = Self(rawValue: functionName) else {
-            Constant.FatalError.noFunctionFound(functionType: Self.self, functionName: functionName, file: file, line: line)
+            Constant.FatalError.noFunctionFound(functionName: functionName, type: type, file: file, line: line)
         }
 
         self = function

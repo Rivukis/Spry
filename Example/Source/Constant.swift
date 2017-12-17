@@ -100,13 +100,13 @@ internal enum Constant {
             andThrowOnNonThrowingFunction(type: S.self, functionName: function.rawValue)
         }
 
-        static func noFunctionFound<T: StringRepresentable>(functionType: T.Type, functionName: String, file: String, line: Int) -> Never {
+        static func noFunctionFound<T>(functionName: String, type: T.Type, file: String, line: Int) -> Never {
             let caseName = functionName.removeAfter(startingCharacter: "(") ?? functionName
             let probableMessage = "case \(caseName) = \"\(functionName)\""
 
             let title = "Unable to find function"
             let entries = [
-                "On type <\(functionType)>",
+                "On type <\(type)>",
                 "With function signature <\(functionName)>",
                 "Error occured in file <\(file)> on line <\(line)>",
                 "Possible Fix:",

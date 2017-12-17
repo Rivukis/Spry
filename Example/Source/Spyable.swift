@@ -232,7 +232,7 @@ public extension Spyable {
     }
 
     func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
-        let function = Function(functionName: functionName, file: file, line: line)
+        let function = Function(functionName: functionName, type: Self.self, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
@@ -267,7 +267,7 @@ public extension Spyable {
     }
 
     static func recordCall(functionName: String = #function, arguments: Any?..., file: String = #file, line: Int = #line) {
-        let function = ClassFunction(functionName: functionName, file: file, line: line)
+        let function = ClassFunction(functionName: functionName, type: self, file: file, line: line)
         internal_recordCall(function: function, arguments: arguments)
     }
 
