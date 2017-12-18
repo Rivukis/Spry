@@ -19,7 +19,7 @@ class ArgumentSpec: QuickSpec {
                     expect("\(Argument.anything)").to(equal("Argument.anything"))
                     expect("\(Argument.nonNil)").to(equal("Argument.nonNil"))
                     expect("\(Argument.nil)").to(equal("Argument.nil"))
-                    expect("\(Argument.pass({ _ in true }))").to(equal("Argument.pass"))
+                    expect("\(Argument.validator({ _ in true }))").to(equal("Argument.validator"))
                 }
             }
 
@@ -156,7 +156,7 @@ class ArgumentSpec: QuickSpec {
                         }
                     }
 
-                    describe(".pass") {
+                    describe(".validator") {
                         describe("validating closure") {
                             var passedInArg: String!
                             let actualArg = "actual arg"
@@ -164,7 +164,7 @@ class ArgumentSpec: QuickSpec {
                             beforeEach {
                                 passedInArg = nil
 
-                                let customValidator = Argument.pass { actualArg -> Bool in
+                                let customValidator = Argument.validator { actualArg -> Bool in
                                     passedInArg = actualArg as! String
                                     return true
                                 }
@@ -187,7 +187,7 @@ class ArgumentSpec: QuickSpec {
                         context("when the validator returns true") {
                             beforeEach {
                                 specifiedArgs = [
-                                    Argument.pass { _ -> Bool in
+                                    Argument.validator { _ -> Bool in
                                         return true
                                     },
                                 ]
@@ -206,7 +206,7 @@ class ArgumentSpec: QuickSpec {
                         context("when the validator returns true") {
                             beforeEach {
                                 specifiedArgs = [
-                                    Argument.pass { _ -> Bool in
+                                    Argument.validator { _ -> Bool in
                                         return false
                                     },
                                 ]
