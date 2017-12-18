@@ -6,6 +6,12 @@ private func fatalError(title: String, entries: [String]) -> Never {
     fatalError(titleString + entriesString)
 }
 
+private func routeString(filePath: String, line: String) -> String {
+    let file = filePath.components(separatedBy: "/").last ?? filePath
+
+    return file + ":" + line
+}
+
 internal enum Constant {
     enum FatalError {
         static func wrongTypesBeingCompared(self me: SpryEquatable, actual: SpryEquatable) -> Never {
@@ -108,7 +114,7 @@ internal enum Constant {
             let entries = [
                 "On type <\(type)>",
                 "With function signature <\(functionName)>",
-                "Error occured in file <\(file)> on line <\(line)>",
+                "Error occured on \(routeString(filePath: file, line: "\(line)"))",
                 "Possible Fix:",
                 probableMessage,
             ]
