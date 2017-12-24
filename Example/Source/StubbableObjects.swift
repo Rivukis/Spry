@@ -87,7 +87,7 @@ public class Stub: CustomStringConvertible {
 
      - Parameter value: The value to be returned by the stubbed function.
      */
-    public func andReturn(_ value: Any?) {
+    public func andReturn(_ value: Any? = Void()) {
         stubType = .andReturn(value)
     }
 

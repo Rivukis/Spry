@@ -25,6 +25,16 @@ class StubbableSpec: QuickSpec {
             }
 
             describe("and return") {
+                describe("default return value") {
+                    beforeEach {
+                        subject.stub(.giveMeAVoid).andReturn()
+                    }
+
+                    it("should default to Void()") {
+                        expect(subject.giveMeAVoid()).to(beVoid())
+                    }
+                }
+
                 describe("returning Void") {
                     beforeEach {
                         subject.stub(.giveMeAVoid).andReturn(())
