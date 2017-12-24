@@ -14,15 +14,6 @@ private func routeString(filePath: String, line: String) -> String {
 
 internal enum Constant {
     enum FatalError {
-        static func wrongTypesBeingCompared(self me: SpryEquatable, actual: SpryEquatable) -> Never {
-            let title = "Wrong types being equated"
-            let entries = [
-                "<\(actual)> could NOT be cast as <\(type(of: me))>"
-            ]
-
-            fatalError(title: title, entries: entries)
-        }
-
         static func wrongNumberOfArgsBeingCompared(specifiedArguments: [SpryEquatable?], actualArguments: [Any?]) -> Never {
             let title = "Wrong number of arguments to compare"
             let entries = [

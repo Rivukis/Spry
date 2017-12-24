@@ -29,7 +29,7 @@ public extension SpryEquatable {
 public extension SpryEquatable where Self: Equatable {
     func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         return self == castedActual
@@ -41,7 +41,7 @@ public extension SpryEquatable where Self: Equatable {
 public extension SpryEquatable where Self: AnyObject {
     func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         return self === castedActual
@@ -53,7 +53,7 @@ public extension SpryEquatable where Self: AnyObject {
 public extension SpryEquatable where Self: AnyObject & Equatable {
     func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Self else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         return self === castedActual
@@ -65,7 +65,7 @@ public extension SpryEquatable where Self: AnyObject & Equatable {
 public extension Array {
     func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Array<Element> else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         if self.count != castedActual.count {
@@ -91,7 +91,7 @@ public extension Array {
 public extension Dictionary {
     func _isEqual(to actual: SpryEquatable?) -> Bool {
         guard let castedActual = actual as? Dictionary<Key, Value> else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         if self.count != castedActual.count {
@@ -135,7 +135,7 @@ public extension SpryEquatable where Self: OptionalType {
         }
 
         guard type(of: self) == type(of: actual) else {
-            Constant.FatalError.wrongTypesBeingCompared(self: self, actual: actual)
+            return false
         }
 
         let selfsWrappedValue = selfMirror.children.first?.value
