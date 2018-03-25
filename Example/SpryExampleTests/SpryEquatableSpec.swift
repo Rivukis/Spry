@@ -31,9 +31,9 @@ class SpryEquatableSpec: QuickSpec {
                     let myObject1 = AnyObjectAndEquatable()
                     let myObject2 = AnyObjectAndEquatable()
 
-                    it("should use pointer comparison") {
+                    it("should use Equatable") {
                         expect(myObject1._isEqual(to: myObject1)).to(beTrue())
-                        expect(myObject1._isEqual(to: myObject2)).to(beFalse())
+                        expect(myObject1._isEqual(to: myObject2)).to(beTrue())
                     }
                 }
             }

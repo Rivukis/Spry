@@ -56,7 +56,7 @@ public extension SpryEquatable where Self: AnyObject & Equatable {
             return false
         }
 
-        return self === castedActual
+        return self == castedActual
     }
 }
 
