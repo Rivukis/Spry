@@ -19,13 +19,42 @@ public class Stub: CustomStringConvertible {
         case andThrow(Error)
     }
 
-    internal let functionName: String
-    internal private(set) var arguments: [SpryEquatable] = []
-    internal let referenceID = UUID()
+    // MARK: - Public Properties
 
-    internal var isComplete: Bool {
+    /// A beautified description. Used for debugging purposes.
+    public var description: String {
+        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
+        let returnDescription = isNil(stubType) ? "nil" : "\(stubType!)"
+
+        return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
+    }
+
+    /// A beautified description. Used for logging.
+    public var friendlyDescription: String {
+        let functionStringRepresentation = "<" + functionName + ">"
+        let arguementListStringRepresentation = arguments
+            .map { "<\($0)>" }
+            .joined(separator: ", ")
+
+        if !arguementListStringRepresentation.isEmpty {
+            return functionStringRepresentation + " with " + arguementListStringRepresentation
+        }
+
+        return functionStringRepresentation
+    }
+
+    // MARK: - Internal Properties
+
+    let functionName: String
+
+    var isComplete: Bool {
         return stubType != nil
     }
+
+    private(set) var arguments: [SpryEquatable] = []
+    var chronologicalIndex = -1
+
+    // MARK: - Private Properties
 
     private var stubType: StubType? {
         didSet {
@@ -34,21 +63,17 @@ public class Stub: CustomStringConvertible {
             }
         }
     }
+
     private var stubCompleteHandler: (Stub) -> Void
 
-    internal init(functionName: String, stubCompleteHandler: @escaping (Stub) -> Void) {
+    // MARK: - Initializers
+
+    init(functionName: String, stubCompleteHandler: @escaping (Stub) -> Void) {
         self.functionName = functionName
         self.stubCompleteHandler = stubCompleteHandler
     }
 
     // MARK: - Public Functions
-
-    /// A beautified description. Used for debugging purposes.
-    public var description: String {
-        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        let returnDescription = isNil(stubType) ? "nil" : "\(stubType!)"
-        return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
-    }
 
     /**
      Used to specify arguments when stubbing.
@@ -166,10 +191,47 @@ public class Stub: CustomStringConvertible {
  This exists because a dictionary is needed as a class. Instances of this type are put into an NSMapTable.
  */
 public class StubsDictionary: CustomStringConvertible {
+
+    // MARK: - Public Properties
+
+    /// A beautified description. Used for debugging purposes.
+    public var description: String {
+        return String(describing: stubsDict)
+    }
+
+    /// A beautified description. Used for logging.
+    public var friendlyDescription: String {
+        guard !stubs.isEmpty else {
+            return "<>"
+        }
+
+        let friendlyStubsString = stubs
+            .map { $0.friendlyDescription }
+            .joined(separator: "; ")
+
+        return friendlyStubsString
+    }
+
+    /// Array of all stubs in chronological order.
+    public var stubs: [Stub] {
+        return stubsDict
+            .values
+            .flatMap { $0 }
+            .sorted { $0.0.chronologicalIndex < $0.1.chronologicalIndex }
+    }
+
+    /// Number of stubs that have been added. This number is NOT reset when stubs are removed (i.e. `stubAgain()`, `resetStubs()`)
+    public private(set) var stubsCount = 0
+
+    // MARK: - Private Properties
+
     private var stubsDict: [String: [Stub]] = [:]
 
     func add(stub: Stub) {
         var stubs = stubsDict[stub.functionName] ?? []
+
+        stubsCount += 1
+        stub.chronologicalIndex = stubsCount
 
         stubs.insert(stub, at: 0)
         stubsDict[stub.functionName] = stubs
@@ -179,7 +241,7 @@ public class StubsDictionary: CustomStringConvertible {
         var duplicates: [Stub] = []
 
         stubsDict[stub.functionName]?.forEach {
-            guard $0.referenceID != stub.referenceID && stub.isComplete else {
+            guard $0.chronologicalIndex != stub.chronologicalIndex && stub.isComplete else {
                 return
             }
 
@@ -200,7 +262,7 @@ public class StubsDictionary: CustomStringConvertible {
 
         removingStubs.forEach { removedStub in
             currentStubs.removeFirst { currentStub in
-                currentStub.referenceID == removedStub.referenceID
+                return currentStub.chronologicalIndex == removedStub.chronologicalIndex
             }
         }
 
@@ -209,10 +271,6 @@ public class StubsDictionary: CustomStringConvertible {
 
     func clearAllStubs() {
         stubsDict = [:]
-    }
-
-    public var description: String {
-        return String(describing: stubsDict)
     }
 }
 

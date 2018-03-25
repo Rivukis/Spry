@@ -3,7 +3,9 @@ import Foundation
 private func fatalError(title: String, entries: [String]) -> Never {
     let titleString = "\n --- FATAL ERROR: \(title) ---"
     let entriesString = entries.map { "\n  ￫ " + $0 }.joined() + "\n"
-    fatalError(titleString + entriesString)
+    let errorString = titleString + entriesString
+
+    fatalError(errorString)
 }
 
 private func routeString(filePath: String, line: String) -> String {
