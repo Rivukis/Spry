@@ -35,7 +35,7 @@ public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: Spr
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
-            return PredicateResult(bool: false, message: .expectedActualValueTo(descriptionOfAttempted))
+            return PredicateResult(status: .fail, message: .expectedActualValueTo(descriptionOfAttempted))
         }
 
         let descriptionOfAttempted = descriptionOfExpectation(actualType: type(of: spyable), functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
@@ -71,7 +71,7 @@ public func haveReceived<T: Spyable>(_ function: T.ClassFunction, with arguments
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
-            return PredicateResult(bool: false, message: .expectedActualValueTo(descriptionOfAttempted))
+            return PredicateResult(status: .fail, message: .expectedActualValueTo(descriptionOfAttempted))
         }
 
         let descriptionOfAttempted = descriptionOfExpectation(actualType: spyable, functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
