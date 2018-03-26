@@ -129,8 +129,9 @@ class StubbableTestHelper: Stubbable {
         return stubbedValue()
     }
 
-    func giveMeAStringWithFallbackValue() -> String {
-        return stubbedValue(fallbackValue: "fallback value")
+    var fallbackValueForgiveMeAStringWithFallbackValue: String?
+    func giveMeAStringWithFallbackValue() -> String? {
+        return stubbedValue(fallbackValue: fallbackValueForgiveMeAStringWithFallbackValue)
     }
 
     func giveMeAnOptional() -> String? {

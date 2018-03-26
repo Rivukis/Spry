@@ -357,8 +357,23 @@ class StubbableSpec: QuickSpec {
                 }
 
                 context("when the function is NOT stubbed with the appropriate type") {
+                    let fallbackValue = "fallback value"
+
                     beforeEach {
+                        subject.fallbackValueForgiveMeAStringWithFallbackValue = fallbackValue
                         subject.stub(.giveMeAStringWithFallbackValue).andReturn(100)
+                    }
+
+                    it("should return the fallback value") {
+                        expect(subject.giveMeAStringWithFallbackValue()).to(equal(fallbackValue))
+                    }
+                }
+
+                context("when the function is NOT stubbed") {
+                    let fallbackValue = "fallback value"
+
+                    beforeEach {
+                        subject.fallbackValueForgiveMeAStringWithFallbackValue = fallbackValue
                     }
 
                     it("should return the fallback value") {
@@ -366,9 +381,13 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
-                context("when the function is NOT stubbed") {
-                    it("should return the fallback value") {
-                        expect(subject.giveMeAStringWithFallbackValue()).to(equal("fallback value"))
+                context("when the fallback value is nil") {
+                    beforeEach {
+                        subject.fallbackValueForgiveMeAStringWithFallbackValue = nil
+                    }
+
+                    it("should return nil when the fallback value should be used") {
+                        expect(subject.giveMeAStringWithFallbackValue()).to(beNil())
                     }
                 }
             }
