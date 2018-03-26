@@ -16,21 +16,7 @@ import Foundation
  */
 public class RecordedCall: CustomStringConvertible {
 
-    // MARK: - Internal Properties
-
-    let functionName: String
-    let arguments: [Any?]
-
-    var chronologicalIndex = -1
-
-    // MARK: - Initializers
-
-    init(functionName: String, arguments: [Any?]) {
-        self.functionName = functionName
-        self.arguments = arguments
-    }
-
-    // MARK: - Public Functions
+    // MARK: - Public Properties
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
@@ -50,6 +36,20 @@ public class RecordedCall: CustomStringConvertible {
         }
 
         return functionStringRepresentation
+    }
+
+    // MARK: - Internal Properties
+
+    let functionName: String
+    let arguments: [Any?]
+
+    var chronologicalIndex = -1
+
+    // MARK: - Initializers
+
+    init(functionName: String, arguments: [Any?]) {
+        self.functionName = functionName
+        self.arguments = arguments
     }
 }
 
