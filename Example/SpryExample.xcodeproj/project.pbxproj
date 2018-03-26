@@ -20,6 +20,7 @@
 		7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */; };
 		7A4607822068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4607812068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift */; };
 		7A4607832068799400598ED1 /* HaveRecordedCallsMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A46077F2068790200598ED1 /* HaveRecordedCallsMatcher.swift */; };
+		7A460786206886D100598ED1 /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A460784206882C100598ED1 /* SpryConfiguration.swift */; };
 		7A736E0E1F1B70BE00FBCD98 /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736DFE1F1B70B900FBCD98 /* SpryEquatable.swift */; };
 		7A736E0F1F1B70BE00FBCD98 /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736DFF1F1B70B900FBCD98 /* Argument.swift */; };
 		7A736E101F1B70BE00FBCD98 /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E001F1B70B900FBCD98 /* Spryable.swift */; };
@@ -71,6 +72,7 @@
 		7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleUtils.swift; sourceTree = "<group>"; };
 		7A46077F2068790200598ED1 /* HaveRecordedCallsMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HaveRecordedCallsMatcher.swift; path = SourceNimble/HaveRecordedCallsMatcher.swift; sourceTree = SOURCE_ROOT; };
 		7A4607812068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveRecordedCallsMatcherSpec.swift; sourceTree = "<group>"; };
+		7A460784206882C100598ED1 /* SpryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpryConfiguration.swift; path = Source/SpryConfiguration.swift; sourceTree = SOURCE_ROOT; };
 		7A736DFE1F1B70B900FBCD98 /* SpryEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryEquatable.swift; path = Source/SpryEquatable.swift; sourceTree = SOURCE_ROOT; };
 		7A736DFF1F1B70B900FBCD98 /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Argument.swift; path = Source/Argument.swift; sourceTree = SOURCE_ROOT; };
 		7A736E001F1B70B900FBCD98 /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spryable.swift; path = Source/Spryable.swift; sourceTree = SOURCE_ROOT; };
@@ -199,6 +201,7 @@
 				7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */,
 				7A140E9E1F66134300F65E35 /* Constant.swift */,
 				7A0C15E11FB5517100F54AC6 /* Helpers.swift */,
+				7A460784206882C100598ED1 /* SpryConfiguration.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */,
 				7AABAD861FAFD6CB00788CA3 /* Stubbable+TestHelper.swift in Sources */,
 				7AABAD8A1FAFDAB300788CA3 /* SpyableSpec.swift in Sources */,
+				7A460786206886D100598ED1 /* SpryConfiguration.swift in Sources */,
 				7AABAD8E1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift in Sources */,
 				7A736E111F1B70BE00FBCD98 /* Spyable.swift in Sources */,
 				7AABAD881FAFDA5C00788CA3 /* Spryable+TestHelper.swift in Sources */,

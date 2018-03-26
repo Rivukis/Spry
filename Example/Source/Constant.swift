@@ -5,6 +5,8 @@ private func fatalError(title: String, entries: [String]) -> Never {
     let entriesString = entries.map { "\n  ￫ " + $0 }.joined() + "\n"
     let errorString = titleString + entriesString
 
+    SpryConfiguration.fatalErrorClosure(errorString)
+
     fatalError(errorString)
 }
 
