@@ -16,12 +16,15 @@ private func routeString(filePath: String, line: String) -> String {
 
 internal enum Constant {
     enum FatalError {
-        static func wrongNumberOfArgsBeingCompared(specifiedArguments: [SpryEquatable?], actualArguments: [Any?]) -> Never {
+        static func wrongNumberOfArgsBeingCompared<T>(fakeType: T.Type, functionName: String, specifiedArguments: [SpryEquatable?], actualArguments: [Any?]) -> Never {
             let title = "Wrong number of arguments to compare"
             let entries = [
-                "Specified <\(specifiedArguments.count)>, received <\(actualArguments.count)>",
-                "Specified arguments <\(descriptionOfArguments(specifiedArguments))>",
-                "Actual arguments <\(descriptionOfArguments(actualArguments))>"
+                "Type: \(T.self)",
+                "Function: \(fakeType)",
+                "Specified count: \(specifiedArguments.count)",
+                "Received count: \(actualArguments.count)",
+                "Specified arguments: \(descriptionOfArguments(specifiedArguments))",
+                "Actual arguments: \(descriptionOfArguments(actualArguments))"
             ]
 
             fatalError(title: title, entries: entries)
@@ -30,7 +33,7 @@ internal enum Constant {
         static func doesNotConformToEquatable(_ value: SpryEquatable) -> Never {
             let title = "Improper SpryEquatable"
             let entries = [
-                "<\(type(of: value))> must either conform to Equatable or be changed to an AnyObject"
+                "\(type(of: value)) must either conform to Equatable or be changed to a reference type (i.e. class)"
             ]
 
             fatalError(title: title, entries: entries)
@@ -39,7 +42,7 @@ internal enum Constant {
         static func doesNotConformToSpryEquatable(_ value: Any) -> Never {
             let title = "SpryEquatable required"
             let entries = [
-                "<\(type(of: value))> must conform to SpryEquatable"
+                "\(type(of: value)) must conform to SpryEquatable"
             ]
 
             fatalError(title: title, entries: entries)
@@ -48,7 +51,8 @@ internal enum Constant {
         static func shouldNotConformToOptionalType(_ value: Any) -> Never {
             let title = "Not allowed to conform to 'OptionalType'"
             let entries = [
-                "<\(type(of: value))> should NOT conform to OptionalType. This is reserved for Optional<Wrapped>"
+                "Violating Type: \(type(of: value))",
+                "Nothing should NOT conform to OptionalType. This is reserved for Optional<Wrapped>"
             ]
 
             fatalError(title: title, entries: entries)
@@ -57,8 +61,8 @@ internal enum Constant {
         static func argumentCaptorCouldNotReturnSpecifiedType<T>(value: Any?, type: T.Type) -> Never {
             let title = "Argument Capture: wrong argument type"
             let entries = [
-                "Captured argument <\(value as Any)>",
-                "Specified type <\(T.self)>"
+                "Captured argument: \(value as Any)",
+                "Specified type: \(T.self)"
             ]
 
             fatalError(title: title, entries: entries)
@@ -67,8 +71,8 @@ internal enum Constant {
         static func capturedArgumentsOutOfBounds(index: Int, capturedArguments: [Any?]) -> Never {
             let title = "Argument Capture: index out of bounds"
             let entries = [
-                "Index <\(index)> is out of bounds for captured arguments",
-                "Current captured arguments <\(descriptionOfArguments(capturedArguments))>"
+                "Index \(index) is out of bounds for captured arguments",
+                "Current captured arguments: \(descriptionOfArguments(capturedArguments))"
             ]
 
             fatalError(title: title, entries: entries)
@@ -105,10 +109,10 @@ internal enum Constant {
 
             let title = "Unable to find function"
             let entries = [
-                "On type <\(type)>",
-                "With function signature <\(functionName)>",
-                "Error occured on \(routeString(filePath: file, line: "\(line)"))",
-                "Possible Fix:",
+                "Type: \(type)",
+                "Function signature: \(functionName)",
+                "Error occured on: \(routeString(filePath: file, line: "\(line)"))",
+                "Possible Fix: ↴",
                 probableMessage,
             ]
 
@@ -118,10 +122,10 @@ internal enum Constant {
         static func stubbingSameFunctionWithSameArguments(stub: Stub) -> Never {
             let title = "Stubbing the same function with the same arguments"
             let entries = [
-                "Function <\(stub.functionName)>",
-                "Arguments <\(descriptionOfArguments(stub.arguments))>",
+                "Function: \(stub.functionName)",
+                "Arguments: \(descriptionOfArguments(stub.arguments))",
                 "In most cases, stubbing the same function with the same arguments is a \"code smell\"",
-                "However, if this on purpose then use `.stubAgain()`"
+                "However, if this is intentional then use `.stubAgain()`"
             ]
 
             fatalError(title: title, entries: entries)
@@ -132,8 +136,11 @@ internal enum Constant {
         private static func noReturnValueFoundForFunction<S, R>(stubbableType: S.Type, functionName: String, arguments: [Any?], returnType: R.Type, stubsDictionary: StubsDictionary) -> Never {
             let title = "No return value found"
             let entries = [
-                "For <\(S.self).\(functionName)> with received arguments <\(descriptionOfArguments(arguments))> returning a <\(R.self)>",
-                "Current stubs: <\(stubsDictionary.description)>"
+                "Stubbable: \(S.self)",
+                "Function: \(functionName)",
+                "Arguments: \(descriptionOfArguments(arguments))",
+                "Return Type: \(R.self)",
+                "Current stubs: \(stubsDictionary.stubs)"
             ]
 
             fatalError(title: title, entries: entries)
@@ -142,8 +149,9 @@ internal enum Constant {
         private static func andThrowOnNonThrowingFunction<T>(type: T.Type, functionName: String) -> Never {
             let title = "Used '.andThrow()' on non-throwing function"
             let entries = [
-                "Tried to throw from <\(T.self).\(functionName)>",
-                "If this function can throw, use 'spryifyThrows' or 'stubbedValueThrows' as the return value"
+                "Stubbable: \(T.self)",
+                "Function: \(functionName)",
+                "If this function can throw, then ensure that the fake is calling 'spryifyThrows()' or 'stubbedValueThrows()' as the return value of this function."
             ]
 
             fatalError(title: title, entries: entries)

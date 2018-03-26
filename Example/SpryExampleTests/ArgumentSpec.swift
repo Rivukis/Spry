@@ -38,7 +38,7 @@ class ArgumentSpec: QuickSpec {
 
                 let subjectAction: () -> Void = {
                     subjectActionRanCount = subjectActionRanCount + 1
-                    result = isEqualArgsLists(specifiedArgs: specifiedArgs, actualArgs: actualArgs)
+                    result = isEqualArgsLists(fakeType: Any.self, functionName: "", specifiedArgs: specifiedArgs, actualArgs: actualArgs)
                 }
 
                 afterEach {

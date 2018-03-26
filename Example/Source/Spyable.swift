@@ -104,7 +104,7 @@ public protocol Spyable: class {
      - Parameter function: The `Function` specified.
      - Parameter arguments: The arguments specified. If this value is an empty array, then any parameters passed into the actual function call will result in a success (i.e. passing in `[]` is equivalent to passing in Argument.anything for every expected parameter.)
      - Parameter countSpecifier: Used to specify the amount of times this function needs to be called for a successful result. See `CountSpecifier` for more detials.
-     
+
      - Returns: A DidCallResult. See `DidCallResult` for more details.
      */
     func didCall(_ function: Function, withArguments arguments: [SpryEquatable?], countSpecifier: CountSpecifier) -> DidCallResult
@@ -304,17 +304,17 @@ public extension Spyable {
     // MARK: - Private Functions
     
     private func timesCalled(_ function: Function, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
+        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
     }
 
     private static func timesCalled(_ function: ClassFunction, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
+        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
     }
 }
 
 // MARK: Private Functions
 
-private func numberOfMatchingCalls(functionName: String, arguments: [SpryEquatable?], callsDictionary: RecordedCallsDictionary) -> Int {
+private func numberOfMatchingCalls<T>(fakeType: T.Type, functionName: String, arguments: [SpryEquatable?], callsDictionary: RecordedCallsDictionary) -> Int {
     let matchingFunctions = callsDictionary.getCalls(for: functionName)
 
     // if no args passed in then only check if function was called (allows user to not care about args being passed in)
@@ -323,7 +323,7 @@ private func numberOfMatchingCalls(functionName: String, arguments: [SpryEquatab
     }
 
     return matchingFunctions.reduce(0) {
-        return $0 + isEqualArgsLists(specifiedArgs: arguments, actualArgs: $1.arguments).toInt()
+        return $0 + isEqualArgsLists(fakeType: fakeType, functionName: functionName, specifiedArgs: arguments, actualArgs: $1.arguments).toInt()
     }
 }
 
