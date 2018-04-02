@@ -83,7 +83,7 @@ public class RecordedCallsDictionary: CustomStringConvertible {
         return callsDict
             .values
             .flatMap { $0 }
-            .sorted { $0.0.chronologicalIndex < $0.1.chronologicalIndex }
+            .sorted { $0.chronologicalIndex < $1.chronologicalIndex }
     }
 
     /// Number of calls that have been recorded. This number is NOT reset when calls are removed (i.e. `resetCalls()`)

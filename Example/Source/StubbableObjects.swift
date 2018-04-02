@@ -217,7 +217,7 @@ public class StubsDictionary: CustomStringConvertible {
         return stubsDict
             .values
             .flatMap { $0 }
-            .sorted { $0.0.chronologicalIndex < $0.1.chronologicalIndex }
+            .sorted { $0.chronologicalIndex < $1.chronologicalIndex }
     }
 
     /// Number of stubs that have been added. This number is NOT reset when stubs are removed (i.e. `stubAgain()`, `resetStubs()`)
