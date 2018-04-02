@@ -52,7 +52,7 @@ extension String {
     func removeAfter(startingCharacter character: String) -> String? {
         let range = self.range(of: character)
         if let lowerBound = range?.lowerBound {
-            return self.substring(to: lowerBound)
+            return String(self[..<lowerBound])
         }
 
         return nil
