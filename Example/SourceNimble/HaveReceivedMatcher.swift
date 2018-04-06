@@ -10,7 +10,7 @@ import Nimble
 import Spry
 
 /**
- Nimble matcher used to test whether or not a function has been called on an object.
+ Nimble matcher used to test whether or not a function or property has been called on an object.
  
  ## Examples ##
  ```swift
@@ -35,10 +35,46 @@ public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: Spr
     return Predicate.define("") { actualExpression, msg in
         guard let spyable = try actualExpression.evaluate() else {
             let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
-            return PredicateResult(bool: false, message: .expectedActualValueTo(descriptionOfAttempted))
+            return PredicateResult(status: .fail, message: .expectedActualValueTo(descriptionOfAttempted))
         }
 
         let descriptionOfAttempted = descriptionOfExpectation(actualType: type(of: spyable), functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
+        let result = spyable.didCall(function, withArguments: arguments, countSpecifier: countSpecifier)
+
+        return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
+    }
+}
+
+/**
+ Nimble matcher used to test whether or not a function or property has been called on a class.
+
+ ## Examples ##
+ ```swift
+ // any arguments will pass validation as long as the function was called.
+ expect(Service).to(haveReceived("configuration()"))
+
+ // only the first argument has to equate to the actual argument passed in.
+ expect(Service).to(haveReceived("loadJSON(url:)", with: URL("www.google.com")!, Argument.anything))
+
+ // both arguments have to equate to the actual arguments passed in.
+ expect(Service).to(haveReceived("loadJSON(url:)", with: URL("www.google.com")!, 5.0))
+
+ // will only pass if the function was exactly one time.
+ expect(Service).to(haveReceived("loadJSON(url:)", countSpecifier: .exactly(1)))
+ ```
+
+ - Parameter function: A string representation of the function signature
+ - Parameter arguments: Expected arguments. Will fail if the actual arguments don't equate to what is passed in here. Passing in no arguments is equivalent to passing in `Argument.anything` for every expected argument.
+ - Parameter countSpecifier: Used to be more strict about the number of times this function should have been called with the passed in arguments. Defaults to .atLeast(1).
+ */
+public func haveReceived<T: Spyable>(_ function: T.ClassFunction, with arguments: SpryEquatable?..., countSpecifier: CountSpecifier = .atLeast(1)) -> Predicate<T.Type> {
+    return Predicate.define("") { actualExpression, msg in
+        guard let spyable = try actualExpression.evaluate() else {
+            let descriptionOfAttempted = descriptionOfNilAttempt(arguments: arguments, countSpecifier: countSpecifier)
+            return PredicateResult(status: .fail, message: .expectedActualValueTo(descriptionOfAttempted))
+        }
+
+        let descriptionOfAttempted = descriptionOfExpectation(actualType: spyable, functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
         let result = spyable.didCall(function, withArguments: arguments, countSpecifier: countSpecifier)
 
         return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
