@@ -449,10 +449,22 @@ public extension Stubbable {
         let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
         for stub in stubsWithArgs {
-            if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments), let value = try stub.returnValue(for: arguments) as? T {
+            if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments) {
+                let rawValue = try stub.returnValue(for: arguments)
 
-                captureArguments(stub: stub, actualArgs: arguments)
-                return value
+                if isNil(rawValue) {
+                    // nils won't cast to T even when T is Optional unless cast to Any first
+                    if let castedValue = rawValue as Any as? T {
+                        captureArguments(stub: stub, actualArgs: arguments)
+                        return castedValue
+                    }
+                } else {
+                    // values won't cast to T when T is a protocol if values is cast to Any first
+                    if let castedValue = rawValue as? T {
+                        captureArguments(stub: stub, actualArgs: arguments)
+                        return castedValue
+                    }
+                }
             }
         }
 
