@@ -29,8 +29,8 @@
 		7A736E131F1B70BE00FBCD98 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */; };
 		7A736E141F1B70BE00FBCD98 /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E041F1B70B900FBCD98 /* Stubbable.swift */; };
 		7A736E151F1B70BE00FBCD98 /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E051F1B70B900FBCD98 /* StubbableObjects.swift */; };
-		7A736E181F1B70E000FBCD98 /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A736E161F1B70CF00FBCD98 /* HaveReceivedMatcher.swift */; };
 		7A8654F41F00F62200D425B6 /* ArgumentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8654F31F00F62200D425B6 /* ArgumentSpec.swift */; };
+		7A86975A207822BE002A4D1C /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A869758207822AF002A4D1C /* HaveReceivedMatcher.swift */; };
 		7A9774D41F66147C00DCA5CE /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A140E9E1F66134300F65E35 /* Constant.swift */; };
 		7AABAD841FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD831FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift */; };
 		7AABAD861FAFD6CB00788CA3 /* Stubbable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD851FAFD6CB00788CA3 /* Stubbable+TestHelper.swift */; };
@@ -81,8 +81,8 @@
 		7A736E031F1B70B900FBCD98 /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringRepresentable.swift; path = Source/StringRepresentable.swift; sourceTree = SOURCE_ROOT; };
 		7A736E041F1B70B900FBCD98 /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stubbable.swift; path = Source/Stubbable.swift; sourceTree = SOURCE_ROOT; };
 		7A736E051F1B70B900FBCD98 /* StubbableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StubbableObjects.swift; path = Source/StubbableObjects.swift; sourceTree = SOURCE_ROOT; };
-		7A736E161F1B70CF00FBCD98 /* HaveReceivedMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcher.swift; sourceTree = "<group>"; };
 		7A8654F31F00F62200D425B6 /* ArgumentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentSpec.swift; sourceTree = "<group>"; };
+		7A869758207822AF002A4D1C /* HaveReceivedMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HaveReceivedMatcher.swift; path = SourceNimble/HaveReceivedMatcher.swift; sourceTree = SOURCE_ROOT; };
 		7AABAD831FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpryEquatable+TestHelper.swift"; sourceTree = "<group>"; };
 		7AABAD851FAFD6CB00788CA3 /* Stubbable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stubbable+TestHelper.swift"; sourceTree = "<group>"; };
 		7AABAD871FAFDA5C00788CA3 /* Spryable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spryable+TestHelper.swift"; sourceTree = "<group>"; };
@@ -209,7 +209,7 @@
 		7A8654F21F00F34400D425B6 /* NimbleSource */ = {
 			isa = PBXGroup;
 			children = (
-				7A736E161F1B70CF00FBCD98 /* HaveReceivedMatcher.swift */,
+				7A869758207822AF002A4D1C /* HaveReceivedMatcher.swift */,
 				7A46077F2068790200598ED1 /* HaveRecordedCallsMatcher.swift */,
 			);
 			name = NimbleSource;
@@ -470,9 +470,9 @@
 				7AABAD8C1FAFDB3300788CA3 /* Spyable+TestHelper.swift in Sources */,
 				7A736E131F1B70BE00FBCD98 /* StringRepresentable.swift in Sources */,
 				7A4607822068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift in Sources */,
-				7A736E181F1B70E000FBCD98 /* HaveReceivedMatcher.swift in Sources */,
 				7A8654F41F00F62200D425B6 /* ArgumentSpec.swift in Sources */,
 				7A736E121F1B70BE00FBCD98 /* SpyableObjects.swift in Sources */,
+				7A86975A207822BE002A4D1C /* HaveReceivedMatcher.swift in Sources */,
 				7A0C15E31FB6329400F54AC6 /* Helpers.swift in Sources */,
 				7A736E0F1F1B70BE00FBCD98 /* Argument.swift in Sources */,
 				7A2FE8A41F0242120062AE72 /* StubbableSpec.swift in Sources */,
