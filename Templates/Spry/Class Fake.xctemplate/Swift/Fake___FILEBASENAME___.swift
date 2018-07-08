@@ -4,7 +4,7 @@ import Spry
 @testable import ___PROJECTNAME___
 
 class Fake___VARIABLE_spryClass:identifier___: ___VARIABLE_spryClass:identifier___, Spryable {
-    enum StaticFunction: String, StringRepresentable {
+    enum ClassFunction: String, StringRepresentable {
         case <#someFunction#> = <#"someFunction()"#>
     }
 
@@ -25,13 +25,20 @@ class Fake___VARIABLE_spryClass:identifier___: ___VARIABLE_spryClass:identifier_
 
      - Example Stringified Case
 
-     case stringsToBool = "stringsToBool(string1:string2)"
+     case stringsToBool = "stringsToBool(string1:string2:)"
+     case failableStringsToBool = "failableStringsToBool(string1:string2:)"
      case firstName = "firstName"
 
      - Example Function
 
      override func stringsToBool(string1: String, string2: String) -> Bool {
          return spryify(arguments: string1, string2)
+     }
+
+     - Example Throwing Function
+
+     override func failableStringsToBool(string1: String, string2: String) throws -> Bool {
+         return spryifyThrows(arguments: string1, string2)
      }
 
      - Example Property
