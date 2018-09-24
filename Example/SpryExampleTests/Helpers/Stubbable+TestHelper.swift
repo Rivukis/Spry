@@ -150,7 +150,7 @@ class StubbableTestHelper: Stubbable {
         return stubbedValue(arguments: string)
     }
 
-    func callThisCompletion(string: String, closure: () -> Void) {
+    func callThisCompletion(string: String, closure: @escaping () -> Void) {
         return stubbedValue(arguments: string, closure)
     }
 
