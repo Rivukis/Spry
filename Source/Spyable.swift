@@ -13,7 +13,7 @@ import Foundation
  
  - Important: Do NOT use this object.
  */
-private var callsMapTable: NSMapTable<AnyObject, RecordedCallsDictionary> = NSMapTable.weakToStrongObjects()
+private var callsMapTableReference: AtomicReference<NSMapTable<AnyObject, AtomicReference<RecordedCallsDictionary>>> = AtomicReference(initialValue: NSMapTable.weakToStrongObjects(), objectName: "callsMapTable")
 
 /**
  A protocol used to spy on an object's function calls. A small amount of boilerplate is requried.
@@ -83,7 +83,7 @@ public protocol Spyable: class {
      var _callsDictionary: RecordedCallsDictionary = RecordedCallsDictionary()
      ```
      */
-    var _callsDictionary: RecordedCallsDictionary { get }
+    var _callsDictionaryReference: AtomicReference<RecordedCallsDictionary> { get }
 
     /**
      Used to record a function call. Must call in every function for Spyable to work properly.
@@ -177,7 +177,7 @@ public protocol Spyable: class {
      var _callsDictionary: RecordedCallsDictionary = RecordedCallsDictionary()
      ```
      */
-    static var _callsDictionary: RecordedCallsDictionary { get }
+    static var _callsDictionaryReference: AtomicReference<RecordedCallsDictionary> { get }
 
     /**
      Used to record a function call. Must call in every function for Spyable to work properly.
@@ -219,15 +219,20 @@ public extension Spyable {
 
     // MARK: Instance
 
-    var _callsDictionary: RecordedCallsDictionary {
+    var _callsDictionaryReference: AtomicReference<RecordedCallsDictionary> {
         get {
-            guard let callsDict = callsMapTable.object(forKey: self) else {
-                let callsDict = RecordedCallsDictionary()
-                callsMapTable.setObject(callsDict, forKey: self)
-                return callsDict
-            }
+            return callsMapTableReference.getSubValue { callsMapTable -> AtomicReference<RecordedCallsDictionary> in
+                let callsDictionaryReference: AtomicReference<RecordedCallsDictionary>
 
-            return callsDict
+                if let found = callsMapTable.object(forKey: self) {
+                    callsDictionaryReference = found
+                } else {
+                    callsDictionaryReference = AtomicReference(initialValue: RecordedCallsDictionary(), objectName: "\(self)_RecordedCallsDictionary")
+                    callsMapTable.setObject(callsDictionaryReference, forKey: self)
+                }
+
+                return callsDictionaryReference
+            }
         }
     }
 
@@ -244,25 +249,35 @@ public extension Spyable {
         case .atMost(let count): success = timesCalled(function, arguments: arguments) <= count
         }
 
-        let recordedCallsDescription = _callsDictionary.friendlyDescription
+        let recordedCallsDescription = _callsDictionaryReference.getSubValue { recordedCallsDictionary -> String in
+            return recordedCallsDictionary.friendlyDescription
+        }
+
         return DidCallResult(success: success, recordedCallsDescription: recordedCallsDescription)
     }
 
     func resetCalls() {
-        _callsDictionary.clearAllCalls()
+        _callsDictionaryReference.getAndDo { recordedCallsDictionary in
+            recordedCallsDictionary.clearAllCalls()
+        }
     }
 
     // MARK: Static
 
-    static var _callsDictionary: RecordedCallsDictionary {
+    static var _callsDictionaryReference: AtomicReference<RecordedCallsDictionary> {
         get {
-            guard let callsDict = callsMapTable.object(forKey: self) else {
-                let callsDict = RecordedCallsDictionary()
-                callsMapTable.setObject(callsDict, forKey: self)
-                return callsDict
-            }
+            return callsMapTableReference.getSubValue { callsMapTable -> AtomicReference<RecordedCallsDictionary> in
+                let callsDictionaryReference: AtomicReference<RecordedCallsDictionary>
 
-            return callsDict
+                if let found = callsMapTable.object(forKey: self) {
+                    callsDictionaryReference = found
+                } else {
+                    callsDictionaryReference = AtomicReference(initialValue: RecordedCallsDictionary(), objectName: "\(self)_RecordedCallsDictionary")
+                    callsMapTable.setObject(callsDictionaryReference, forKey: self)
+                }
+
+                return callsDictionaryReference
+            }
         }
     }
 
@@ -279,12 +294,17 @@ public extension Spyable {
         case .atMost(let count): success = timesCalled(function, arguments: arguments) <= count
         }
 
-        let recordedCallsDescription = _callsDictionary.friendlyDescription
+        let recordedCallsDescription = _callsDictionaryReference.getSubValue { recordedCallsDictionary -> String in
+            return recordedCallsDictionary.friendlyDescription
+        }
+
         return DidCallResult(success: success, recordedCallsDescription: recordedCallsDescription)
     }
 
     static func resetCalls() {
-        _callsDictionary.clearAllCalls()
+        _callsDictionaryReference.getAndDo { recordedCallsDictionary in
+            recordedCallsDictionary.clearAllCalls()
+        }
     }
 
     // MARK: - Internal Functions
@@ -292,39 +312,49 @@ public extension Spyable {
     /// This is for `Spryable` to act as a pass-through to record a call.
     internal func internal_recordCall(function: Function, arguments: [Any?]) {
         let call = RecordedCall(functionName: function.rawValue, arguments: arguments)
-        _callsDictionary.add(call: call)
+
+        _callsDictionaryReference.getAndDo { recordedCallsDictionary in
+            recordedCallsDictionary.add(call: call)
+        }
     }
 
     /// This is for `Spryable` to act as a pass-through to record a call.
     internal static func internal_recordCall(function: ClassFunction, arguments: [Any?]) {
         let call = RecordedCall(functionName: function.rawValue, arguments: arguments)
-        _callsDictionary.add(call: call)
+
+        _callsDictionaryReference.getAndDo { recordedCallsDictionary in
+            recordedCallsDictionary.add(call: call)
+        }
     }
 
     // MARK: - Private Functions
     
     private func timesCalled(_ function: Function, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
+        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionaryReference: _callsDictionaryReference)
     }
 
     private static func timesCalled(_ function: ClassFunction, arguments: [SpryEquatable?]) -> Int {
-        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionary: _callsDictionary)
+        return numberOfMatchingCalls(fakeType: Self.self, functionName: function.rawValue, arguments: arguments, callsDictionaryReference: _callsDictionaryReference)
     }
 }
 
 // MARK: Private Functions
 
-private func numberOfMatchingCalls<T>(fakeType: T.Type, functionName: String, arguments: [SpryEquatable?], callsDictionary: RecordedCallsDictionary) -> Int {
-    let matchingFunctions = callsDictionary.getCalls(for: functionName)
+private func numberOfMatchingCalls<T>(fakeType: T.Type, functionName: String, arguments: [SpryEquatable?], callsDictionaryReference: AtomicReference<RecordedCallsDictionary>) -> Int {
+    let count = callsDictionaryReference.getSubValue { recordedCallsDictionary -> Int in
+        let matchingFunctions = recordedCallsDictionary.getCalls(for: functionName)
 
-    // if no args passed in then only check if function was called (allows user to not care about args being passed in)
-    if arguments.isEmpty {
-        return matchingFunctions.count
+        // if no args passed in then only check if function was called (allows user to not care about args being passed in)
+        if arguments.isEmpty {
+            return matchingFunctions.count
+        }
+
+        return matchingFunctions.reduce(0) {
+            return $0 + isEqualArgsLists(fakeType: fakeType, functionName: functionName, specifiedArgs: arguments, actualArgs: $1.arguments).toInt()
+        }
     }
 
-    return matchingFunctions.reduce(0) {
-        return $0 + isEqualArgsLists(fakeType: fakeType, functionName: functionName, specifiedArgs: arguments, actualArgs: $1.arguments).toInt()
-    }
+    return count
 }
 
 private func matchingIndexesFor(functionName: String, functionList: [String]) -> [Int] {

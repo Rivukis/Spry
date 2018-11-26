@@ -81,11 +81,11 @@ internal enum Constant {
         }
 
         static func noReturnValueFoundForInstanceFunction<S: Stubbable, R>(stubbable: S, function: S.Function, arguments: [Any?], returnType: R.Type) -> Never {
-            noReturnValueFoundForFunction(stubbableType: S.self, functionName: function.rawValue, arguments: arguments, returnType: R.self, stubsDictionary: stubbable._stubsDictionary)
+            noReturnValueFoundForFunction(stubbableType: S.self, functionName: function.rawValue, arguments: arguments, returnType: R.self, stubsDictionaryReference: stubbable._stubsDictionaryReference)
         }
 
         static func noReturnValueFoundForClassFunction<S: Stubbable, R>(stubbableType _: S.Type, function: S.ClassFunction, arguments: [Any?], returnType: R.Type) -> Never {
-            noReturnValueFoundForFunction(stubbableType: S.self, functionName: function.rawValue, arguments: arguments, returnType: R.self, stubsDictionary: S._stubsDictionary)
+            noReturnValueFoundForFunction(stubbableType: S.self, functionName: function.rawValue, arguments: arguments, returnType: R.self, stubsDictionaryReference: S._stubsDictionaryReference)
         }
 
         static func noReturnValueSourceFound(functionName: String) -> Never {
@@ -135,14 +135,17 @@ internal enum Constant {
 
         // MARK: - Private
 
-        private static func noReturnValueFoundForFunction<S, R>(stubbableType: S.Type, functionName: String, arguments: [Any?], returnType: R.Type, stubsDictionary: StubsDictionary) -> Never {
+        private static func noReturnValueFoundForFunction<S, R>(stubbableType: S.Type, functionName: String, arguments: [Any?], returnType: R.Type, stubsDictionaryReference: AtomicReference<StubsDictionary>) -> Never {
             let title = "No return value found"
+            let stubsDescription = stubsDictionaryReference.getSubValue { stubsDictionary -> String in
+                return String(describing: stubsDictionary.stubs)
+            }
             let entries = [
                 "Stubbable: \(S.self)",
                 "Function: \(functionName)",
                 "Arguments: \(descriptionOfArguments(arguments))",
                 "Return Type: \(R.self)",
-                "Current stubs: \(stubsDictionary.stubs)"
+                "Current stubs: \(stubsDescription)"
             ]
 
             fatalError(title: title, entries: entries)

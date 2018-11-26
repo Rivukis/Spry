@@ -13,7 +13,7 @@ import Foundation
 
  - Important: Do NOT use this object.
  */
-private var stubsMapTable: NSMapTable<AnyObject, StubsDictionary> = NSMapTable.weakToStrongObjects()
+private var stubsMapTableReference: AtomicReference<NSMapTable<AnyObject, AtomicReference<StubsDictionary>>> = AtomicReference(initialValue: NSMapTable.weakToStrongObjects(), objectName: "stubsMapTable")
 
 /**
  A protocol used to stub an object's functions. A small amount of boilerplate is requried.
@@ -83,7 +83,7 @@ public protocol Stubbable: class {
      var _stubsDictionary: StubsDictionary = StubsDictionary()
      ```
      */
-    var _stubsDictionary: StubsDictionary { get }
+    var _stubsDictionaryReference: AtomicReference<StubsDictionary> { get }
 
     /**
      Used to stub a function. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
@@ -221,7 +221,7 @@ public protocol Stubbable: class {
      var _stubsDictionary: StubsDictionary = StubsDictionary()
      ```
      */
-    static var _stubsDictionary: StubsDictionary { get }
+    static var _stubsDictionaryReference: AtomicReference<StubsDictionary> { get }
 
     /**
      Used to stub a function. All stubs must be provided either `andReturn()`, `andDo()`, or `andThrow()` to work properly. May also specify arguments using `with()`.
@@ -303,15 +303,20 @@ public extension Stubbable {
 
     // MARK: - Instance
 
-    var _stubsDictionary: StubsDictionary {
+    var _stubsDictionaryReference: AtomicReference<StubsDictionary> {
         get {
-            guard let stubsDict = stubsMapTable.object(forKey: self) else {
-                let stubDict = StubsDictionary()
-                stubsMapTable.setObject(stubDict, forKey: self)
-                return stubDict
-            }
+            return stubsMapTableReference.getSubValue { stubsMapTable -> AtomicReference<StubsDictionary> in
+                let stubsDictionaryReference: AtomicReference<StubsDictionary>
 
-            return stubsDict
+                if let found = stubsMapTable.object(forKey: self) {
+                    stubsDictionaryReference = found
+                } else {
+                    stubsDictionaryReference = AtomicReference(initialValue: StubsDictionary(), objectName: "\(self)_StubsDictionary")
+                    stubsMapTable.setObject(stubsDictionaryReference, forKey: self)
+                }
+
+                return stubsDictionaryReference
+            }
         }
     }
 
@@ -321,9 +326,12 @@ public extension Stubbable {
                 return
             }
 
-            handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: false)
+            handleDuplicates(stubsDictionaryReference: welf._stubsDictionaryReference, stub: stub, again: false)
         })
-        _stubsDictionary.add(stub: stub)
+
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.add(stub: stub)
+        }
 
         return stub
     }
@@ -334,9 +342,12 @@ public extension Stubbable {
                 return
             }
 
-            handleDuplicates(stubsDictionary: welf._stubsDictionary, stub: stub, again: true)
+            handleDuplicates(stubsDictionaryReference: welf._stubsDictionaryReference, stub: stub, again: true)
         })
-        _stubsDictionary.add(stub: stub)
+
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.add(stub: stub)
+        }
 
         return stub
     }
@@ -370,37 +381,50 @@ public extension Stubbable {
     }
 
     func resetStubs() {
-        _stubsDictionary.clearAllStubs()
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.clearAllStubs()
+        }
     }
 
     // MARK: - Static
 
-    static var _stubsDictionary: StubsDictionary {
+    static var _stubsDictionaryReference: AtomicReference<StubsDictionary> {
         get {
-            guard let stubDict = stubsMapTable.object(forKey: self) else {
-                let stubDict = StubsDictionary()
-                stubsMapTable.setObject(stubDict, forKey: self)
-                return stubDict
-            }
+            return stubsMapTableReference.getSubValue { stubsMapTable -> AtomicReference<StubsDictionary> in
+                let stubsDictionaryReference: AtomicReference<StubsDictionary>
 
-            return stubDict
+                if let found = stubsMapTable.object(forKey: self) {
+                    stubsDictionaryReference = found
+                } else {
+                    stubsDictionaryReference = AtomicReference(initialValue: StubsDictionary(), objectName: "\(self)_StubsDictionary")
+                    stubsMapTable.setObject(stubsDictionaryReference, forKey: self)
+                }
+
+                return stubsDictionaryReference
+            }
         }
     }
 
     static func stub(_ function: ClassFunction) -> Stub {
         let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
-            handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: false)
+            handleDuplicates(stubsDictionaryReference: _stubsDictionaryReference, stub: stub, again: false)
         })
-        _stubsDictionary.add(stub: stub)
+
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.add(stub: stub)
+        }
 
         return stub
     }
 
     static func stubAgain(_ function: ClassFunction) -> Stub {
         let stub = Stub(functionName: function.rawValue, stubCompleteHandler: { stub in
-            handleDuplicates(stubsDictionary: _stubsDictionary, stub: stub, again: true)
+            handleDuplicates(stubsDictionaryReference: _stubsDictionaryReference, stub: stub, again: true)
         })
-        _stubsDictionary.add(stub: stub)
+
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.add(stub: stub)
+        }
 
         return stub
     }
@@ -434,105 +458,120 @@ public extension Stubbable {
     }
 
     static func resetStubs() {
-        _stubsDictionary.clearAllStubs()
+        _stubsDictionaryReference.getAndDo { stubsDictionary in
+            stubsDictionary.clearAllStubs()
+        }
     }
 
     // MARK: - Internal Helper Functions
 
     internal func internal_stubbedValue<T>(_ function: Function, arguments: [Any?], fallback: Fallback<T>) throws -> T {
-        let stubsForFunctionName = _stubsDictionary.getStubs(for: function.rawValue)
+        return try spryQueue.throwingSafeSyncFunction { () -> T in
+            let stubsForFunctionName = self._stubsDictionaryReference.getSubValue { stubsDictionary -> [Stub] in
+                return stubsDictionary.getStubs(for: function.rawValue)
+            }
 
-        if stubsForFunctionName.isEmpty {
-            return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
-        }
+            // TODO: remove me
+            if stubsForFunctionName.isEmpty {
+                return self.fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
+            }
 
-        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
+            let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
-        for stub in stubsWithArgs {
-            if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments) {
+            for stub in stubsWithArgs {
+                if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments) {
+                    let rawValue = try stub.returnValue(for: arguments)
+
+                    if isNil(rawValue) {
+                        // nils won't cast to T even when T is Optional unless cast to Any first
+                        if let castedValue = rawValue as Any as? T {
+                            stub.captureArguments(actualArgs: arguments)
+
+                            return castedValue
+                        }
+                    } else {
+                        // values won't cast to T when T is a protocol if values is cast to Any first
+                        if let castedValue = rawValue as? T {
+                            stub.captureArguments(actualArgs: arguments)
+
+                            return castedValue
+                        }
+                    }
+                }
+            }
+
+            for stub in stubsWithoutArgs {
                 let rawValue = try stub.returnValue(for: arguments)
 
                 if isNil(rawValue) {
                     // nils won't cast to T even when T is Optional unless cast to Any first
                     if let castedValue = rawValue as Any as? T {
-                        captureArguments(stub: stub, actualArgs: arguments)
                         return castedValue
                     }
                 } else {
                     // values won't cast to T when T is a protocol if values is cast to Any first
                     if let castedValue = rawValue as? T {
-                        captureArguments(stub: stub, actualArgs: arguments)
                         return castedValue
                     }
                 }
             }
+
+            return self.fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
         }
-
-        for stub in stubsWithoutArgs {
-            let rawValue = try stub.returnValue(for: arguments)
-
-            if isNil(rawValue) {
-                // nils won't cast to T even when T is Optional unless cast to Any first
-                if let castedValue = rawValue as Any as? T {
-                    return castedValue
-                }
-            } else {
-                // values won't cast to T when T is a protocol if values is cast to Any first
-                if let castedValue = rawValue as? T {
-                    return castedValue
-                }
-            }
-        }
-
-        return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
     }
 
     internal static func internal_stubbedValue<T>(_ function: ClassFunction, arguments: [Any?], fallback: Fallback<T>) throws -> T {
-        let stubsForFunctionName = _stubsDictionary.getStubs(for: function.rawValue)
+        return try spryQueue.throwingSafeSyncFunction { () -> T in
+            let stubsForFunctionName = self._stubsDictionaryReference.getSubValue { stubsDictionary -> [Stub] in
+                return stubsDictionary.getStubs(for: function.rawValue)
+            }
 
-        if stubsForFunctionName.isEmpty {
-            return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
-        }
+            if stubsForFunctionName.isEmpty {
+                return self.fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
+            }
 
-        let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
+            let (stubsWithoutArgs, stubsWithArgs) = stubsForFunctionName.bisect{ $0.arguments.count == 0 }
 
-        for stub in stubsWithArgs {
-            if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments) {
+            for stub in stubsWithArgs {
+                if isEqualArgsLists(fakeType: Self.self, functionName: function.rawValue, specifiedArgs: stub.arguments, actualArgs: arguments) {
+                    let rawValue = try stub.returnValue(for: arguments)
+
+                    if isNil(rawValue) {
+                        // nils won't cast to T even when T is Optional unless cast to Any first
+                        if let castedValue = rawValue as Any as? T {
+                            stub.captureArguments(actualArgs: arguments)
+
+                            return castedValue
+                        }
+                    } else {
+                        // values won't cast to T when T is a protocol if value is cast to Any first
+                        if let castedValue = rawValue as? T {
+                            stub.captureArguments(actualArgs: arguments)
+
+                            return castedValue
+                        }
+                    }
+                }
+            }
+
+            for stub in stubsWithoutArgs {
                 let rawValue = try stub.returnValue(for: arguments)
 
                 if isNil(rawValue) {
                     // nils won't cast to T even when T is Optional unless cast to Any first
                     if let castedValue = rawValue as Any as? T {
-                        captureArguments(stub: stub, actualArgs: arguments)
                         return castedValue
                     }
                 } else {
                     // values won't cast to T when T is a protocol if values is cast to Any first
                     if let castedValue = rawValue as? T {
-                        captureArguments(stub: stub, actualArgs: arguments)
                         return castedValue
                     }
                 }
             }
+
+            return self.fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
         }
-
-        for stub in stubsWithoutArgs {
-            let rawValue = try stub.returnValue(for: arguments)
-
-            if isNil(rawValue) {
-                // nils won't cast to T even when T is Optional unless cast to Any first
-                if let castedValue = rawValue as Any as? T {
-                    return castedValue
-                }
-            } else {
-                // values won't cast to T when T is a protocol if values is cast to Any first
-                if let castedValue = rawValue as? T {
-                    return castedValue
-                }
-            }
-        }
-
-        return fatalErrorOrReturnFallback(fallback: fallback, function: function, arguments: arguments)
     }
 
     // MARK: - Private Helper Functions
@@ -556,25 +595,19 @@ public extension Stubbable {
     }
 }
 
-private func handleDuplicates(stubsDictionary: StubsDictionary, stub: Stub, again: Bool) {
-    let duplicates = stubsDictionary.completedDuplicates(of: stub)
+private func handleDuplicates(stubsDictionaryReference: AtomicReference<StubsDictionary>, stub: Stub, again: Bool) {
+    stubsDictionaryReference.getAndDo { stubsDictionary in
+        let duplicates = stubsDictionary.completedDuplicates(of: stub)
 
-    if duplicates.isEmpty {
-        return
-    }
+        if duplicates.isEmpty {
+            return
+        }
 
-    if again {
-        stubsDictionary.remove(stubs: duplicates, forFunctionName: stub.functionName)
-    }
-    else {
-        Constant.FatalError.stubbingSameFunctionWithSameArguments(stub: stub)
-    }
-}
-
-private func captureArguments(stub: Stub, actualArgs: [Any?]) {
-    zip(stub.arguments, actualArgs).forEach { (specifiedArg, actual) in
-        if let specifiedArg = specifiedArg as? ArgumentCaptor {
-            specifiedArg.capture(actual)
+        if again {
+            stubsDictionary.remove(stubs: duplicates, forFunctionName: stub.functionName)
+        }
+        else {
+            Constant.FatalError.stubbingSameFunctionWithSameArguments(stub: stub)
         }
     }
 }

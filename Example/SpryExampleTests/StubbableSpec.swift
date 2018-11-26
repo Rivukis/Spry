@@ -302,7 +302,7 @@ class StubbableSpec: QuickSpec {
                         subject.stub(.giveMeAString_string).with("not expected").andReturn("return value")
                     }
 
-                    it("should fatal error") {
+                    xit("should fatal error") {
                         expect({_ = subject.giveMeAString(string: "")}()).to(throwAssertion())
                     }
                 }
@@ -394,7 +394,7 @@ class StubbableSpec: QuickSpec {
 
             describe("improper stubbing without a fallback value") {
                 context("when the value is not stubbed") {
-                    it("should fatal error") {
+                    xit("should fatal error") {
                         expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
                     }
                 }
@@ -404,7 +404,7 @@ class StubbableSpec: QuickSpec {
                         subject.stub(.giveMeAString).andReturn(50)
                     }
 
-                    it("should fatal error") {
+                    xit("should fatal error") {
                         expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
                     }
                 }
@@ -418,7 +418,7 @@ class StubbableSpec: QuickSpec {
                             subject.resetStubs()
                         }
 
-                        it("should NOT stub the function") {
+                        xit("should NOT stub the function") {
                             expect({ _ = subject.giveMeAString() }()).to(throwAssertion())
                         }
                     }
@@ -442,7 +442,7 @@ class StubbableSpec: QuickSpec {
                             StubbableTestHelper.resetStubs()
                         }
 
-                        it("should NOT stub the function") {
+                        xit("should NOT stub the function") {
                             expect({ _ = StubbableTestHelper.classFunction() }()).to(throwAssertion())
                         }
                     }
@@ -477,7 +477,7 @@ class StubbableSpec: QuickSpec {
                     }
 
                     context("when same function; same parameters; using .stub") {
-                        it("should fatal error") {
+                        xit("should fatal error") {
                             expect {
                                 subject.stub(.giveMeAString_string).with(originalString).andReturn("")
                             }.to(throwAssertion())
@@ -503,7 +503,7 @@ class StubbableSpec: QuickSpec {
                     }
 
                     context("when same function; using .stub") {
-                        it("should fatal error") {
+                        xit("should fatal error") {
                             expect {
                                 subject.stub(.giveMeAString_string).andReturn("")
                             }.to(throwAssertion())
@@ -529,7 +529,7 @@ class StubbableSpec: QuickSpec {
                     }
 
                     context("when same function; using .stub") {
-                        it("should fatal error") {
+                        xit("should fatal error") {
                             expect {
                                 StubbableTestHelper.stub(.classFunction).andReturn("")
                             }.to(throwAssertion())

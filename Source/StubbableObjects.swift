@@ -11,7 +11,6 @@ import Foundation
 /**
  Object return by `stub()` call. Used to specify arguments and return values when stubbing.
  */
-
 public class Stub: CustomStringConvertible {
     enum StubType {
         case andReturn(Any?)
@@ -23,24 +22,28 @@ public class Stub: CustomStringConvertible {
 
     /// A beautified description. Used for debugging purposes.
     public var description: String {
-        let argumentsDescription = arguments.map{"<\($0)>"}.joined(separator: ", ")
-        let returnDescription = isNil(stubType) ? "nil" : "\(stubType!)"
+        return spryQueue.safeSyncFunction {
+            let argumentsDescription = self.arguments.map{"<\($0)>"}.joined(separator: ", ")
+            let returnDescription = isNil(self.stubType) ? "nil" : "\(self.stubType!)"
 
-        return "Stub(function: <\(functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
+            return "Stub(function: <\(self.functionName)>, args: <\(argumentsDescription)>, returnValue: <\(returnDescription)>)"
+        }
     }
 
     /// A beautified description. Used for logging.
     public var friendlyDescription: String {
-        let functionStringRepresentation = "<" + functionName + ">"
-        let arguementListStringRepresentation = arguments
-            .map { "<\($0)>" }
-            .joined(separator: ", ")
+        return spryQueue.safeSyncFunction {
+            let functionStringRepresentation = "<" + self.functionName + ">"
+            let arguementListStringRepresentation = self.arguments
+                .map { "<\($0)>" }
+                .joined(separator: ", ")
 
-        if !arguementListStringRepresentation.isEmpty {
-            return functionStringRepresentation + " with " + arguementListStringRepresentation
+            if !arguementListStringRepresentation.isEmpty {
+                return functionStringRepresentation + " with " + arguementListStringRepresentation
+            }
+
+            return functionStringRepresentation
         }
-
-        return functionStringRepresentation
     }
 
     // MARK: - Internal Properties
@@ -90,8 +93,10 @@ public class Stub: CustomStringConvertible {
      - Returns: A stub object used to add additional `with()` or to add `andReturn()` or `andDo()`.
      */
     public func with(_ arguments: SpryEquatable...) -> Stub {
-        self.arguments += arguments
-        return self
+        return spryQueue.safeSyncFunction {
+            self.arguments += arguments
+            return self
+        }
     }
 
     /**
@@ -113,7 +118,9 @@ public class Stub: CustomStringConvertible {
      - Parameter value: The value to be returned by the stubbed function.
      */
     public func andReturn(_ value: Any? = Void()) {
-        stubType = .andReturn(value)
+        spryQueue.safeSyncFunction {
+            self.stubType = .andReturn(value)
+        }
     }
 
     /**
@@ -139,7 +146,9 @@ public class Stub: CustomStringConvertible {
      - Parameter closure: The closure to be executed. The array of parameters that will be passed in correspond to the parameters being passed into the stubbed function. The return value must match the stubbed function's return type and will be the return value of the stubbed function.
      */
     public func andDo(_ closure: @escaping ([Any?]) -> Any?) {
-        stubType = .andDo(closure)
+        spryQueue.safeSyncFunction {
+            self.stubType = .andDo(closure)
+        }
     }
 
     /**
@@ -161,14 +170,16 @@ public class Stub: CustomStringConvertible {
      - Parameter error: The error to be thrown by the stubbed function.
      */
     public func andThrow(_ error: Error) {
-        stubType = .andThrow(error)
+        spryQueue.safeSyncFunction {
+            self.stubType = .andThrow(error)
+        }
     }
 
     // MARK: - Internal Functions
 
     internal func returnValue(for args: [Any?]) throws -> Any? {
-        guard let stubType = stubType else {
-            Constant.FatalError.noReturnValueSourceFound(functionName: functionName)
+        guard let stubType = self.stubType else {
+            Constant.FatalError.noReturnValueSourceFound(functionName: self.functionName)
         }
 
         switch stubType {
@@ -184,6 +195,14 @@ public class Stub: CustomStringConvertible {
     internal func hasEqualBase(as stub: Stub) -> Bool {
         return self.functionName == stub.functionName
             && self.arguments._isEqual(to: stub.arguments as SpryEquatable)
+    }
+
+    internal func captureArguments(actualArgs: [Any?]) {
+        zip(self.arguments, actualArgs).forEach { (specifiedArg, actual) in
+            if let specifiedArg = specifiedArg as? ArgumentCaptor {
+                specifiedArg.capture(actual)
+            }
+        }
     }
 }
 
@@ -280,4 +299,28 @@ public class StubsDictionary: CustomStringConvertible {
 internal enum Fallback<T> {
     case noFallback
     case fallback(T)
+}
+
+internal let spryQueue: OperationQueue = {
+    let operationQueue = OperationQueue()
+    operationQueue.maxConcurrentOperationCount = 1
+    operationQueue.qualityOfService = .userInteractive
+    operationQueue.name = "Global non-concurrent queue used in Spry"
+
+    return operationQueue
+}()
+
+// TODO: remove me
+internal enum StubbedValue<T> {
+    case value(T)
+    case error(Error)
+
+    func getValue() throws -> T {
+        switch self {
+        case .value(let value):
+            return value
+        case .error(let error):
+            throw error
+        }
+    }
 }
