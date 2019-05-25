@@ -165,7 +165,7 @@ class ArgumentSpec: QuickSpec {
                                 passedInArg = nil
 
                                 let customValidator = Argument.validator { actualArg -> Bool in
-                                    passedInArg = actualArg as! String
+                                    passedInArg = actualArg as? String
                                     return true
                                 }
 
