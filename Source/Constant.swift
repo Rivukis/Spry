@@ -166,3 +166,7 @@ internal enum Constant {
         }
     }
 }
+
+extension Constant {
+    static let singleUnnamedArgumentFunctionaSuffix = "(_:)"
+}

@@ -194,6 +194,21 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
+                context("when there are ONE unnamed argument") {
+                    let expectedString = "expected"
+
+                    beforeEach {
+                        subject.stub(.takeUnnamedArgument).andDo { arguments in
+                            let string = arguments[0] as! String
+                            return string == expectedString
+                        }
+                    }
+
+                    it("should get a string from the stubbed service") {
+                        expect(subject.takeUnnamedArgument(expectedString)).to(beTrue())
+                    }
+                }
+
                 describe("respecting passed in arguments and the return value") {
                     beforeEach {
                         subject.stub(.hereAreTwoStrings).andDo { arguments in

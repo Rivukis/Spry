@@ -26,10 +26,21 @@ public protocol StringRepresentable: RawRepresentable {
 
 public extension StringRepresentable {
     init<T>(functionName: String, type: T.Type, file: String, line: Int) {
-        guard let function = Self(rawValue: functionName) else {
+        let hasUnnamedArgumentSuffix = functionName.hasSuffix(Constant.singleUnnamedArgumentFunctionaSuffix)
+
+        if let function = Self(rawValue: functionName) {
+            self = function
+        }
+        else if hasUnnamedArgumentSuffix,
+            let function = Self(rawValue: String(functionName.dropLast(Constant.singleUnnamedArgumentFunctionaSuffix.count))) {
+            self = function
+        }
+        else if !hasUnnamedArgumentSuffix,
+            let function = Self(rawValue: functionName + Constant.singleUnnamedArgumentFunctionaSuffix){
+            self = function
+        }
+        else {
             Constant.FatalError.noFunctionFound(functionName: functionName, type: type, file: file, line: line)
         }
-
-        self = function
     }
 }
