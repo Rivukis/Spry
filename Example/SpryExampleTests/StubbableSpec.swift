@@ -194,7 +194,7 @@ class StubbableSpec: QuickSpec {
                     }
                 }
 
-                context("when there are ONE unnamed argument") {
+                context("when there is ONE unnamed argument") {
                     let expectedString = "expected"
 
                     beforeEach {
