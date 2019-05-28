@@ -24,19 +24,21 @@ public protocol StringRepresentable: RawRepresentable {
     init<T>(functionName: String, type: T.Type, file: String, line: Int)
 }
 
+private let singleUnnamedArgumentFunctionaSuffix = "(_:)"
+
 public extension StringRepresentable {
     init<T>(functionName: String, type: T.Type, file: String, line: Int) {
-        let hasUnnamedArgumentSuffix = functionName.hasSuffix(Constant.singleUnnamedArgumentFunctionaSuffix)
+        let hasUnnamedArgumentSuffix = functionName.hasSuffix(singleUnnamedArgumentFunctionaSuffix)
 
         if let function = Self(rawValue: functionName) {
             self = function
         }
         else if hasUnnamedArgumentSuffix,
-            let function = Self(rawValue: String(functionName.dropLast(Constant.singleUnnamedArgumentFunctionaSuffix.count))) {
+            let function = Self(rawValue: String(functionName.dropLast(singleUnnamedArgumentFunctionaSuffix.count))) {
             self = function
         }
         else if !hasUnnamedArgumentSuffix,
-            let function = Self(rawValue: functionName + Constant.singleUnnamedArgumentFunctionaSuffix){
+            let function = Self(rawValue: functionName + singleUnnamedArgumentFunctionaSuffix){
             self = function
         }
         else {
