@@ -127,7 +127,7 @@ extension Optional: OptionalType {}
 // MARK: - SpryEquatable where Self: OptionalType
 
 public extension SpryEquatable where Self: OptionalType {
-    public func _isEqual(to actual: SpryEquatable?) -> Bool {
+    func _isEqual(to actual: SpryEquatable?) -> Bool {
         let selfMirror = Mirror(reflecting: self)
 
         guard selfMirror.displayStyle == .optional else {

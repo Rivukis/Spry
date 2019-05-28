@@ -93,6 +93,7 @@ class StubbableTestHelper: Stubbable {
         case giveMeAString_string = "giveMeAString(string:)"
         case giveMeAVoid = "giveMeAVoid()"
         case takeAnOptionalString = "takeAnOptionalString(string:)"
+        case takeUnnamedArgument = "takeUnnamedArgument(_:)"
         case callThisCompletion = "callThisCompletion(string:closure:)"
         case throwingFunction = "throwingFunction()"
     }
@@ -148,6 +149,10 @@ class StubbableTestHelper: Stubbable {
 
     func takeAnOptionalString(string: String?) -> String {
         return stubbedValue(arguments: string)
+    }
+
+    func takeUnnamedArgument(_ unnamed: String) -> Bool {
+        return stubbedValue(arguments: unnamed)
     }
 
     func callThisCompletion(string: String, closure: @escaping () -> Void) {
