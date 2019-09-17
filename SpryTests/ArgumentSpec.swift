@@ -8,7 +8,8 @@
 
 import Quick
 import Nimble
-import Spry
+
+@testable import Spry
 
 class ArgumentSpec: QuickSpec {
     override func spec() {
