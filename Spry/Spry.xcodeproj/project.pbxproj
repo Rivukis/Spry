@@ -10,6 +10,17 @@
 		93EF2CA423313B3000BC6DEC /* Spry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF2C9A23313B3000BC6DEC /* Spry.framework */; };
 		93EF2CA923313B3000BC6DEC /* SpryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CA823313B3000BC6DEC /* SpryTests.swift */; };
 		93EF2CAB23313B3000BC6DEC /* Spry.h in Headers */ = {isa = PBXBuildFile; fileRef = 93EF2C9D23313B3000BC6DEC /* Spry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		93EF2CC023313B9D00BC6DEC /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB523313B9C00BC6DEC /* Spyable.swift */; };
+		93EF2CC123313B9D00BC6DEC /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB623313B9C00BC6DEC /* Stubbable.swift */; };
+		93EF2CC223313B9D00BC6DEC /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */; };
+		93EF2CC323313B9D00BC6DEC /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */; };
+		93EF2CC423313B9D00BC6DEC /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */; };
+		93EF2CC523313B9D00BC6DEC /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBA23313B9D00BC6DEC /* Constant.swift */; };
+		93EF2CC623313B9D00BC6DEC /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBB23313B9D00BC6DEC /* Spryable.swift */; };
+		93EF2CC723313B9D00BC6DEC /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBC23313B9D00BC6DEC /* Helpers.swift */; };
+		93EF2CC823313B9D00BC6DEC /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */; };
+		93EF2CC923313B9D00BC6DEC /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBE23313B9D00BC6DEC /* Argument.swift */; };
+		93EF2CCA23313B9D00BC6DEC /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +40,17 @@
 		93EF2CA323313B3000BC6DEC /* SpryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93EF2CA823313B3000BC6DEC /* SpryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpryTests.swift; sourceTree = "<group>"; };
 		93EF2CAA23313B3000BC6DEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		93EF2CB523313B9C00BC6DEC /* Spyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spyable.swift; path = ../../Source/Spyable.swift; sourceTree = "<group>"; };
+		93EF2CB623313B9C00BC6DEC /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stubbable.swift; path = ../../Source/Stubbable.swift; sourceTree = "<group>"; };
+		93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpyableObjects.swift; path = ../../Source/SpyableObjects.swift; sourceTree = "<group>"; };
+		93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryEquatable.swift; path = ../../Source/SpryEquatable.swift; sourceTree = "<group>"; };
+		93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StubbableObjects.swift; path = ../../Source/StubbableObjects.swift; sourceTree = "<group>"; };
+		93EF2CBA23313B9D00BC6DEC /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = ../../Source/Constant.swift; sourceTree = "<group>"; };
+		93EF2CBB23313B9D00BC6DEC /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spryable.swift; path = ../../Source/Spryable.swift; sourceTree = "<group>"; };
+		93EF2CBC23313B9D00BC6DEC /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = ../../Source/Helpers.swift; sourceTree = "<group>"; };
+		93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringRepresentable.swift; path = ../../Source/StringRepresentable.swift; sourceTree = "<group>"; };
+		93EF2CBE23313B9D00BC6DEC /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Argument.swift; path = ../../Source/Argument.swift; sourceTree = "<group>"; };
+		93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryConfiguration.swift; path = ../../Source/SpryConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +75,7 @@
 		93EF2C9023313B3000BC6DEC = {
 			isa = PBXGroup;
 			children = (
+				93EF2CB423313B5F00BC6DEC /* Source */,
 				93EF2C9C23313B3000BC6DEC /* Spry */,
 				93EF2CA723313B3000BC6DEC /* SpryTests */,
 				93EF2C9B23313B3000BC6DEC /* Products */,
@@ -84,6 +107,24 @@
 				93EF2CAA23313B3000BC6DEC /* Info.plist */,
 			);
 			path = SpryTests;
+			sourceTree = "<group>";
+		};
+		93EF2CB423313B5F00BC6DEC /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				93EF2CBE23313B9D00BC6DEC /* Argument.swift */,
+				93EF2CBA23313B9D00BC6DEC /* Constant.swift */,
+				93EF2CBC23313B9D00BC6DEC /* Helpers.swift */,
+				93EF2CBB23313B9D00BC6DEC /* Spryable.swift */,
+				93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */,
+				93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */,
+				93EF2CB523313B9C00BC6DEC /* Spyable.swift */,
+				93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */,
+				93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */,
+				93EF2CB623313B9C00BC6DEC /* Stubbable.swift */,
+				93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +189,7 @@
 				TargetAttributes = {
 					93EF2C9923313B3000BC6DEC = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
 					};
 					93EF2CA223313B3000BC6DEC = {
 						CreatedOnToolsVersion = 10.3;
@@ -194,6 +236,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93EF2CC423313B9D00BC6DEC /* StubbableObjects.swift in Sources */,
+				93EF2CC623313B9D00BC6DEC /* Spryable.swift in Sources */,
+				93EF2CCA23313B9D00BC6DEC /* SpryConfiguration.swift in Sources */,
+				93EF2CC323313B9D00BC6DEC /* SpryEquatable.swift in Sources */,
+				93EF2CC823313B9D00BC6DEC /* StringRepresentable.swift in Sources */,
+				93EF2CC723313B9D00BC6DEC /* Helpers.swift in Sources */,
+				93EF2CC223313B9D00BC6DEC /* SpyableObjects.swift in Sources */,
+				93EF2CC123313B9D00BC6DEC /* Stubbable.swift in Sources */,
+				93EF2CC023313B9D00BC6DEC /* Spyable.swift in Sources */,
+				93EF2CC923313B9D00BC6DEC /* Argument.swift in Sources */,
+				93EF2CC523313B9D00BC6DEC /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +394,7 @@
 		93EF2CAF23313B3000BC6DEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -357,6 +411,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtp.Spry;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -365,6 +420,7 @@
 		93EF2CB023313B3000BC6DEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -389,6 +445,7 @@
 		93EF2CB223313B3000BC6DEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SpryTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -406,6 +463,7 @@
 		93EF2CB323313B3000BC6DEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SpryTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
