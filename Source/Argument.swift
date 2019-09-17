@@ -1,6 +1,6 @@
 //
 //  Argument.swift
-//  SpryExample
+//  Spry
 //
 //  Created by Brian Radebaugh on 11/3/15.
 //  Copyright © 2015 Brian Radebaugh. All rights reserved.

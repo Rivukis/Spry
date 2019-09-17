@@ -1,6 +1,6 @@
 //
 //  SpyableSpec.swift
-//  SpryExampleTests
+//  SpryTests
 //
 //  Created by Brian Radebaugh on 11/5/17.
 //  Copyright © 2017 Brian Radebaugh. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import SpryExample
+import Spry
 
 class SpyableSpec: QuickSpec {
     override func spec() {

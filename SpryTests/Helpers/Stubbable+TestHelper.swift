@@ -1,12 +1,13 @@
 //
 //  Stubbable+TestHelper.swift
-//  SpryExampleTests
+//  SpryTests
 //
 //  Created by Brian Radebaugh on 11/5/17.
 //  Copyright © 2017 Brian Radebaugh. All rights reserved.
 //
 
 import Foundation
+import Spry
 
 struct StubbableError: Error, Equatable {
     let id: String

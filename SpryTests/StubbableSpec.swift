@@ -1,6 +1,6 @@
 //
 //  StubbableTest.swift
-//  SpryExample
+//  Spry
 //
 //  Created by Brian Radebaugh on 8/1/16.
 //  Copyright © 2016 Brian Radebaugh. All rights reserved.
@@ -8,7 +8,8 @@
 
 import Quick
 import Nimble
-import SpryExample
+import Spry
+import Spry_Nimble
 
 class StubbableSpec: QuickSpec {
     override func spec() {

@@ -1,6 +1,6 @@
 //
 //  Helpers.swift
-//  SpryExample
+//  Spry
 //
 //  Created by Brian Radebaugh on 11/9/17.
 //  Copyright © 2017 Brian Radebaugh. All rights reserved.

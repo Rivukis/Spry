@@ -1,6 +1,6 @@
 //
 //  HaveRecordedCallsMatcherSpec.swift
-//  SpryExampleTests
+//  SpryTests
 //
 //  Created by Brian Radebaugh on 3/25/18.
 //  Copyright © 2018 Brian Radebaugh. All rights reserved.
@@ -8,7 +8,8 @@
 
 import Quick
 import Nimble
-import SpryExample
+import Spry
+import Spry_Nimble
 
 class HaveRecordedCallsMatcherSpec: QuickSpec {
     override func spec() {
