@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		93EF2CA423313B3000BC6DEC /* Spry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF2C9A23313B3000BC6DEC /* Spry.framework */; };
-		93EF2CA923313B3000BC6DEC /* SpryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CA823313B3000BC6DEC /* SpryTests.swift */; };
 		93EF2CAB23313B3000BC6DEC /* Spry.h in Headers */ = {isa = PBXBuildFile; fileRef = 93EF2C9D23313B3000BC6DEC /* Spry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93EF2CC023313B9D00BC6DEC /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB523313B9C00BC6DEC /* Spyable.swift */; };
 		93EF2CC123313B9D00BC6DEC /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB623313B9C00BC6DEC /* Stubbable.swift */; };
@@ -21,6 +20,18 @@
 		93EF2CC823313B9D00BC6DEC /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */; };
 		93EF2CC923313B9D00BC6DEC /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBE23313B9D00BC6DEC /* Argument.swift */; };
 		93EF2CCA23313B9D00BC6DEC /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */; };
+		93EF2CCE23313D3D00BC6DEC /* HaveRecordedCallsMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCB23313D3C00BC6DEC /* HaveRecordedCallsMatcherSpec.swift */; };
+		93EF2CCF23313D3D00BC6DEC /* HaveReceivedMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCC23313D3C00BC6DEC /* HaveReceivedMatcherSpec.swift */; };
+		93EF2CD023313D3D00BC6DEC /* ArgumentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCD23313D3C00BC6DEC /* ArgumentSpec.swift */; };
+		93EF2CD523313D4D00BC6DEC /* StubbableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CD123313D4D00BC6DEC /* StubbableSpec.swift */; };
+		93EF2CD623313D4D00BC6DEC /* SpyableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CD223313D4D00BC6DEC /* SpyableSpec.swift */; };
+		93EF2CD723313D4D00BC6DEC /* SpryEquatableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CD323313D4D00BC6DEC /* SpryEquatableSpec.swift */; };
+		93EF2CD823313D4D00BC6DEC /* SpryableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CD423313D4D00BC6DEC /* SpryableSpec.swift */; };
+		93EF2CDF23313D8600BC6DEC /* SpryEquatable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDA23313D8600BC6DEC /* SpryEquatable+TestHelper.swift */; };
+		93EF2CE023313D8600BC6DEC /* NimbleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDB23313D8600BC6DEC /* NimbleUtils.swift */; };
+		93EF2CE123313D8600BC6DEC /* Spryable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDC23313D8600BC6DEC /* Spryable+TestHelper.swift */; };
+		93EF2CE223313D8600BC6DEC /* Spyable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDD23313D8600BC6DEC /* Spyable+TestHelper.swift */; };
+		93EF2CE323313D8600BC6DEC /* Stubbable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDE23313D8600BC6DEC /* Stubbable+TestHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +49,6 @@
 		93EF2C9D23313B3000BC6DEC /* Spry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spry.h; sourceTree = "<group>"; };
 		93EF2C9E23313B3000BC6DEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93EF2CA323313B3000BC6DEC /* SpryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		93EF2CA823313B3000BC6DEC /* SpryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpryTests.swift; sourceTree = "<group>"; };
 		93EF2CAA23313B3000BC6DEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93EF2CB523313B9C00BC6DEC /* Spyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spyable.swift; path = ../../Source/Spyable.swift; sourceTree = "<group>"; };
 		93EF2CB623313B9C00BC6DEC /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stubbable.swift; path = ../../Source/Stubbable.swift; sourceTree = "<group>"; };
@@ -51,6 +61,18 @@
 		93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringRepresentable.swift; path = ../../Source/StringRepresentable.swift; sourceTree = "<group>"; };
 		93EF2CBE23313B9D00BC6DEC /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Argument.swift; path = ../../Source/Argument.swift; sourceTree = "<group>"; };
 		93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryConfiguration.swift; path = ../../Source/SpryConfiguration.swift; sourceTree = "<group>"; };
+		93EF2CCB23313D3C00BC6DEC /* HaveRecordedCallsMatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveRecordedCallsMatcherSpec.swift; sourceTree = "<group>"; };
+		93EF2CCC23313D3C00BC6DEC /* HaveReceivedMatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcherSpec.swift; sourceTree = "<group>"; };
+		93EF2CCD23313D3C00BC6DEC /* ArgumentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentSpec.swift; sourceTree = "<group>"; };
+		93EF2CD123313D4D00BC6DEC /* StubbableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbableSpec.swift; sourceTree = "<group>"; };
+		93EF2CD223313D4D00BC6DEC /* SpyableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpyableSpec.swift; sourceTree = "<group>"; };
+		93EF2CD323313D4D00BC6DEC /* SpryEquatableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryEquatableSpec.swift; sourceTree = "<group>"; };
+		93EF2CD423313D4D00BC6DEC /* SpryableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryableSpec.swift; sourceTree = "<group>"; };
+		93EF2CDA23313D8600BC6DEC /* SpryEquatable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpryEquatable+TestHelper.swift"; sourceTree = "<group>"; };
+		93EF2CDB23313D8600BC6DEC /* NimbleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleUtils.swift; sourceTree = "<group>"; };
+		93EF2CDC23313D8600BC6DEC /* Spryable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Spryable+TestHelper.swift"; sourceTree = "<group>"; };
+		93EF2CDD23313D8600BC6DEC /* Spyable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Spyable+TestHelper.swift"; sourceTree = "<group>"; };
+		93EF2CDE23313D8600BC6DEC /* Stubbable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stubbable+TestHelper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +125,14 @@
 		93EF2CA723313B3000BC6DEC /* SpryTests */ = {
 			isa = PBXGroup;
 			children = (
-				93EF2CA823313B3000BC6DEC /* SpryTests.swift */,
+				93EF2CD923313D5600BC6DEC /* Helpers */,
+				93EF2CD423313D4D00BC6DEC /* SpryableSpec.swift */,
+				93EF2CD323313D4D00BC6DEC /* SpryEquatableSpec.swift */,
+				93EF2CD223313D4D00BC6DEC /* SpyableSpec.swift */,
+				93EF2CD123313D4D00BC6DEC /* StubbableSpec.swift */,
+				93EF2CCD23313D3C00BC6DEC /* ArgumentSpec.swift */,
+				93EF2CCC23313D3C00BC6DEC /* HaveReceivedMatcherSpec.swift */,
+				93EF2CCB23313D3C00BC6DEC /* HaveRecordedCallsMatcherSpec.swift */,
 				93EF2CAA23313B3000BC6DEC /* Info.plist */,
 			);
 			path = SpryTests;
@@ -125,6 +154,18 @@
 				93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		93EF2CD923313D5600BC6DEC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				93EF2CDB23313D8600BC6DEC /* NimbleUtils.swift */,
+				93EF2CDC23313D8600BC6DEC /* Spryable+TestHelper.swift */,
+				93EF2CDA23313D8600BC6DEC /* SpryEquatable+TestHelper.swift */,
+				93EF2CDD23313D8600BC6DEC /* Spyable+TestHelper.swift */,
+				93EF2CDE23313D8600BC6DEC /* Stubbable+TestHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,7 +295,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93EF2CA923313B3000BC6DEC /* SpryTests.swift in Sources */,
+				93EF2CD623313D4D00BC6DEC /* SpyableSpec.swift in Sources */,
+				93EF2CE323313D8600BC6DEC /* Stubbable+TestHelper.swift in Sources */,
+				93EF2CD823313D4D00BC6DEC /* SpryableSpec.swift in Sources */,
+				93EF2CCF23313D3D00BC6DEC /* HaveReceivedMatcherSpec.swift in Sources */,
+				93EF2CD723313D4D00BC6DEC /* SpryEquatableSpec.swift in Sources */,
+				93EF2CDF23313D8600BC6DEC /* SpryEquatable+TestHelper.swift in Sources */,
+				93EF2CE023313D8600BC6DEC /* NimbleUtils.swift in Sources */,
+				93EF2CE123313D8600BC6DEC /* Spryable+TestHelper.swift in Sources */,
+				93EF2CCE23313D3D00BC6DEC /* HaveRecordedCallsMatcherSpec.swift in Sources */,
+				93EF2CD523313D4D00BC6DEC /* StubbableSpec.swift in Sources */,
+				93EF2CE223313D8600BC6DEC /* Spyable+TestHelper.swift in Sources */,
+				93EF2CD023313D3D00BC6DEC /* ArgumentSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
