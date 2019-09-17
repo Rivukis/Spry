@@ -9,17 +9,6 @@
 /* Begin PBXBuildFile section */
 		93EF2CA423313B3000BC6DEC /* Spry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EF2C9A23313B3000BC6DEC /* Spry.framework */; };
 		93EF2CAB23313B3000BC6DEC /* Spry.h in Headers */ = {isa = PBXBuildFile; fileRef = 93EF2C9D23313B3000BC6DEC /* Spry.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93EF2CC023313B9D00BC6DEC /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB523313B9C00BC6DEC /* Spyable.swift */; };
-		93EF2CC123313B9D00BC6DEC /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB623313B9C00BC6DEC /* Stubbable.swift */; };
-		93EF2CC223313B9D00BC6DEC /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */; };
-		93EF2CC323313B9D00BC6DEC /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */; };
-		93EF2CC423313B9D00BC6DEC /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */; };
-		93EF2CC523313B9D00BC6DEC /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBA23313B9D00BC6DEC /* Constant.swift */; };
-		93EF2CC623313B9D00BC6DEC /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBB23313B9D00BC6DEC /* Spryable.swift */; };
-		93EF2CC723313B9D00BC6DEC /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBC23313B9D00BC6DEC /* Helpers.swift */; };
-		93EF2CC823313B9D00BC6DEC /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */; };
-		93EF2CC923313B9D00BC6DEC /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBE23313B9D00BC6DEC /* Argument.swift */; };
-		93EF2CCA23313B9D00BC6DEC /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */; };
 		93EF2CCE23313D3D00BC6DEC /* HaveRecordedCallsMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCB23313D3C00BC6DEC /* HaveRecordedCallsMatcherSpec.swift */; };
 		93EF2CCF23313D3D00BC6DEC /* HaveReceivedMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCC23313D3C00BC6DEC /* HaveReceivedMatcherSpec.swift */; };
 		93EF2CD023313D3D00BC6DEC /* ArgumentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CCD23313D3C00BC6DEC /* ArgumentSpec.swift */; };
@@ -32,6 +21,17 @@
 		93EF2CE123313D8600BC6DEC /* Spryable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDC23313D8600BC6DEC /* Spryable+TestHelper.swift */; };
 		93EF2CE223313D8600BC6DEC /* Spyable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDD23313D8600BC6DEC /* Spyable+TestHelper.swift */; };
 		93EF2CE323313D8600BC6DEC /* Stubbable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CDE23313D8600BC6DEC /* Stubbable+TestHelper.swift */; };
+		93EF2CEF233141DD00BC6DEC /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE4233141DD00BC6DEC /* Stubbable.swift */; };
+		93EF2CF0233141DD00BC6DEC /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE5233141DD00BC6DEC /* Spyable.swift */; };
+		93EF2CF1233141DD00BC6DEC /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE6233141DD00BC6DEC /* SpyableObjects.swift */; };
+		93EF2CF2233141DD00BC6DEC /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE7233141DD00BC6DEC /* SpryEquatable.swift */; };
+		93EF2CF3233141DD00BC6DEC /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE8233141DD00BC6DEC /* StringRepresentable.swift */; };
+		93EF2CF4233141DD00BC6DEC /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CE9233141DD00BC6DEC /* SpryConfiguration.swift */; };
+		93EF2CF5233141DD00BC6DEC /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CEA233141DD00BC6DEC /* Constant.swift */; };
+		93EF2CF6233141DD00BC6DEC /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CEB233141DD00BC6DEC /* StubbableObjects.swift */; };
+		93EF2CF7233141DD00BC6DEC /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CEC233141DD00BC6DEC /* Argument.swift */; };
+		93EF2CF8233141DD00BC6DEC /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CED233141DD00BC6DEC /* Helpers.swift */; };
+		93EF2CF9233141DD00BC6DEC /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EF2CEE233141DD00BC6DEC /* Spryable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,17 +50,6 @@
 		93EF2C9E23313B3000BC6DEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93EF2CA323313B3000BC6DEC /* SpryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93EF2CAA23313B3000BC6DEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		93EF2CB523313B9C00BC6DEC /* Spyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spyable.swift; path = ../../Source/Spyable.swift; sourceTree = "<group>"; };
-		93EF2CB623313B9C00BC6DEC /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stubbable.swift; path = ../../Source/Stubbable.swift; sourceTree = "<group>"; };
-		93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpyableObjects.swift; path = ../../Source/SpyableObjects.swift; sourceTree = "<group>"; };
-		93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryEquatable.swift; path = ../../Source/SpryEquatable.swift; sourceTree = "<group>"; };
-		93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StubbableObjects.swift; path = ../../Source/StubbableObjects.swift; sourceTree = "<group>"; };
-		93EF2CBA23313B9D00BC6DEC /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constant.swift; path = ../../Source/Constant.swift; sourceTree = "<group>"; };
-		93EF2CBB23313B9D00BC6DEC /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spryable.swift; path = ../../Source/Spryable.swift; sourceTree = "<group>"; };
-		93EF2CBC23313B9D00BC6DEC /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = ../../Source/Helpers.swift; sourceTree = "<group>"; };
-		93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringRepresentable.swift; path = ../../Source/StringRepresentable.swift; sourceTree = "<group>"; };
-		93EF2CBE23313B9D00BC6DEC /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Argument.swift; path = ../../Source/Argument.swift; sourceTree = "<group>"; };
-		93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpryConfiguration.swift; path = ../../Source/SpryConfiguration.swift; sourceTree = "<group>"; };
 		93EF2CCB23313D3C00BC6DEC /* HaveRecordedCallsMatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveRecordedCallsMatcherSpec.swift; sourceTree = "<group>"; };
 		93EF2CCC23313D3C00BC6DEC /* HaveReceivedMatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcherSpec.swift; sourceTree = "<group>"; };
 		93EF2CCD23313D3C00BC6DEC /* ArgumentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentSpec.swift; sourceTree = "<group>"; };
@@ -73,6 +62,17 @@
 		93EF2CDC23313D8600BC6DEC /* Spryable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Spryable+TestHelper.swift"; sourceTree = "<group>"; };
 		93EF2CDD23313D8600BC6DEC /* Spyable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Spyable+TestHelper.swift"; sourceTree = "<group>"; };
 		93EF2CDE23313D8600BC6DEC /* Stubbable+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stubbable+TestHelper.swift"; sourceTree = "<group>"; };
+		93EF2CE4233141DD00BC6DEC /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stubbable.swift; sourceTree = "<group>"; };
+		93EF2CE5233141DD00BC6DEC /* Spyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spyable.swift; sourceTree = "<group>"; };
+		93EF2CE6233141DD00BC6DEC /* SpyableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpyableObjects.swift; sourceTree = "<group>"; };
+		93EF2CE7233141DD00BC6DEC /* SpryEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryEquatable.swift; sourceTree = "<group>"; };
+		93EF2CE8233141DD00BC6DEC /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
+		93EF2CE9233141DD00BC6DEC /* SpryConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryConfiguration.swift; sourceTree = "<group>"; };
+		93EF2CEA233141DD00BC6DEC /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		93EF2CEB233141DD00BC6DEC /* StubbableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbableObjects.swift; sourceTree = "<group>"; };
+		93EF2CEC233141DD00BC6DEC /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
+		93EF2CED233141DD00BC6DEC /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		93EF2CEE233141DD00BC6DEC /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spryable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,17 +141,17 @@
 		93EF2CB423313B5F00BC6DEC /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				93EF2CBE23313B9D00BC6DEC /* Argument.swift */,
-				93EF2CBA23313B9D00BC6DEC /* Constant.swift */,
-				93EF2CBC23313B9D00BC6DEC /* Helpers.swift */,
-				93EF2CBB23313B9D00BC6DEC /* Spryable.swift */,
-				93EF2CBF23313B9D00BC6DEC /* SpryConfiguration.swift */,
-				93EF2CB823313B9C00BC6DEC /* SpryEquatable.swift */,
-				93EF2CB523313B9C00BC6DEC /* Spyable.swift */,
-				93EF2CB723313B9C00BC6DEC /* SpyableObjects.swift */,
-				93EF2CBD23313B9D00BC6DEC /* StringRepresentable.swift */,
-				93EF2CB623313B9C00BC6DEC /* Stubbable.swift */,
-				93EF2CB923313B9D00BC6DEC /* StubbableObjects.swift */,
+				93EF2CEC233141DD00BC6DEC /* Argument.swift */,
+				93EF2CEA233141DD00BC6DEC /* Constant.swift */,
+				93EF2CED233141DD00BC6DEC /* Helpers.swift */,
+				93EF2CEE233141DD00BC6DEC /* Spryable.swift */,
+				93EF2CE9233141DD00BC6DEC /* SpryConfiguration.swift */,
+				93EF2CE7233141DD00BC6DEC /* SpryEquatable.swift */,
+				93EF2CE5233141DD00BC6DEC /* Spyable.swift */,
+				93EF2CE6233141DD00BC6DEC /* SpyableObjects.swift */,
+				93EF2CE8233141DD00BC6DEC /* StringRepresentable.swift */,
+				93EF2CE4233141DD00BC6DEC /* Stubbable.swift */,
+				93EF2CEB233141DD00BC6DEC /* StubbableObjects.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -277,17 +277,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93EF2CC423313B9D00BC6DEC /* StubbableObjects.swift in Sources */,
-				93EF2CC623313B9D00BC6DEC /* Spryable.swift in Sources */,
-				93EF2CCA23313B9D00BC6DEC /* SpryConfiguration.swift in Sources */,
-				93EF2CC323313B9D00BC6DEC /* SpryEquatable.swift in Sources */,
-				93EF2CC823313B9D00BC6DEC /* StringRepresentable.swift in Sources */,
-				93EF2CC723313B9D00BC6DEC /* Helpers.swift in Sources */,
-				93EF2CC223313B9D00BC6DEC /* SpyableObjects.swift in Sources */,
-				93EF2CC123313B9D00BC6DEC /* Stubbable.swift in Sources */,
-				93EF2CC023313B9D00BC6DEC /* Spyable.swift in Sources */,
-				93EF2CC923313B9D00BC6DEC /* Argument.swift in Sources */,
-				93EF2CC523313B9D00BC6DEC /* Constant.swift in Sources */,
+				93EF2CF5233141DD00BC6DEC /* Constant.swift in Sources */,
+				93EF2CF2233141DD00BC6DEC /* SpryEquatable.swift in Sources */,
+				93EF2CF1233141DD00BC6DEC /* SpyableObjects.swift in Sources */,
+				93EF2CF9233141DD00BC6DEC /* Spryable.swift in Sources */,
+				93EF2CF8233141DD00BC6DEC /* Helpers.swift in Sources */,
+				93EF2CF4233141DD00BC6DEC /* SpryConfiguration.swift in Sources */,
+				93EF2CF0233141DD00BC6DEC /* Spyable.swift in Sources */,
+				93EF2CF3233141DD00BC6DEC /* StringRepresentable.swift in Sources */,
+				93EF2CEF233141DD00BC6DEC /* Stubbable.swift in Sources */,
+				93EF2CF7233141DD00BC6DEC /* Argument.swift in Sources */,
+				93EF2CF6233141DD00BC6DEC /* StubbableObjects.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
