@@ -8,68 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		0F88A6018844A48B28A70B48 /* Pods_SpryExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CBCE14618A091169555908 /* Pods_SpryExample.framework */; };
-		7A199CC61FA68F27003208D0 /* SpryEquatableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A199CC51FA68F27003208D0 /* SpryEquatableSpec.swift */; };
-		7A27A61A1F09C130001D956D /* SpryableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27A6191F09C130001D956D /* SpryableSpec.swift */; };
 		7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */; };
 		7A2BFC561F00D27E00BB12C1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2BFC551F00D27E00BB12C1 /* ViewController.swift */; };
 		7A2BFC591F00D27E00BB12C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2BFC571F00D27E00BB12C1 /* Main.storyboard */; };
 		7A2BFC5B1F00D27E00BB12C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2BFC5A1F00D27E00BB12C1 /* Assets.xcassets */; };
 		7A2BFC5E1F00D27E00BB12C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2BFC5C1F00D27E00BB12C1 /* LaunchScreen.storyboard */; };
-		7A2FE8A41F0242120062AE72 /* StubbableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8A31F0242120062AE72 /* StubbableSpec.swift */; };
-		7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */; };
-		7A4607822068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4607812068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift */; };
-		7A8654F41F00F62200D425B6 /* ArgumentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8654F31F00F62200D425B6 /* ArgumentSpec.swift */; };
-		7AABAD841FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD831FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift */; };
-		7AABAD861FAFD6CB00788CA3 /* Stubbable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD851FAFD6CB00788CA3 /* Stubbable+TestHelper.swift */; };
-		7AABAD881FAFDA5C00788CA3 /* Spryable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD871FAFDA5C00788CA3 /* Spryable+TestHelper.swift */; };
-		7AABAD8A1FAFDAB300788CA3 /* SpyableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD891FAFDAB300788CA3 /* SpyableSpec.swift */; };
-		7AABAD8C1FAFDB3300788CA3 /* Spyable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD8B1FAFDB3300788CA3 /* Spyable+TestHelper.swift */; };
-		7AABAD8E1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD8D1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift */; };
 		7AE35A3421587694000CAA6F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2921587694000CAA6F /* Constant.swift */; };
-		7AE35A3521587694000CAA6F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2921587694000CAA6F /* Constant.swift */; };
 		7AE35A3621587694000CAA6F /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2A21587694000CAA6F /* SpyableObjects.swift */; };
-		7AE35A3721587694000CAA6F /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2A21587694000CAA6F /* SpyableObjects.swift */; };
 		7AE35A3821587694000CAA6F /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2B21587694000CAA6F /* Argument.swift */; };
-		7AE35A3921587694000CAA6F /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2B21587694000CAA6F /* Argument.swift */; };
 		7AE35A3A21587694000CAA6F /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2C21587694000CAA6F /* StringRepresentable.swift */; };
-		7AE35A3B21587694000CAA6F /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2C21587694000CAA6F /* StringRepresentable.swift */; };
 		7AE35A3C21587694000CAA6F /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2D21587694000CAA6F /* Spryable.swift */; };
-		7AE35A3D21587694000CAA6F /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2D21587694000CAA6F /* Spryable.swift */; };
 		7AE35A3E21587694000CAA6F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2E21587694000CAA6F /* Helpers.swift */; };
-		7AE35A3F21587694000CAA6F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2E21587694000CAA6F /* Helpers.swift */; };
 		7AE35A4021587694000CAA6F /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2F21587694000CAA6F /* Stubbable.swift */; };
-		7AE35A4121587694000CAA6F /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2F21587694000CAA6F /* Stubbable.swift */; };
 		7AE35A4221587694000CAA6F /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3021587694000CAA6F /* StubbableObjects.swift */; };
-		7AE35A4321587694000CAA6F /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3021587694000CAA6F /* StubbableObjects.swift */; };
 		7AE35A4421587694000CAA6F /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3121587694000CAA6F /* Spyable.swift */; };
-		7AE35A4521587694000CAA6F /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3121587694000CAA6F /* Spyable.swift */; };
 		7AE35A4621587694000CAA6F /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3221587694000CAA6F /* SpryConfiguration.swift */; };
-		7AE35A4721587694000CAA6F /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3221587694000CAA6F /* SpryConfiguration.swift */; };
 		7AE35A4821587694000CAA6F /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3321587694000CAA6F /* SpryEquatable.swift */; };
-		7AE35A4921587694000CAA6F /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3321587694000CAA6F /* SpryEquatable.swift */; };
 		7AE35A4D2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */; };
-		7AE35A4E2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */; };
 		7AE35A4F2158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */; };
-		7AE35A502158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */; };
-		A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		7A2BFC651F00D27E00BB12C1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A2BFC481F00D27E00BB12C1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7A2BFC4F1F00D27E00BB12C1;
-			remoteInfo = SpryExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpryExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E8701AC756C09395104A62 /* Pods-SpryExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.debug.xcconfig"; sourceTree = "<group>"; };
-		7A199CC51FA68F27003208D0 /* SpryEquatableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpryEquatableSpec.swift; sourceTree = "<group>"; };
-		7A27A6191F09C130001D956D /* SpryableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryableSpec.swift; sourceTree = "<group>"; };
 		7A2BFC501F00D27E00BB12C1 /* SpryExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpryExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A2BFC551F00D27E00BB12C1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -77,18 +39,6 @@
 		7A2BFC5A1F00D27E00BB12C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A2BFC5D1F00D27E00BB12C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7A2BFC5F1F00D27E00BB12C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A2BFC641F00D27E00BB12C1 /* SpryExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpryExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A2BFC6A1F00D27E00BB12C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A2FE8A31F0242120062AE72 /* StubbableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbableSpec.swift; sourceTree = "<group>"; };
-		7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleUtils.swift; sourceTree = "<group>"; };
-		7A4607812068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveRecordedCallsMatcherSpec.swift; sourceTree = "<group>"; };
-		7A8654F31F00F62200D425B6 /* ArgumentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentSpec.swift; sourceTree = "<group>"; };
-		7AABAD831FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpryEquatable+TestHelper.swift"; sourceTree = "<group>"; };
-		7AABAD851FAFD6CB00788CA3 /* Stubbable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stubbable+TestHelper.swift"; sourceTree = "<group>"; };
-		7AABAD871FAFDA5C00788CA3 /* Spryable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spryable+TestHelper.swift"; sourceTree = "<group>"; };
-		7AABAD891FAFDAB300788CA3 /* SpyableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyableSpec.swift; sourceTree = "<group>"; };
-		7AABAD8B1FAFDB3300788CA3 /* Spyable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spyable+TestHelper.swift"; sourceTree = "<group>"; };
-		7AABAD8D1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcherSpec.swift; sourceTree = "<group>"; };
 		7AE35A2921587694000CAA6F /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		7AE35A2A21587694000CAA6F /* SpyableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpyableObjects.swift; sourceTree = "<group>"; };
 		7AE35A2B21587694000CAA6F /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
@@ -117,14 +67,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7A2BFC611F00D27E00BB12C1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -138,23 +80,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7A02796E1FA6916B003EBD52 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				7A2FE8BD1F036DD30062AE72 /* NimbleUtils.swift */,
-				7AABAD831FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift */,
-				7AABAD851FAFD6CB00788CA3 /* Stubbable+TestHelper.swift */,
-				7AABAD871FAFDA5C00788CA3 /* Spryable+TestHelper.swift */,
-				7AABAD8B1FAFDB3300788CA3 /* Spyable+TestHelper.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
 		7A2BFC471F00D27E00BB12C1 = {
 			isa = PBXGroup;
 			children = (
 				7A2BFC521F00D27E00BB12C1 /* SpryExample */,
-				7A2BFC671F00D27E00BB12C1 /* SpryExampleTests */,
 				7A2BFC511F00D27E00BB12C1 /* Products */,
 				A905F35EED5C995F1EF96AC9 /* Pods */,
 				5725F8C25B3518E3B4FB1342 /* Frameworks */,
@@ -165,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				7A2BFC501F00D27E00BB12C1 /* SpryExample.app */,
-				7A2BFC641F00D27E00BB12C1 /* SpryExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -183,22 +111,6 @@
 				7A2BFC5F1F00D27E00BB12C1 /* Info.plist */,
 			);
 			path = SpryExample;
-			sourceTree = "<group>";
-		};
-		7A2BFC671F00D27E00BB12C1 /* SpryExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				7A2BFC6A1F00D27E00BB12C1 /* Info.plist */,
-				7A02796E1FA6916B003EBD52 /* Helpers */,
-				7A27A6191F09C130001D956D /* SpryableSpec.swift */,
-				7AABAD891FAFDAB300788CA3 /* SpyableSpec.swift */,
-				7A2FE8A31F0242120062AE72 /* StubbableSpec.swift */,
-				7A8654F31F00F62200D425B6 /* ArgumentSpec.swift */,
-				7A199CC51FA68F27003208D0 /* SpryEquatableSpec.swift */,
-				7AABAD8D1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift */,
-				7A4607812068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift */,
-			);
-			path = SpryExampleTests;
 			sourceTree = "<group>";
 		};
 		7AE35A2821587694000CAA6F /* Source */ = {
@@ -263,26 +175,6 @@
 			productReference = 7A2BFC501F00D27E00BB12C1 /* SpryExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7A2BFC631F00D27E00BB12C1 /* SpryExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7A2BFC701F00D27E00BB12C1 /* Build configuration list for PBXNativeTarget "SpryExampleTests" */;
-			buildPhases = (
-				6997D2DF0B0D6C17FEFA755F /* [CP] Check Pods Manifest.lock */,
-				7A2BFC601F00D27E00BB12C1 /* Sources */,
-				7A2BFC611F00D27E00BB12C1 /* Frameworks */,
-				7A2BFC621F00D27E00BB12C1 /* Resources */,
-				0EFF7EE7C3697C53796F9C55 /* [CP] Embed Pods Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7A2BFC661F00D27E00BB12C1 /* PBXTargetDependency */,
-			);
-			name = SpryExampleTests;
-			productName = SpryExampleTests;
-			productReference = 7A2BFC641F00D27E00BB12C1 /* SpryExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -297,13 +189,6 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = XQJAY5KMS4;
 						ProvisioningStyle = Automatic;
-					};
-					7A2BFC631F00D27E00BB12C1 = {
-						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = XQJAY5KMS4;
-						LastSwiftMigration = 0830;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 7A2BFC4F1F00D27E00BB12C1;
 					};
 				};
 			};
@@ -322,7 +207,6 @@
 			projectRoot = "";
 			targets = (
 				7A2BFC4F1F00D27E00BB12C1 /* SpryExample */,
-				7A2BFC631F00D27E00BB12C1 /* SpryExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -338,34 +222,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7A2BFC621F00D27E00BB12C1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0EFF7EE7C3697C53796F9C55 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		58294558D5DA01F7C4A35C40 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -386,24 +245,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpryExample/Pods-SpryExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6997D2DF0B0D6C17FEFA755F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SpryExampleTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F980A5FD39F6CC3612514F0F /* [CP] Check Pods Manifest.lock */ = {
@@ -449,47 +290,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7A2BFC601F00D27E00BB12C1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7A199CC61FA68F27003208D0 /* SpryEquatableSpec.swift in Sources */,
-				7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */,
-				7AE35A4721587694000CAA6F /* SpryConfiguration.swift in Sources */,
-				7AABAD861FAFD6CB00788CA3 /* Stubbable+TestHelper.swift in Sources */,
-				7AABAD8A1FAFDAB300788CA3 /* SpyableSpec.swift in Sources */,
-				7AABAD8E1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift in Sources */,
-				7AE35A3D21587694000CAA6F /* Spryable.swift in Sources */,
-				7AABAD881FAFDA5C00788CA3 /* Spryable+TestHelper.swift in Sources */,
-				7AE35A4E2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */,
-				7AE35A4121587694000CAA6F /* Stubbable.swift in Sources */,
-				7AE35A4521587694000CAA6F /* Spyable.swift in Sources */,
-				7AABAD8C1FAFDB3300788CA3 /* Spyable+TestHelper.swift in Sources */,
-				7AE35A3B21587694000CAA6F /* StringRepresentable.swift in Sources */,
-				7A4607822068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift in Sources */,
-				7A8654F41F00F62200D425B6 /* ArgumentSpec.swift in Sources */,
-				7AE35A3521587694000CAA6F /* Constant.swift in Sources */,
-				7A2FE8A41F0242120062AE72 /* StubbableSpec.swift in Sources */,
-				7AE35A502158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */,
-				7AE35A3F21587694000CAA6F /* Helpers.swift in Sources */,
-				7AE35A4321587694000CAA6F /* StubbableObjects.swift in Sources */,
-				7AE35A3721587694000CAA6F /* SpyableObjects.swift in Sources */,
-				7AE35A4921587694000CAA6F /* SpryEquatable.swift in Sources */,
-				7AABAD841FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift in Sources */,
-				7AE35A3921587694000CAA6F /* Argument.swift in Sources */,
-				7A27A61A1F09C130001D956D /* SpryableSpec.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7A2BFC661F00D27E00BB12C1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7A2BFC4F1F00D27E00BB12C1 /* SpryExample */;
-			targetProxy = 7A2BFC651F00D27E00BB12C1 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7A2BFC571F00D27E00BB12C1 /* Main.storyboard */ = {
@@ -660,41 +461,6 @@
 			};
 			name = Release;
 		};
-		7A2BFC711F00D27E00BB12C1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B651727304E2FD212D035A72 /* Pods-SpryExampleTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = XQJAY5KMS4;
-				INFOPLIST_FILE = SpryExampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpryExample.app/SpryExample";
-			};
-			name = Debug;
-		};
-		7A2BFC721F00D27E00BB12C1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2862BC607790262CDC9DB580 /* Pods-SpryExampleTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = XQJAY5KMS4;
-				INFOPLIST_FILE = SpryExampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpryExample.app/SpryExample";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -712,15 +478,6 @@
 			buildConfigurations = (
 				7A2BFC6E1F00D27E00BB12C1 /* Debug */,
 				7A2BFC6F1F00D27E00BB12C1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7A2BFC701F00D27E00BB12C1 /* Build configuration list for PBXNativeTarget "SpryExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7A2BFC711F00D27E00BB12C1 /* Debug */,
-				7A2BFC721F00D27E00BB12C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
