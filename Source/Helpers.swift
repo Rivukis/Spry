@@ -77,7 +77,7 @@ internal extension Array {
 
 internal extension Array where Element: Equatable {
     @discardableResult mutating func removeFirst(_ element: Element) -> Element? {
-        guard let index = index(of: element) else {
+        guard let index = firstIndex(of: element) else {
             return nil
         }
 
@@ -87,7 +87,7 @@ internal extension Array where Element: Equatable {
 
 internal extension Array {
     @discardableResult mutating func removeFirst(where predicate: (Element) -> Bool) -> Element? {
-        guard let index = index(where: predicate) else {
+        guard let index = firstIndex(where: predicate) else {
             return nil
         }
 
