@@ -41,7 +41,7 @@ public func haveReceived<T: Spyable>(_ function: T.Function, with arguments: Spr
         let descriptionOfAttempted = descriptionOfExpectation(actualType: type(of: spyable), functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
         let result = spyable.didCall(function, withArguments: arguments, countSpecifier: countSpecifier)
 
-        return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
+        return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, actual: result.recordedCallsDescription))
     }
 }
 
@@ -77,7 +77,7 @@ public func haveReceived<T: Spyable>(_ function: T.ClassFunction, with arguments
         let descriptionOfAttempted = descriptionOfExpectation(actualType: spyable, functionName: function.rawValue, arguments: arguments, countSpecifier: countSpecifier)
         let result = spyable.didCall(function, withArguments: arguments, countSpecifier: countSpecifier)
 
-        return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, result.recordedCallsDescription))
+        return PredicateResult(bool: result.success, message: .expectedCustomValueTo(descriptionOfAttempted, actual: result.recordedCallsDescription))
     }
 }
 
