@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   s.source_files = 'SourceNimble/*'
 
   s.framework = 'XCTest'
-  s.dependency 'Nimble', '>= 9.0.0'
+  s.dependency 'Nimble', '>= 8.0.0'
   s.dependency 'Spry', '>= 3.3.0'
 end

@@ -248,9 +248,7 @@ class StubbableSpec: QuickSpec {
                     }
 
                     it("should throw the specified error") {
-                        expect{
-                            try subject.throwingFunction()
-                        }.to(throwError(stubbedError))
+                        expect(expression: { try subject.throwingFunction() }).to(throwError(stubbedError))
                     }
                 }
 
