@@ -1,14 +1,8 @@
-//
-//  ArgumentTest.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 11/3/15.
-//  Copyright © 2015 Brian Radebaugh. All rights reserved.
-//
-
 import Quick
 import Nimble
 import SpryExample
+@testable import Spry
+@testable import Spry_Nimble
 
 class ArgumentSpec: QuickSpec {
     override func spec() {

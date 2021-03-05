@@ -25,32 +25,6 @@
 		7AABAD8A1FAFDAB300788CA3 /* SpyableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD891FAFDAB300788CA3 /* SpyableSpec.swift */; };
 		7AABAD8C1FAFDB3300788CA3 /* Spyable+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD8B1FAFDB3300788CA3 /* Spyable+TestHelper.swift */; };
 		7AABAD8E1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AABAD8D1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift */; };
-		7AE35A3421587694000CAA6F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2921587694000CAA6F /* Constant.swift */; };
-		7AE35A3521587694000CAA6F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2921587694000CAA6F /* Constant.swift */; };
-		7AE35A3621587694000CAA6F /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2A21587694000CAA6F /* SpyableObjects.swift */; };
-		7AE35A3721587694000CAA6F /* SpyableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2A21587694000CAA6F /* SpyableObjects.swift */; };
-		7AE35A3821587694000CAA6F /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2B21587694000CAA6F /* Argument.swift */; };
-		7AE35A3921587694000CAA6F /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2B21587694000CAA6F /* Argument.swift */; };
-		7AE35A3A21587694000CAA6F /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2C21587694000CAA6F /* StringRepresentable.swift */; };
-		7AE35A3B21587694000CAA6F /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2C21587694000CAA6F /* StringRepresentable.swift */; };
-		7AE35A3C21587694000CAA6F /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2D21587694000CAA6F /* Spryable.swift */; };
-		7AE35A3D21587694000CAA6F /* Spryable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2D21587694000CAA6F /* Spryable.swift */; };
-		7AE35A3E21587694000CAA6F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2E21587694000CAA6F /* Helpers.swift */; };
-		7AE35A3F21587694000CAA6F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2E21587694000CAA6F /* Helpers.swift */; };
-		7AE35A4021587694000CAA6F /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2F21587694000CAA6F /* Stubbable.swift */; };
-		7AE35A4121587694000CAA6F /* Stubbable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A2F21587694000CAA6F /* Stubbable.swift */; };
-		7AE35A4221587694000CAA6F /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3021587694000CAA6F /* StubbableObjects.swift */; };
-		7AE35A4321587694000CAA6F /* StubbableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3021587694000CAA6F /* StubbableObjects.swift */; };
-		7AE35A4421587694000CAA6F /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3121587694000CAA6F /* Spyable.swift */; };
-		7AE35A4521587694000CAA6F /* Spyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3121587694000CAA6F /* Spyable.swift */; };
-		7AE35A4621587694000CAA6F /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3221587694000CAA6F /* SpryConfiguration.swift */; };
-		7AE35A4721587694000CAA6F /* SpryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3221587694000CAA6F /* SpryConfiguration.swift */; };
-		7AE35A4821587694000CAA6F /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3321587694000CAA6F /* SpryEquatable.swift */; };
-		7AE35A4921587694000CAA6F /* SpryEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A3321587694000CAA6F /* SpryEquatable.swift */; };
-		7AE35A4D2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */; };
-		7AE35A4E2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */; };
-		7AE35A4F2158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */; };
-		7AE35A502158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */; };
 		A868345EE374B595E13E2984 /* Pods_SpryExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD2FFE8E4A8F012A95390DE /* Pods_SpryExampleTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -89,19 +63,6 @@
 		7AABAD891FAFDAB300788CA3 /* SpyableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyableSpec.swift; sourceTree = "<group>"; };
 		7AABAD8B1FAFDB3300788CA3 /* Spyable+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spyable+TestHelper.swift"; sourceTree = "<group>"; };
 		7AABAD8D1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcherSpec.swift; sourceTree = "<group>"; };
-		7AE35A2921587694000CAA6F /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
-		7AE35A2A21587694000CAA6F /* SpyableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpyableObjects.swift; sourceTree = "<group>"; };
-		7AE35A2B21587694000CAA6F /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
-		7AE35A2C21587694000CAA6F /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
-		7AE35A2D21587694000CAA6F /* Spryable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spryable.swift; sourceTree = "<group>"; };
-		7AE35A2E21587694000CAA6F /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		7AE35A2F21587694000CAA6F /* Stubbable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stubbable.swift; sourceTree = "<group>"; };
-		7AE35A3021587694000CAA6F /* StubbableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbableObjects.swift; sourceTree = "<group>"; };
-		7AE35A3121587694000CAA6F /* Spyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spyable.swift; sourceTree = "<group>"; };
-		7AE35A3221587694000CAA6F /* SpryConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryConfiguration.swift; sourceTree = "<group>"; };
-		7AE35A3321587694000CAA6F /* SpryEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpryEquatable.swift; sourceTree = "<group>"; };
-		7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveRecordedCallsMatcher.swift; sourceTree = "<group>"; };
-		7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaveReceivedMatcher.swift; sourceTree = "<group>"; };
 		97CBCE14618A091169555908 /* Pods_SpryExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpryExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9837E16BB68D3120490898EF /* Pods-SpryExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExample/Pods-SpryExample.release.xcconfig"; sourceTree = "<group>"; };
 		B651727304E2FD212D035A72 /* Pods-SpryExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpryExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -173,8 +134,6 @@
 		7A2BFC521F00D27E00BB12C1 /* SpryExample */ = {
 			isa = PBXGroup;
 			children = (
-				7AE35A2821587694000CAA6F /* Source */,
-				7AE35A4A2158769E000CAA6F /* SourceNimble */,
 				7A2BFC531F00D27E00BB12C1 /* AppDelegate.swift */,
 				7A2BFC551F00D27E00BB12C1 /* ViewController.swift */,
 				7A2BFC571F00D27E00BB12C1 /* Main.storyboard */,
@@ -201,35 +160,6 @@
 			path = SpryExampleTests;
 			sourceTree = "<group>";
 		};
-		7AE35A2821587694000CAA6F /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				7AE35A2921587694000CAA6F /* Constant.swift */,
-				7AE35A2A21587694000CAA6F /* SpyableObjects.swift */,
-				7AE35A2B21587694000CAA6F /* Argument.swift */,
-				7AE35A2C21587694000CAA6F /* StringRepresentable.swift */,
-				7AE35A2D21587694000CAA6F /* Spryable.swift */,
-				7AE35A2E21587694000CAA6F /* Helpers.swift */,
-				7AE35A2F21587694000CAA6F /* Stubbable.swift */,
-				7AE35A3021587694000CAA6F /* StubbableObjects.swift */,
-				7AE35A3121587694000CAA6F /* Spyable.swift */,
-				7AE35A3221587694000CAA6F /* SpryConfiguration.swift */,
-				7AE35A3321587694000CAA6F /* SpryEquatable.swift */,
-			);
-			name = Source;
-			path = ../../Source;
-			sourceTree = "<group>";
-		};
-		7AE35A4A2158769E000CAA6F /* SourceNimble */ = {
-			isa = PBXGroup;
-			children = (
-				7AE35A4B2158769E000CAA6F /* HaveRecordedCallsMatcher.swift */,
-				7AE35A4C2158769E000CAA6F /* HaveReceivedMatcher.swift */,
-			);
-			name = SourceNimble;
-			path = ../../SourceNimble;
-			sourceTree = "<group>";
-		};
 		A905F35EED5C995F1EF96AC9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,7 +182,6 @@
 				7A2BFC4C1F00D27E00BB12C1 /* Sources */,
 				7A2BFC4D1F00D27E00BB12C1 /* Frameworks */,
 				7A2BFC4E1F00D27E00BB12C1 /* Resources */,
-				58294558D5DA01F7C4A35C40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -309,10 +238,9 @@
 			};
 			buildConfigurationList = 7A2BFC4B1F00D27E00BB12C1 /* Build configuration list for PBXProject "SpryExample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -355,37 +283,21 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		58294558D5DA01F7C4A35C40 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpryExample/Pods-SpryExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/Spry/Spry.framework",
 				"${BUILT_PRODUCTS_DIR}/Spry+Nimble/Spry_Nimble.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Spry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Spry_Nimble.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpryExample/Pods-SpryExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpryExampleTests/Pods-SpryExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6997D2DF0B0D6C17FEFA755F /* [CP] Check Pods Manifest.lock */ = {
@@ -431,21 +343,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AE35A4021587694000CAA6F /* Stubbable.swift in Sources */,
 				7A2BFC561F00D27E00BB12C1 /* ViewController.swift in Sources */,
-				7AE35A4421587694000CAA6F /* Spyable.swift in Sources */,
-				7AE35A3C21587694000CAA6F /* Spryable.swift in Sources */,
-				7AE35A4821587694000CAA6F /* SpryEquatable.swift in Sources */,
-				7AE35A3621587694000CAA6F /* SpyableObjects.swift in Sources */,
-				7AE35A3E21587694000CAA6F /* Helpers.swift in Sources */,
-				7AE35A4F2158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */,
-				7AE35A4221587694000CAA6F /* StubbableObjects.swift in Sources */,
 				7A2BFC541F00D27E00BB12C1 /* AppDelegate.swift in Sources */,
-				7AE35A4621587694000CAA6F /* SpryConfiguration.swift in Sources */,
-				7AE35A4D2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */,
-				7AE35A3A21587694000CAA6F /* StringRepresentable.swift in Sources */,
-				7AE35A3821587694000CAA6F /* Argument.swift in Sources */,
-				7AE35A3421587694000CAA6F /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,28 +354,15 @@
 			files = (
 				7A199CC61FA68F27003208D0 /* SpryEquatableSpec.swift in Sources */,
 				7A2FE8BE1F036DD30062AE72 /* NimbleUtils.swift in Sources */,
-				7AE35A4721587694000CAA6F /* SpryConfiguration.swift in Sources */,
 				7AABAD861FAFD6CB00788CA3 /* Stubbable+TestHelper.swift in Sources */,
 				7AABAD8A1FAFDAB300788CA3 /* SpyableSpec.swift in Sources */,
 				7AABAD8E1FAFF49E00788CA3 /* HaveReceivedMatcherSpec.swift in Sources */,
-				7AE35A3D21587694000CAA6F /* Spryable.swift in Sources */,
 				7AABAD881FAFDA5C00788CA3 /* Spryable+TestHelper.swift in Sources */,
-				7AE35A4E2158769E000CAA6F /* HaveRecordedCallsMatcher.swift in Sources */,
-				7AE35A4121587694000CAA6F /* Stubbable.swift in Sources */,
-				7AE35A4521587694000CAA6F /* Spyable.swift in Sources */,
 				7AABAD8C1FAFDB3300788CA3 /* Spyable+TestHelper.swift in Sources */,
-				7AE35A3B21587694000CAA6F /* StringRepresentable.swift in Sources */,
 				7A4607822068791C00598ED1 /* HaveRecordedCallsMatcherSpec.swift in Sources */,
 				7A8654F41F00F62200D425B6 /* ArgumentSpec.swift in Sources */,
-				7AE35A3521587694000CAA6F /* Constant.swift in Sources */,
 				7A2FE8A41F0242120062AE72 /* StubbableSpec.swift in Sources */,
-				7AE35A502158769E000CAA6F /* HaveReceivedMatcher.swift in Sources */,
-				7AE35A3F21587694000CAA6F /* Helpers.swift in Sources */,
-				7AE35A4321587694000CAA6F /* StubbableObjects.swift in Sources */,
-				7AE35A3721587694000CAA6F /* SpyableObjects.swift in Sources */,
-				7AE35A4921587694000CAA6F /* SpryEquatable.swift in Sources */,
 				7AABAD841FAFCE6C00788CA3 /* SpryEquatable+TestHelper.swift in Sources */,
-				7AE35A3921587694000CAA6F /* Argument.swift in Sources */,
 				7A27A61A1F09C130001D956D /* SpryableSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -562,13 +448,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -618,11 +504,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -636,11 +522,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XQJAY5KMS4;
 				INFOPLIST_FILE = SpryExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -652,11 +536,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XQJAY5KMS4;
 				INFOPLIST_FILE = SpryExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -673,7 +555,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpryExample.app/SpryExample";
 			};
 			name = Debug;
@@ -690,7 +571,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = RIV.SpryExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpryExample.app/SpryExample";
 			};
 			name = Release;

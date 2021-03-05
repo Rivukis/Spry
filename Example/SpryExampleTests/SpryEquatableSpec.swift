@@ -1,16 +1,9 @@
-//
-//  SpryEquatableTest.swift
-//  SpryExampleTests
-//
-//  Created by Brian Radebaugh on 10/29/17.
-//  Copyright © 2017 Brian Radebaugh. All rights reserved.
-//
-
 import Foundation
 
 import Quick
 import Nimble
 import SpryExample
+import Spry
 
 class SpryEquatableSpec: QuickSpec {
     override func spec() {

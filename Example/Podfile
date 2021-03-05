@@ -1,17 +1,45 @@
-platform :ios, '9.0'
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-source 'https://github.com/CocoaPods/Specs.git'
+unless Pod.respond_to?(:is_prebuild_stage)
+  IOS_VERSION = '10.0'
+  KNOWN_REGIONS = ['Base', 'en']
+  DEVELOPMENT_REGION = 'en'
+end
+
+platform :ios, '10.0'
 
 use_frameworks!
 
 target "SpryExample" do
-    pod 'Nimble'
-    pod 'Spry', :path => './../'
-    pod 'Spry+Nimble', :path => './../'
-
     target 'SpryExampleTests' do
         inherit! :search_paths
+        pod 'Quick', '~> 3.1.2', :inhibit_warnings => true
+        pod 'Nimble', '~> 9.0.0', :inhibit_warnings => true
 
-        pod 'Quick'
+        pod 'Spry', :path => './../'
+        pod 'Spry+Nimble', :path => './../'
     end
+end
+
+post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.root_object.known_regions = KNOWN_REGIONS
+    project.root_object.development_region = DEVELOPMENT_REGION
+
+    project.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_VERSION
+    end
+
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['COCOAPODS_PARALLEL_CODE_SIGN'] = 'true'
+        config.build_settings['SWIFT_VERSION'] = '5.4'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_VERSION
+        config.build_settings['ENABLE_BITCODE'] = 'YES'
+      end
+    end
+  end
+
+  installer.pods_project.root_object.known_regions = KNOWN_REGIONS
+  installer.pods_project.root_object.development_region = DEVELOPMENT_REGION
 end

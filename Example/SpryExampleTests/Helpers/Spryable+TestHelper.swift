@@ -1,12 +1,5 @@
-//
-//  Spryable+TestHelper.swift
-//  SpryExampleTests
-//
-//  Created by Brian Radebaugh on 11/5/17.
-//  Copyright © 2017 Brian Radebaugh. All rights reserved.
-//
-
 import Foundation
+import Spry
 
 class SpryableTestClass: Spryable {
     enum ClassFunction: String, StringRepresentable {
