@@ -1,11 +1,3 @@
-//
-//  Stubbable.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 8/1/16.
-//  Copyright © 2016 Brian Radebaugh. All rights reserved.
-//
-
 import Foundation
 
 /**

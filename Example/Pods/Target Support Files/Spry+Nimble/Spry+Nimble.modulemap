@@ -1,0 +1,6 @@
+framework module Spry_Nimble {
+  umbrella header "Spry+Nimble-umbrella.h"
+
+  export *
+  module * { export * }
+}

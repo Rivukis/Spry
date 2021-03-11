@@ -1,0 +1,6 @@
+framework module Spry {
+  umbrella header "Spry-umbrella.h"
+
+  export *
+  module * { export * }
+}

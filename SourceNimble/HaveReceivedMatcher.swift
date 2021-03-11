@@ -1,11 +1,3 @@
-//
-//  HaveReceivedMatcher.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 11/14/15.
-//  Copyright © 2015 Brian Radebaugh. All rights reserved.
-//
-
 import Nimble
 import Spry
 

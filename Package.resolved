@@ -27,6 +27,15 @@
           "revision": "e491a6731307bb23783bf664d003be9b2fa59ab5",
           "version": "9.0.0"
         }
+      },
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/Quick/Quick.git",
+        "state": {
+          "branch": null,
+          "revision": "8cce6acd38f965f5baa3167b939f86500314022b",
+          "version": "3.1.2"
+        }
       }
     ]
   },

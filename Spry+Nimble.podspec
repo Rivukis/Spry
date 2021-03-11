@@ -1,23 +1,33 @@
-Pod::Spec.new do |s|
-  s.name = 'Spry+Nimble'
-  s.version = '3.3.0'
-  s.summary = 'Nimble matcher for test expectations on Spyable objects.'
+Pod::Spec.new do |spec|
+  spec.name = 'Spry+Nimble'
+  spec.version = '3.4.0'
+  spec.summary = 'Nimble matcher for test expectations on Spyable objects.'
 
-  s.description = <<-DESC
+  spec.description = <<-DESC
     Spry+Nimble allows developers, used to working with Quick/Nimble, be able to test whether or not functions were called on objects in a helpful Nimble matcher. The haveReceived matcher contains rich failure messages when tests fail.
                        DESC
 
-  s.homepage = 'https://github.com/Rivukis/Spry'
-  s.license = { :type => 'MIT', :file => 'LICENSE' }
-  s.author = { 'Brian Radebaugh' => 'Rivukis@gmail.com' }
-  s.source = { :git => 'https://github.com/Rivukis/Spry.git', :tag => s.version.to_s }
+  spec.source       = { :git => "git@github.com:NikSativa/NCallback.git" }
+  spec.homepage     = "https://github.com/NikSativa/NCallback"
 
-  s.swift_versions = ['5.0', '5.1', '5.2', '5.3', '5.4']
-  s.swift_version = '5.0'
-  s.ios.deployment_target = '10.0'
-  s.source_files = 'SourceNimble/*'
+  spec.license          = 'MIT'
+  spec.author           = { "Nikita Konopelko" => "nik.sativa@gmail.com" }
+  spec.social_media_url = "https://www.facebook.com/Nik.Sativa"
 
-  s.framework = 'XCTest'
-  s.dependency 'Nimble', '>= 8.0.0'
-  s.dependency 'Spry', '>= 3.3.0'
+  spec.swift_version = '5.0'
+  spec.ios.deployment_target = '10.0'
+  spec.source_files = 'SourceNimble/*'
+
+  spec.framework = 'XCTest'
+  spec.dependency 'Nimble', '~> 9.0.0'
+  spec.dependency 'Spry', '~> 3.4.0'
+
+  spec.test_spec 'Tests' do |tests|
+    # tests.requires_app_host = false
+
+    tests.dependency 'Quick', '~> 3.1.2'
+
+    tests.source_files = 'Tests/Specs/**/*.swift'
+    tests.resources = ['Tests/Specs/**/*.{storyboard,xib,xcassets,json,imageset,png,strings,stringsdict}']
+  end
 end

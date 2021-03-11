@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "Spry_Nimble", targets: ["Spry_Nimble"])
     ],
     dependencies: [
+        .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "3.1.2")),
         .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0"))
     ],
     targets: [
@@ -21,7 +22,16 @@ let package = Package(
                 path: "Source"),
         .target(name: "Spry_Nimble",
                 dependencies: ["Spry", "Nimble"],
-                path: "SourceNimble")
+                path: "SourceNimble"),
+        .testTarget(name: "SpryTests",
+                    dependencies: [
+                        "Spry_Nimble",
+                        "Spry",
+                        "Nimble",
+                        "Quick"
+                    ],
+                    path: "Tests/Specs",
+                    exclude: ["Resources/cocoapods"])
     ],
     swiftLanguageVersions: [.v5]
 )

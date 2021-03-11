@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 6/25/17.
-//  Copyright © 2017 Brian Radebaugh. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

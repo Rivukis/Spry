@@ -1,10 +1,4 @@
-//
-//  StringRepresentable.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 7/7/17.
-//  Copyright © 2017 Brian Radebaugh. All rights reserved.
-//
+import Foundation
 
 /**
  This protocol is how the function name string gets converted to a type.

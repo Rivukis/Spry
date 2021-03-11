@@ -1,11 +1,3 @@
-//
-//  SpryEquatable.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 4/2/16.
-//  Copyright © 2016 Brian Radebaugh. All rights reserved.
-//
-
 import Foundation
 
 /**

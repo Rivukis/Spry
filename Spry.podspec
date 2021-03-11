@@ -1,18 +1,20 @@
-Pod::Spec.new do |s|
-  s.name = 'Spry'
-  s.version = '3.3.0'
-  s.summary = 'Spry is spying and stubbing framework for Apple\'s Swift language.'
+Pod::Spec.new do |spec|
+  spec.name = 'Spry'
+  spec.version = '3.4.0'
+  spec.summary = 'Spry is spying and stubbing framework for Apple\'s Swift language.'
 
-  s.description = <<-DESC
+  spec.description = <<-DESC
     Spry allows developers to test a specific object without having to test dependency objects that the subject under test uses. Spyable allows a developer to check whether or not a function was called on an object with the correct arguments. Stubbable allows a developer to stub return values (or the entire implementation of a function) to ensure proper encapsulation during tests.
                        DESC
 
-  s.homepage = 'https://github.com/Rivukis/Spry'
-  s.license = { :type => 'MIT', :file => 'LICENSE' }
-  s.author = { 'Brian Radebaugh' => 'Rivukis@gmail.com' }
-  s.source = { :git => 'https://github.com/Rivukis/Spry.git', :tag => s.version.to_s }
+  spec.source       = { :git => "git@github.com:NikSativa/NCallback.git" }
+  spec.homepage     = "https://github.com/NikSativa/NCallback"
 
-  s.swift_version = '5.4'
-  s.ios.deployment_target = '10.0'
-  s.source_files = 'Source/*'
+  spec.license          = 'MIT'
+  spec.author           = { "Nikita Konopelko" => "nik.sativa@gmail.com" }
+  spec.social_media_url = "https://www.facebook.com/Nik.Sativa"
+
+  spec.swift_version = '5.4'
+  spec.ios.deployment_target = '10.0'
+  spec.source_files = 'Source/*'
 end

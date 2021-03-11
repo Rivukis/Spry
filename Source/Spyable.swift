@@ -1,11 +1,3 @@
-//
-//  Spyable.swift
-//  SpryExample
-//
-//  Created by Brian Radebaugh on 11/1/15.
-//  Copyright © 2015 Brian Radebaugh. All rights reserved.
-//
-
 import Foundation
 
 /**
