@@ -146,14 +146,3 @@ public extension SpryEquatable where Self: OptionalType {
         return selfsContainedValueAsSE._isEqual(to: actual)
     }
 }
-
-// MARK: - Default Conformers
-
-extension Optional: SpryEquatable {}
-extension String: SpryEquatable {}
-extension Int: SpryEquatable {}
-extension Double: SpryEquatable {}
-extension Bool: SpryEquatable {}
-extension Array: SpryEquatable {}
-extension Dictionary: SpryEquatable {}
-extension NSObject: SpryEquatable {}

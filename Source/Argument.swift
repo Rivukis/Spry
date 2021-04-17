@@ -40,7 +40,7 @@ public class ArgumentCaptor: SpryEquatable {
  * .nil - Only Optional.nil matches this qualification.
  * .instanceOf(type:) - Only objects whose type is exactly the type passed in match this qualification (subtypes do NOT qualify).
  */
-public enum Argument: CustomStringConvertible, SpryEquatable, Equatable {
+public enum Argument: CustomStringConvertible, SpryEquatable {
     case anything
     case nonNil
     case `nil`
