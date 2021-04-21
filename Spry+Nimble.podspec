@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'Spry+Nimble'
-  spec.version = '3.4.1'
+  spec.version = '3.4.3'
   spec.summary = 'Nimble matcher for test expectations on Spyable objects.'
 
   spec.description = <<-DESC

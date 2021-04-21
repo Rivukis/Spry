@@ -30,3 +30,6 @@ extension Notification: SpryEquatable {}
 extension Notification.Name: SpryEquatable {}
 
 extension Data: SpryEquatable {}
+
+extension DispatchTime: SpryEquatable {}
+extension DispatchTimeInterval: SpryEquatable {}
