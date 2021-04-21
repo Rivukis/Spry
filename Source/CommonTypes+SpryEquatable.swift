@@ -26,5 +26,7 @@ extension UInt16: SpryEquatable {}
 extension UInt32: SpryEquatable {}
 extension UInt64: SpryEquatable {}
 
-extension Notification: SpryEquatable { }
-extension Notification.Name: SpryEquatable { }
+extension Notification: SpryEquatable {}
+extension Notification.Name: SpryEquatable {}
+
+extension Data: SpryEquatable {}
