@@ -2,6 +2,8 @@ TODO: Build example project.
 
 # Spry
 
+Some of this may be out of date as things are being reconfigured to no longer support cocoapods but to be a Swift Package.
+
 [![Version](https://img.shields.io/cocoapods/v/Spry.svg?style=flat)](http://cocoapods.org/pods/Spry)
 [![License](https://img.shields.io/cocoapods/l/Spry.svg?style=flat)](http://cocoapods.org/pods/Spry)
 [![Platform](https://img.shields.io/cocoapods/p/Spry.svg?style=flat)](http://cocoapods.org/pods/Spry)
