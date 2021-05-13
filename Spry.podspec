@@ -17,4 +17,5 @@ Pod::Spec.new do |spec|
   spec.swift_version = '5.4'
   spec.ios.deployment_target = '10.0'
   spec.source_files = 'Source/*'
+  spec.resources = ['SourceryTamplates/**/*']
 end
