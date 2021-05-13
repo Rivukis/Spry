@@ -14,13 +14,13 @@ Pod::Spec.new do |spec|
   spec.author           = { "Nikita Konopelko" => "nik.sativa@gmail.com" }
   spec.social_media_url = "https://www.facebook.com/Nik.Sativa"
 
-  spec.swift_version = '5.0'
+  spec.swift_version = '5.4'
   spec.ios.deployment_target = '10.0'
   spec.source_files = 'SourceNimble/*'
 
   spec.framework = 'XCTest'
   spec.dependency 'Nimble', '~> 9.0.0'
-  spec.dependency 'Spry', '~> 3.4.0'
+  spec.dependency 'Spry', '~> 3.5.1'
 
   spec.test_spec 'Tests' do |tests|
     # tests.requires_app_host = false
