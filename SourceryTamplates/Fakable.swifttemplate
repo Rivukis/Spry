@@ -1,0 +1,291 @@
+<%
+enum Constant {
+    static let tab: String = "    "
+    static let syncClosures = "shouldCallSyncClosures"
+}
+
+struct MethodSyntax {
+    let callName: String
+    let paramNames: String
+    let selectorName: String
+}
+
+protocol Staticable {
+    var isStatic_: Bool { get }
+}
+
+extension SourceryRuntime.Method: Staticable {
+    var isStatic_: Bool {
+        return isStatic || isClass
+    }
+}
+
+extension SourceryRuntime.Variable: Staticable {
+    var isStatic_: Bool {
+        return isStatic
+    }
+}
+
+extension Array where Element: Staticable {
+    var onlyStatic: [Element] {
+        return filter { $0.isStatic_ }
+    }
+
+    var onlyInstance: [Element] {
+        return filter { !$0.isStatic_ }
+    }
+}
+
+func methodCase(_ method: SourceryRuntime.Method) -> MethodSyntax {
+    let nameParams = method.parameters.map({
+        return $0.argumentLabel?.capitalized ?? ("_" + $0.name.capitalized)
+    }).joined(separator: "")
+
+    let selectorName = method.selectorName.contains("(") ? method.selectorName : (method.selectorName + "()")
+    return MethodSyntax(callName: method.callName,
+                        paramNames: nameParams,
+                        selectorName: selectorName)
+}
+
+func methodCases(_ methods: [SourceryRuntime.Method], spacing: String) -> String {
+    if methods.isEmpty {
+        return "case _empty_"
+    }
+
+    let original = methods.map({ methodCase($0) })
+    var names: Set<String> = []
+    var selectors: Set<String> = []
+    var filtered: [MethodSyntax] = []
+    for m in original {
+        if !selectors.contains(m.selectorName) {
+            selectors.insert(m.selectorName)
+            filtered.append(m)
+        }
+    }
+
+    let result: [String] = filtered.map({
+        let paramNames = $0.paramNames.isEmpty ? "" : ("With" + $0.paramNames)
+        return ["case ", $0.callName, paramNames, " = ", "\"", $0.selectorName, "\""].joined()
+    }).sorted()
+
+    return result.joined(separator: "\n" + spacing)
+}
+
+func variableCases(_ variables: [SourceryRuntime.Variable], spacing: String) -> String {
+    if variables.isEmpty {
+        return "case _empty_"
+    }
+
+    let original = variables.map({
+        return "case \($0.name)"
+    })
+    let result: [String] = Set(original).sorted()
+    return result.joined(separator: "\n" + spacing)
+}
+
+func variableSpryify(_ variable: SourceryRuntime.Variable) -> [String] {
+    var declaration: [String] = []
+    if variable.isStatic {
+        declaration.append("static ")
+    }
+
+    declaration.append("var ")
+    declaration.append(variable.name)
+    declaration.append(": ")
+    declaration.append(variable.typeName.asSource)
+
+    var body: [String] = []
+    body.append("get {")
+    body.append(Constant.tab + "return stubbedValue()")
+    body.append("}")
+
+    if variable.isMutable {
+        body.append("set {")
+        body.append(Constant.tab + "recordCall(arguments: newValue)")
+        body.append("}")
+    }
+
+    let bodyWithSpacing = body.map {
+        return [Constant.tab, $0].joined()
+    }
+
+    return [declaration.joined() + " {"] + bodyWithSpacing + ["}"]
+}
+
+func variablesSpryify(_ variables: [SourceryRuntime.Variable], spacing: String, attributes: String) -> String {
+    let result = variables.map { attributes + variableSpryify($0).joined(separator: "\n" + spacing) }
+    return result.joined(separator: "\n\n" + spacing)
+}
+
+func nonescaping(_ methods: [SourceryRuntime.Method]) -> String {
+    let shouldMakeVariable: Bool = methods.onlyInstance
+    .flatMap({ $0.parameters })
+    .contains(where: {
+        if $0.typeName.isClosure {
+            return ($0.typeAttributes["escaping"] ?? []).isEmpty
+        }
+        return false
+    })
+
+    let shouldMakeStaticVariable: Bool = methods.onlyStatic
+    .flatMap({ $0.parameters })
+    .contains(where: {
+        if $0.typeName.isClosure {
+            return ($0.typeAttributes["escaping"] ?? []).isEmpty
+        }
+        return false
+    })
+
+    var body: [String] = []
+    if shouldMakeStaticVariable {
+        let str = ["static var ", Constant.syncClosures, ": Bool = false"].joined()
+        body.append(str)
+    }
+
+    if shouldMakeVariable {
+        let str = ["var ", Constant.syncClosures, ": Bool = false"].joined()
+        body.append(str)
+    }
+
+    return body.joined(separator: "\n" + Constant.tab)
+}
+
+func methodSpryify(_ method: SourceryRuntime.Method, spacing: String) -> String {
+    let returnName = method.actualReturnTypeName.name == "Void" ? [] : [" -> ", method.actualReturnTypeName.asSource]
+    let attributes = method.isStatic ? "static " : (method.isClass ? "class " : "")
+    let declaration = ([attributes, "func ", method.name] + returnName).joined()
+
+    let parameters: [String] = method.parameters
+    .map({
+        if $0.typeName.isClosure {
+            let isEscaping = !($0.typeAttributes["escaping"] ?? []).isEmpty
+            if !isEscaping {
+                return "\"" + $0.name + "\""
+            }
+        }
+        return $0.name
+    })
+
+    var body: [String] = []
+
+    let escapingClosures = method.parameters
+    .filter({
+        if $0.typeName.isClosure {
+            return ($0.typeAttributes["escaping"] ?? []).isEmpty
+        }
+        return false
+    })
+    .map(\.name)
+
+    if !escapingClosures.isEmpty {
+        body.append("if " + Constant.syncClosures + " {")
+        for closure in escapingClosures {
+            body.append(Constant.tab + "_ = " + closure + "()")
+        }
+        body.append("}")
+    }
+
+    if parameters.isEmpty {
+        body.append("return spryify()")
+    } else {
+        let str = ["return spryify(arguments: ", parameters.joined(separator: ", "), ")"].joined()
+        body.append(str)
+    }
+
+    let bodyWithSpacing = body.map {
+        return [spacing, Constant.tab, $0].joined()
+    }
+
+    return ([declaration + " {"] + bodyWithSpacing + [spacing + "}"]).joined(separator: "\n")
+}
+
+func methodsSpryify(_ methods: [SourceryRuntime.Method], spacing: String, attributes: String) -> String {
+    let original = methods.map { attributes + methodSpryify($0, spacing: spacing) }
+    let result: [String] = Set(original).sorted()
+    return result.joined(separator: "\n\n" + spacing)
+}
+
+func overrideidNeeded(_ type: Type) -> String {
+    if type.kind == "class" {
+        return "override "
+    }
+    return ""
+}
+
+-%>
+
+<% for type in types.implementing["Fakable"] { %>
+// sourcery:file:Fake<%= type.name %>
+
+// import Spry
+protocol SpyEquatable {
+}
+
+extension SpyEquatable {
+    func recordCall(arguments: Any?...) {
+        fatalError()
+    }
+
+    func stubbedValue<T>() -> T {
+        fatalError()
+    }
+
+    static func recordCall(arguments: Any?...) {
+        fatalError()
+    }
+
+    static func stubbedValue<T>() -> T {
+        fatalError()
+    }
+
+    func spryify<T>() -> T {
+        fatalError()
+    }
+
+    func spryify<T>(arguments: Any?...) -> T {
+        fatalError()
+    }
+
+    static func spryify<T>() -> T {
+        fatalError()
+    }
+
+    static func spryify<T>(arguments: Any?...) -> T {
+        fatalError()
+    }
+}
+
+protocol StringRepresentable {}
+
+final class Fake<%= type.name %>: <%= type.name %>, SpyEquatable {
+    enum ClassFunction: String, StringRepresentable {
+        <%= variableCases(type.allVariables.onlyStatic, spacing: Constant.tab + Constant.tab) %>
+
+        <%= methodCases(type.allMethods.onlyStatic, spacing: Constant.tab + Constant.tab) %>
+    }
+
+    enum Function: String, StringRepresentable {
+        <%= variableCases(type.allVariables.onlyInstance, spacing: Constant.tab + Constant.tab) %>
+
+        <%= methodCases(type.allMethods.onlyInstance, spacing: Constant.tab + Constant.tab) %>
+    }
+
+    <%= nonescaping(type.allMethods) %>
+
+    // MARK: - static variables
+    <%= variablesSpryify(type.allVariables.onlyStatic, spacing: Constant.tab, attributes: overrideidNeeded(type)) %>
+
+    // MARK: - variables
+    <%= variablesSpryify(type.allVariables.onlyInstance, spacing: Constant.tab, attributes: overrideidNeeded(type)) %>
+
+    // MARK: - static|class methods
+    <%= methodsSpryify(type.allMethods.onlyStatic, spacing: Constant.tab, attributes: overrideidNeeded(type)) %>
+
+    // MARK: - methods
+    <%= methodsSpryify(type.allMethods.onlyInstance, spacing: Constant.tab, attributes: overrideidNeeded(type)) %>
+}
+
+// sourcery:end
+<%
+}
+%>
