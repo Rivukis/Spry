@@ -12,11 +12,13 @@ struct MethodSyntax {
 
 protocol Staticable {
     var isStatic_: Bool { get }
+    var isInitializer: Bool { get }
+    var isDeinitializer: Bool { get }
 }
 
 extension SourceryRuntime.Method: Staticable {
     var isStatic_: Bool {
-        return isStatic || isClass
+        return (isStatic || isClass)
     }
 }
 
@@ -24,15 +26,23 @@ extension SourceryRuntime.Variable: Staticable {
     var isStatic_: Bool {
         return isStatic
     }
+
+    var isInitializer: Bool {
+        return false
+    }
+
+    var isDeinitializer: Bool {
+        return false
+    }
 }
 
 extension Array where Element: Staticable {
     var onlyStatic: [Element] {
-        return filter { $0.isStatic_ }
+        return filter { $0.isStatic_ && !$0.isInitializer && !$0.isDeinitializer }
     }
 
     var onlyInstance: [Element] {
-        return filter { !$0.isStatic_ }
+        return filter { !$0.isStatic_ && !$0.isInitializer && !$0.isDeinitializer }
     }
 }
 
@@ -48,10 +58,6 @@ func methodCase(_ method: SourceryRuntime.Method) -> MethodSyntax {
 }
 
 func methodCases(_ methods: [SourceryRuntime.Method], spacing: String) -> String {
-    if methods.isEmpty {
-        return "case _empty_"
-    }
-
     let original = methods.map({ methodCase($0) })
     var names: Set<String> = []
     var selectors: Set<String> = []
@@ -72,10 +78,6 @@ func methodCases(_ methods: [SourceryRuntime.Method], spacing: String) -> String
 }
 
 func variableCases(_ variables: [SourceryRuntime.Variable], spacing: String) -> String {
-    if variables.isEmpty {
-        return "case _empty_"
-    }
-
     let original = variables.map({
         return "case \($0.name)"
     })
@@ -214,60 +216,40 @@ func overrideidNeeded(_ type: Type) -> String {
 
 -%>
 
-<% for type in types.implementing["Fakable"] { %>
-// sourcery:file:Fake<%= type.name %>
-
-// import Spry
-protocol SpyEquatable {
+<% for type in types.classes + types.protocols {
+if type.annotations["fakable"] == nil {
+   continue
 }
 
-extension SpyEquatable {
-    func recordCall(arguments: Any?...) {
-        fatalError()
-    }
+let sMethods = variableCases(type.allVariables.onlyStatic, spacing: Constant.tab + Constant.tab)
+let iMethods = methodCases(type.allMethods.onlyStatic, spacing: Constant.tab + Constant.tab)
 
-    func stubbedValue<T>() -> T {
-        fatalError()
-    }
+let sVariables = variableCases(type.allVariables.onlyInstance, spacing: Constant.tab + Constant.tab)
+let iVariables = methodCases(type.allMethods.onlyInstance, spacing: Constant.tab + Constant.tab)
 
-    static func recordCall(arguments: Any?...) {
-        fatalError()
-    }
-
-    static func stubbedValue<T>() -> T {
-        fatalError()
-    }
-
-    func spryify<T>() -> T {
-        fatalError()
-    }
-
-    func spryify<T>(arguments: Any?...) -> T {
-        fatalError()
-    }
-
-    static func spryify<T>() -> T {
-        fatalError()
-    }
-
-    static func spryify<T>(arguments: Any?...) -> T {
-        fatalError()
-    }
+if (sVariables + iVariables + sMethods + iMethods).isEmpty {
+    continue
 }
+%>
 
-protocol StringRepresentable {}
+// sourcery:file:Fake<%= type.name %>.swift
+import Spry
 
-final class Fake<%= type.name %>: <%= type.name %>, SpyEquatable {
+final class Fake<%= type.name %>: <%= type.name %>, Spryable {
     enum ClassFunction: String, StringRepresentable {
-        <%= variableCases(type.allVariables.onlyStatic, spacing: Constant.tab + Constant.tab) %>
-
-        <%= methodCases(type.allMethods.onlyStatic, spacing: Constant.tab + Constant.tab) %>
+        <% if (sMethods + iMethods).isEmpty { %>
+        <%="case _empty_"%>
+        <% } else { %>
+        <%= [sMethods, iMethods].joined(separator: "\n") %>
+        <% } %>
     }
 
     enum Function: String, StringRepresentable {
-        <%= variableCases(type.allVariables.onlyInstance, spacing: Constant.tab + Constant.tab) %>
-
-        <%= methodCases(type.allMethods.onlyInstance, spacing: Constant.tab + Constant.tab) %>
+        <% if (sVariables + iVariables).isEmpty { %>
+        <%="case _empty_"%>
+        <% } else { %>
+        <%= [sVariables, iVariables].joined(separator: "\n") %>
+        <% } %>
     }
 
     <%= nonescaping(type.allMethods) %>
