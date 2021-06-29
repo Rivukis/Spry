@@ -1,5 +1,5 @@
 import Foundation
-import Spry
+import NSpry
 
 class SpryEquatableTestHelper: SpryEquatable {
     let isEqual: Bool

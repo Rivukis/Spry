@@ -1,7 +1,6 @@
 import Quick
 import Nimble
-import Spry
-import Spry_Nimble
+import NSpry
 
 class SpyableSpec: QuickSpec {
     override func spec() {

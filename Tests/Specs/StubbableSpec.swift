@@ -1,6 +1,6 @@
 import Quick
 import Nimble
-import Spry
+import NSpry
 
 class StubbableSpec: QuickSpec {
     override func spec() {

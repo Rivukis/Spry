@@ -1,5 +1,5 @@
 import Foundation
-import Spry
+import NSpry
 
 class SpyableTestHelper: Spyable {
     enum ClassFunction: String, StringRepresentable {

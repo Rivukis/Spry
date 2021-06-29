@@ -4,29 +4,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "Spry",
+    name: "NSpry",
     platforms: [
         .iOS(.v10)
     ],
     products: [
-        .library(name: "Spry", targets: ["Spry"]),
-        .library(name: "Spry_Nimble", targets: ["Spry_Nimble"])
+        .library(name: "NSpry", targets: ["NSpry"]),
     ],
     dependencies: [
         .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "4.0.0")),
         .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.2.0"))
     ],
     targets: [
-        .target(name: "Spry",
-                dependencies: [],
+        .target(name: "NSpry",
+                dependencies: ["Nimble",
+                               "Quick"],
                 path: "Source"),
-        .target(name: "Spry_Nimble",
-                dependencies: ["Spry", "Nimble"],
-                path: "SourceNimble"),
-        .testTarget(name: "SpryTests",
+        .testTarget(name: "NSpryTests",
                     dependencies: [
-                        "Spry_Nimble",
-                        "Spry",
+                        "NSpry",
                         "Nimble",
                         "Quick"
                     ],

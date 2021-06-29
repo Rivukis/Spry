@@ -1,6 +1,8 @@
 import Quick
 import Nimble
 
+import NSpry
+
 class SpryableSpec: QuickSpec {
     override func spec() {
         describe("Spryable") {

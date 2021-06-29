@@ -2,8 +2,7 @@ import Foundation
 import Quick
 import Nimble
 
-@testable import Spry
-@testable import Spry_Nimble
+@testable import NSpry
 
 class ArgumentSpec: QuickSpec {
     override func spec() {

@@ -2,7 +2,7 @@ import Foundation
 
 import Quick
 import Nimble
-import Spry
+import NSpry
 
 class SpryEquatableSpec: QuickSpec {
     override func spec() {

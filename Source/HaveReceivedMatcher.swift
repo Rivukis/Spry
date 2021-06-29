@@ -1,5 +1,4 @@
 import Nimble
-import Spry
 
 /**
  Nimble matcher used to test whether or not a function or property has been called on an object.

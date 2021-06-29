@@ -1,5 +1,5 @@
 import Foundation
-import Spry
+import NSpry
 
 struct StubbableError: Error, Equatable {
     let id: String
