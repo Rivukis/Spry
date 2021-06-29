@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'Spry+Nimble'
-  spec.version = '3.5.1'
+  spec.version = '3.5.3'
   spec.summary = 'Nimble matcher for test expectations on Spyable objects.'
 
   spec.description = <<-DESC
@@ -19,13 +19,13 @@ Pod::Spec.new do |spec|
   spec.source_files = 'SourceNimble/*'
 
   spec.framework = 'XCTest'
-  spec.dependency 'Nimble', '~> 9.0.0'
+  spec.dependency 'Nimble', '~> 9.2.0'
   spec.dependency 'Spry', '~> 3.5.1'
 
   spec.test_spec 'Tests' do |tests|
     # tests.requires_app_host = false
 
-    tests.dependency 'Quick', '~> 3.1.2'
+    tests.dependency 'Quick', '~> 4.0.0'
 
     tests.source_files = 'Tests/Specs/**/*.swift'
     tests.resources = ['Tests/Specs/**/*.{storyboard,xib,xcassets,json,imageset,png,strings,stringsdict}']

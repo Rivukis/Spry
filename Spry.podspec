@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'Spry'
-  spec.version = '3.5.1'
+  spec.version = '3.5.3'
   spec.summary = 'Spry is spying and stubbing framework for Apple\'s Swift language.'
 
   spec.description = <<-DESC

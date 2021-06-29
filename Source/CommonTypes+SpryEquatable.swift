@@ -11,7 +11,7 @@ extension Dictionary: SpryEquatable {}
 extension Bool: SpryEquatable {}
 
 extension CGFloat: SpryEquatable {}
-extension Float: SpryEquatable { }
+extension Float: SpryEquatable {}
 extension Double: SpryEquatable {}
 
 extension Int: SpryEquatable {}
