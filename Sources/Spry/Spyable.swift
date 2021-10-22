@@ -22,7 +22,7 @@ private var callsMapTable: NSMapTable<AnyObject, RecordedCallsDictionary> = NSMa
  
  - Note: The `Spryable` protocol exists as a convenience to conform to both `Spyable` and `Stubbable` at the same time.
  */
-public protocol Spyable: class {
+public protocol Spyable: AnyObject {
 
     // MARK: Instance
 
