@@ -22,7 +22,7 @@ private var stubsMapTable: NSMapTable<AnyObject, StubsDictionary> = NSMapTable.w
 
  - Note: The `Spryable` protocol exists as a convenience to conform to both `Spyable` and `Stubbable` at the same time.
  */
-public protocol Stubbable: class {
+public protocol Stubbable: AnyObject {
 
     // MARK: - Instance
 
